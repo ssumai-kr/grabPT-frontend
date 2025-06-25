@@ -1,13 +1,16 @@
-import '@/App.css';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+
+import Test from '@/components/Test';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Test />,
+  },
+]);
 
 function App() {
-  return (
-    <div className="flex w-full items-center justify-center">
-      <button className="mt-2 cursor-pointer rounded bg-white p-2 text-black hover:bg-pink-500">
-        테스트버튼
-      </button>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
