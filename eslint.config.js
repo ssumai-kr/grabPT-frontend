@@ -1,4 +1,5 @@
 import eslint from '@eslint/js';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -19,6 +20,9 @@ export default tseslint.config(
 
   // Hooks preset (v5.2.0)
   reactHooks.configs['recommended-latest'],
+
+  // tanstack(queryKey) plugin
+  ...pluginQuery.configs['flat/recommended'],
 
   // Vite 전용 Fast-Refresh preset
   reactRefresh.configs.vite,
