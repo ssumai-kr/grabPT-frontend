@@ -1,5 +1,19 @@
 @import 'tailwindcss';
 
+/* Pretendard Variable → 전역 기본 글꼴 */
+@layer base {
+  html {
+    font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  }
+}
+
+/* Inter를 가끔 쓸 때 */
+@layer utilities {
+  .font-inter {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  }
+}
+
 :root {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
