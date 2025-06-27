@@ -13,7 +13,7 @@ function AuthMenu() {
   const navigate = useNavigate();
 
   // 추후 전역상태 변경
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   // Todo: 라우팅 완료 시 img 경로변경
   return (

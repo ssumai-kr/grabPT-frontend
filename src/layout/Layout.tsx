@@ -8,7 +8,7 @@ function Layout() {
     <div className="flex h-screen flex-col">
       <Header />
 
-      <main className="flex-1">
+      <main className="flex-1 px-[180px]">
         <Outlet />
       </main>
 
