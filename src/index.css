@@ -1,21 +1,156 @@
+/* ───────── 0) Tailwind v4 로드 ───────── */
 @import 'tailwindcss';
 
-/* Pretendard Variable → 전역 기본 글꼴 */
-@layer base {
-  html {
-    font-family: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-  }
+/* ───────── 1) 디자인 토큰 (@theme) ───────── */
+@theme {
+  /* 폰트 패밀리 변수 */
+  --font-sans: 'Pretendard Variable', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-inter: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Button Scale */
+  --color-button: #003efb;
+  --color-button-hover: #1537d9;
+  --color-button-pressed: #1231c1;
+
+  /* Purple Scale */
+  --color-purple-light: #e8ecfe;
+  --color-purple-light-hover: #dce2fd;
+  --color-purple-light-active: #b7c3fb;
+  --color-purple-normal: #173df1;
+  --color-purple-normal-hover: #1537d9;
+  --color-purple-normal-active: #1231c1;
+  --color-purple-dark: #112eb5;
+  --color-purple-dark-hover: #0e2591;
+  --color-purple-dark-active: #0a1b6c;
+  --color-purple-darker: #081554;
+
+  /* White Scale */
+  --color-white: #ffffff;
+  --color-white-normal-hover: #e6e6e6;
+  --color-white-normal-active: #cccccc;
+  --color-white-dark: #bfbfbf;
+  --color-white-dark-hover: #999999;
+  --color-white-dark-active: #737373;
+  --color-white-darker: #595959;
 }
 
-/* Inter를 가끔 쓸 때 */
-@layer utilities {
-  .font-inter {
-    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  }
-}
-
+/* ───────── 2) 전역 렌더링·안티앨리어싱 ───────── */
 :root {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ───────── 3) 기본 글꼴 (Base 레이어) ───────── */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+}
+
+/* ───────── 4) 인터 폰트 유틸리티 (Utilities 레이어) ───────── */
+@layer utilities {
+  .font-inter {
+    font-family: var(--font-inter);
+  }
+}
+
+/* ───────── 5) 텍스트 컴포넌트 (Components 레이어) ───────── */
+@layer components {
+  /* 3xl (32/42) */
+  .text-3xl-bold {
+    @apply text-[32px] leading-[42px] font-bold;
+  }
+  .text-3xl-sb {
+    @apply text-[32px] leading-[42px] font-semibold;
+  }
+
+  /* 2xl (24/32) */
+  .text-2xl-bold {
+    @apply text-[24px] leading-[32px] font-bold;
+  }
+  .text-2xl-sb {
+    @apply text-[24px] leading-[32px] font-semibold;
+  }
+  .text-2xl-md {
+    @apply text-[24px] leading-[32px] font-medium;
+  }
+  .text-2xl-reg {
+    @apply text-[24px] leading-[32px] font-normal;
+  }
+
+  /* xl (20/32) */
+  .text-xl-bold {
+    @apply text-[20px] leading-[32px] font-bold;
+  }
+  .text-xl-sb {
+    @apply text-[20px] leading-[32px] font-semibold;
+  }
+  .text-xl-md {
+    @apply text-[20px] leading-[32px] font-medium;
+  }
+  .text-xl-reg {
+    @apply text-[20px] leading-[32px] font-normal;
+  }
+
+  /* 2lg (18/26) */
+  .text-2lg-bold {
+    @apply text-[18px] leading-[26px] font-bold;
+  }
+  .text-2lg-sb {
+    @apply text-[18px] leading-[26px] font-semibold;
+  }
+  .text-2lg-md {
+    @apply text-[18px] leading-[26px] font-medium;
+  }
+  .text-2lg-reg {
+    @apply text-[18px] leading-[26px] font-normal;
+  }
+
+  /* lg (16/26) */
+  .text-lg-bold {
+    @apply text-[16px] leading-[26px] font-bold;
+  }
+  .text-lg-sb {
+    @apply text-[16px] leading-[26px] font-semibold;
+  }
+  .text-lg-md {
+    @apply text-[16px] leading-[26px] font-medium;
+  }
+  .text-lg-reg {
+    @apply text-[16px] leading-[26px] font-normal;
+  }
+
+  /* md (14/24) */
+  .text-md-bold {
+    @apply text-[14px] leading-[24px] font-bold;
+  }
+  .text-md-sb {
+    @apply text-[14px] leading-[24px] font-semibold;
+  }
+  .text-md-md {
+    @apply text-[14px] leading-[24px] font-medium;
+  }
+  .text-md-reg {
+    @apply text-[14px] leading-[24px] font-normal;
+  }
+
+  /* sm (13/22) */
+  .text-sm-sb {
+    @apply text-[13px] leading-[22px] font-semibold;
+  }
+  .text-sm-md {
+    @apply text-[13px] leading-[22px] font-medium;
+  }
+
+  /* xs (12/20, 12/18) */
+  .text-xs-sb {
+    @apply text-[12px] leading-[20px] font-semibold;
+  }
+  .text-xs-md {
+    @apply text-[12px] leading-[18px] font-medium;
+  }
+  .text-xs-reg {
+    @apply text-[12px] leading-[18px] font-normal;
+  }
 }

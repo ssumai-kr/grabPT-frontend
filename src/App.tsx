@@ -9,7 +9,12 @@ const routes: RouteObject[] = [
     path: ROUTES.HOME,
     element: <Layout />,
     errorElement: <>없는페이지입니다</>,
-    children: [{ index: true, element: <>HomePage</> }],
+    children: [
+      {
+        index: true,
+        element: <>홈페이지</>,
+      },
+    ],
   },
 ];
 

@@ -10,7 +10,7 @@ function Button({ label, children, ...rest }: PropsWithChildren<ButtonProps>) {
   return (
     <button
       aria-label={label}
-      className="flex h-[42px] w-[98px] items-center justify-center rounded-[10px] bg-[#003EFB] text-[15px] font-semibold text-white"
+      className="flex h-[42px] w-[98px] items-center justify-center rounded-[10px] bg-[color:var(--color-button)] text-[15px] font-semibold text-white hover:bg-[color:var(--color-button-hover)] active:bg-[color:var(--color-button-pressed)]"
       {...rest}
     >
       {children}
