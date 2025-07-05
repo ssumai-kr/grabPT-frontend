@@ -6,8 +6,8 @@ import Navbar from '@/layout/components/Navbar';
 
 function Header() {
   return (
-    <header className="relative z-20 flex h-[78px] justify-between px-10">
-      <Link className="h-full w-[118px] px-[9px] pt-3.5" to={'/'}>
+    <header className="relative z-20 flex min-h-[70px] justify-between px-10">
+      <Link className="h-full w-[118px] px-[9px] pt-3" to={'/'}>
         <img src={AppLogo} alt="AppLogo" className="object-contain" />
       </Link>
 

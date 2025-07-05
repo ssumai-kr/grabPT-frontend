@@ -13,13 +13,13 @@ function AuthMenu() {
   const navigate = useNavigate();
 
   // 추후 전역상태 변경
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
 
   // Todo: 라우팅 완료 시 img 경로변경
   return (
-    <div className="flex items-center gap-7">
+    <div className="flex items-center">
       {isLoggedIn ? (
-        <div className="mt-[15px] flex h-full items-center gap-5">
+        <div className="flex h-full items-center gap-5">
           <div className="flex h-[21px] gap-[21px]">
             <img
               src={Chat}
@@ -51,9 +51,11 @@ function AuthMenu() {
         </div>
       ) : (
         <>
-          <Link to={'/'} className="font-extrabold text-black">
-            로그인
-          </Link>
+          <div className="flex h-full w-[96px] items-center justify-center">
+            <Link to={'/'} className="font-extrabold text-black">
+              로그인
+            </Link>
+          </div>
           <Button>
             <Link to={'/'}>회원가입</Link>
           </Button>
