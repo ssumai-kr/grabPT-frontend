@@ -45,7 +45,7 @@ function AuthMenu() {
               src={HeaderProfile}
               alt="프로필"
               className="x-[45px] h-[45px] cursor-pointer"
-              onClick={() => navigate(ROUTES.HOME)}
+              onClick={() => navigate(ROUTES.MYPAGE)}
             />
           </div>
         </div>
