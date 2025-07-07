@@ -13,7 +13,7 @@ interface Props {
 
 export const ReviewCard = ({ name, location, rating, content }: Props) => {
   return (
-    <div className="relative flex h-[200px] w-[310px] flex-col rounded-[10px] bg-white p-[10px] pt-[15px] shadow-[4px_4px_10px_rgba(0,0,0,0.25)]">
+    <div className="relative flex h-[200px] w-full flex-col rounded-[10px] bg-white p-[10px] pt-[15px] shadow-[4px_4px_10px_rgba(0,0,0,0.25)]">
       {/* 닫기 (기능 없음) */}
       <img src={XIcon} alt="close" className="absolute top-2 right-2 h-4 w-4" />
 

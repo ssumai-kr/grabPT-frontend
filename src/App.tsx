@@ -1,21 +1,40 @@
 import { type RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import ROUTES from '@/constants/routes';
+import UserSettings from '@/features/UserMypage/UserSettings';
+import UserDashboard from '@/features/UserMypage/components/UserDashboard';
+import UserRequests from '@/features/UserMypage/components/UserRequests';
+import UserReviews from '@/features/UserMypage/components/UserReviews';
 import Layout from '@/layout/Layout';
-import Mypage from '@/pages/Mypage';
+import TrainerMypage from '@/pages/TrainerMypage';
+import UserMypage from '@/pages/UserMypage';
 
 // 라우터
 const routes: RouteObject[] = [
   {
     path: ROUTES.HOME,
     element: <Layout />,
-    errorElement: <>없는페이지입니다</>,
+    errorElement: <>없는 페이지입니다.</>,
     children: [
+      { index: true, element: <>홈페이지</> },
+
       {
-        index: true,
-        element: <>홈페이지</>,
+        path: 'mypage',
+        children: [
+          { path: 'trainer', element: <TrainerMypage /> },
+
+          {
+            path: 'user',
+            element: <UserMypage />,
+            children: [
+              { index: true, element: <UserDashboard /> },
+              { path: 'requests', element: <UserRequests /> },
+              { path: 'reviews', element: <UserReviews /> },
+              { path: 'settings', element: <UserSettings /> },
+            ],
+          },
+        ],
       },
-      { path: ROUTES.MYPAGE, element: <Mypage /> },
     ],
   },
 ];

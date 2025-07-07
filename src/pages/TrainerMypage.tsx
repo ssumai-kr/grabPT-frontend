@@ -4,7 +4,7 @@ import ReviewSlide from '@/components/ReviewSlide';
 import MypageSection from '@/features/Mypage/components/MypageSection';
 import ProfileCard from '@/layout/components/ProfileCard';
 
-function Mypage() {
+function TrainerMypage() {
   const images = [
     '/동영상 등 대체 도형.png',
     '/동영상 등 대체 도형.png',
@@ -23,7 +23,7 @@ function Mypage() {
       '너무너무 친절하시고, 운동하면서 부족한 부분을 너무 잘 지적해주셨습니다!! 저는 20회 추가 PT 신청했습니다!!~~~~~~~~~~~~~~~~~~~~~~~~~',
   };
 
-  const reviews = Array.from({ length: 7 }, () => review);
+  const reviews = Array.from({ length: 50 }, () => review);
 
   return (
     <section className="mb-28">
@@ -72,4 +72,4 @@ function Mypage() {
   );
 }
 
-export default Mypage;
+export default TrainerMypage;

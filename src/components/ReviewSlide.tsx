@@ -1,4 +1,3 @@
-// components/ReviewSlide.tsx
 import { useRef } from 'react';
 
 import ArrowRight from '@/assets/images/Arrow-Right.png';
@@ -18,7 +17,7 @@ interface ReviewSlideProps {
 }
 
 const CARD_WIDTH = 310;
-const GAP = 24; // 예: gap-6
+const GAP = 30; // 예: gap-6
 const STEP = CARD_WIDTH + GAP;
 
 function ReviewSlide({ title, reviews }: ReviewSlideProps) {
@@ -37,9 +36,11 @@ function ReviewSlide({ title, reviews }: ReviewSlideProps) {
         {/* 뷰포트 */}
         <div ref={trackRef} className="overflow-x-hidden scroll-smooth">
           {/* 트랙 */}
-          <div className="flex w-max gap-6">
+          <div className="flex w-max gap-[30px]">
             {reviews.map((rv, idx) => (
-              <ReviewCard key={idx} {...rv} />
+              <div className="w-[310px]">
+                <ReviewCard key={idx} {...rv} />
+              </div>
             ))}
           </div>
         </div>
