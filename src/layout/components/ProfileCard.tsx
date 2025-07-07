@@ -1,4 +1,4 @@
-import Profile from '@/assets/images/Profile.png';
+import Profile from '@/assets/images/HeaderProfile.png';
 import StarRating from '@/components/StarRating';
 
 function ProfileCard() {
