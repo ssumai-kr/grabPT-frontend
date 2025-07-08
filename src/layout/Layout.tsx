@@ -12,8 +12,10 @@ function Layout() {
       {/* 220px / 1440px: 180px */}
       <main className="flex flex-1 flex-col justify-between overflow-y-auto px-[220px] max-[1440px]:px-[180px]">
         <Outlet />
-        <Footer />
       </main>
+
+      {/* 푸터 */}
+      <Footer />
     </div>
   );
 }
