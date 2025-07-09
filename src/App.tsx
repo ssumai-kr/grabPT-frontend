@@ -6,11 +6,18 @@ import UserDashboard from '@/features/UserMypage/components/UserDashboard';
 import UserRequests from '@/features/UserMypage/components/UserRequests';
 import UserReviews from '@/features/UserMypage/components/UserReviews';
 import Layout from '@/layout/Layout';
+import { Login } from '@/pages/Login';
+import { Signup } from '@/pages/Signup';
 import TrainerMypage from '@/pages/TrainerMypage';
 import UserMypage from '@/pages/UserMypage';
 
 // 라우터
 const routes: RouteObject[] = [
+  {
+    path: ROUTES.SIGNUP,
+    element: <Signup />,
+  },
+  { path: ROUTES.LOGIN, element: <Login /> },
   {
     path: ROUTES.HOME,
     element: <Layout />,
@@ -34,6 +41,10 @@ const routes: RouteObject[] = [
             ],
           },
         ],
+      },
+      {
+        path: ROUTES.SIGNUP,
+        element: <Signup />,
       },
     ],
   },
