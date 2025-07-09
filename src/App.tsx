@@ -5,6 +5,8 @@ import Layout from '@/layout/Layout';
 import { Login } from '@/pages/Login';
 import { Signup } from '@/pages/Signup';
 
+import UserMainPage from './features/home/pages/UserMainPage';
+
 // 라우터
 const routes: RouteObject[] = [
   {
@@ -24,6 +26,10 @@ const routes: RouteObject[] = [
       {
         path: ROUTES.SIGNUP,
         element: <Signup />,
+      },
+      {
+        path: ROUTES.USER_PAGE, // 'user'
+        element: <UserMainPage />,
       },
     ],
   },

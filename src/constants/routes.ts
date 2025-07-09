@@ -4,6 +4,8 @@ const ROUTES = {
   LOGIN: '/login',
   SIGNUP: '/signup',
   MYPAGE: '/mypage',
+  USER_PAGE: '/user',
+  EXPERT_PAGE: '/expert',
 };
 
 export default ROUTES;
