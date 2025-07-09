@@ -1,3 +1,4 @@
+import MockImage from '@/assets/images/동영상 등 대체 도형.png';
 import CommentBox from '@/components/CommentBox';
 import ImageSlide from '@/components/ImageSlide';
 import ReviewSlide from '@/components/ReviewSlide';
@@ -5,15 +6,7 @@ import MypageSection from '@/features/Mypage/components/MypageSection';
 import ProfileCard from '@/layout/components/ProfileCard';
 
 function TrainerMypage() {
-  const images = [
-    '/동영상 등 대체 도형.png',
-    '/동영상 등 대체 도형.png',
-    '/동영상 등 대체 도형.png',
-    '/동영상 등 대체 도형.png',
-    '/동영상 등 대체 도형.png',
-    '/동영상 등 대체 도형.png',
-    '/동영상 등 대체 도형.png',
-  ];
+  const images = Array.from({ length: 7 }, () => MockImage);
 
   const review = {
     name: '날다람주날닮았쥐',

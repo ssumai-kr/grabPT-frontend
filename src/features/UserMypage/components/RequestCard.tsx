@@ -14,7 +14,7 @@ function RequestCard({ name, location, center, category, content }: RequestCardP
   return (
     <div className="w-[800px]">
       <Box>
-        <div className="relative flex h-full flex-col p-4">
+        <div className="relative flex h-full flex-col p-[10px] pt-[15px]">
           {/* 닫기 (기능 없음) */}
           <img src={XIcon} alt="close" className="absolute top-2 right-2 h-4 w-4" />
 

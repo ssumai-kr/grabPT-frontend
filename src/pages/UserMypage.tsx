@@ -11,12 +11,9 @@ function UserMypage() {
   ];
 
   return (
-    <section className="my-[66px] flex flex-col items-center">
-      <div>
+    <section className="my-[66px]">
+      <div className="flex w-full flex-col items-center">
         <Tabs items={tabs} />
-      </div>
-
-      <div className="w-full">
         <Outlet />
       </div>
     </section>
