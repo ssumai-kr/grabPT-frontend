@@ -54,8 +54,8 @@ const routes: RouteObject[] = [
         element: <UserMainPage />,
       },
       {
-        path: ROUTES.CATEGORY,
-        element: <Category />,
+        path: ROUTES.CATEGORY_ROUTE, // 'category/*'
+        element: <Category />, 
       },
     ],
   },

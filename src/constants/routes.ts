@@ -4,10 +4,11 @@ const ROUTES = {
   SIGNUP: '/signup',
   MYPAGE: '/mypage',
   USERMYPAGE: '/mypage/user',
-  TRAINERMYPAGE: '/mypage/triner',
+  TRAINERMYPAGE: '/mypage/trainer',
   USER_PAGE: '/user',
   EXPERT_PAGE: '/expert',
-  CATEGORY: '/category/*', 
+  CATEGORY: '/category',       
+  CATEGORY_ROUTE: '/category/*',  
 };
 
 export default ROUTES;
