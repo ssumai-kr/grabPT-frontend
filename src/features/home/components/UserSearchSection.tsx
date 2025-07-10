@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import img1 from '/Users/seok/Documents/Projects/grabPT-frontend/public/Usermain1.png';
+import img1 from '@/features/home/assets/images/Usermain1.png';
 import img2 from '@/features/home/assets/images/Usermain2.png';
 import img3 from '@/features/home/assets/images/Usermain3.png';
 import arrowIcon from '@/features/home/assets/icons/NextArrow.svg';
