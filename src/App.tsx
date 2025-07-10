@@ -11,6 +11,9 @@ import { Signup } from '@/pages/Signup';
 import TrainerMypage from '@/pages/TrainerMypage';
 import UserMypage from '@/pages/UserMypage';
 
+import Category from './features/Category/pages/CategoryPage';
+import UserMainPage from './features/home/pages/UserMainPage';
+
 // 라우터
 const routes: RouteObject[] = [
   {
@@ -45,6 +48,14 @@ const routes: RouteObject[] = [
       {
         path: ROUTES.SIGNUP,
         element: <Signup />,
+      },
+      {
+        path: ROUTES.USER_PAGE, // 'user'
+        element: <UserMainPage />,
+      },
+      {
+        path: ROUTES.CATEGORY_ROUTE, // 'category/*'
+        element: <Category />, 
       },
     ],
   },
