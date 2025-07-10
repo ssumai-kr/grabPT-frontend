@@ -1,12 +1,11 @@
 import { useState } from 'react';
 
-import main from '@/features/home/assets/images/Usermain1.png';
+import img1 from '/Users/seok/Documents/Projects/grabPT-frontend/public/Usermain1.png';
+import img2 from '@/features/home/assets/images/Usermain2.png';
+import img3 from '@/features/home/assets/images/Usermain3.png';
+import arrowIcon from '@/features/home/assets/icons/NextArrow.svg';
 
-const images = [
-  'src/features/home/assets/images/Usermain1.png',
-  'src/features/home/assets/images/Usermain2.png',
-  'src/features/home/assets/images/Usermain3.png',
-];
+const images = [img1, img2, img3];
 
 export default function UserSearchSection() {
   const [current, setCurrent] = useState(0);
@@ -22,26 +21,25 @@ export default function UserSearchSection() {
 
   return (
     <section
-      className="relative h-[500px] w-full bg-cover bg-center transition-all duration-700"
-      style={{ backgroundImage: main }}
+      className="relative h-[552px] w-full bg-cover bg-center transition-all duration-700"
+      style={{ backgroundImage: `url(${images[current]})` }}
     >
       {/* 어두운 오버레이 */}
-      <div className="bg-opacity-40 absolute inset-0 z-10 bg-black" />
+      <div className="absolute inset-0 bg-black bg-opacity-40 z-10" />
 
-      {/* 콘텐츠 */}
+      {/* 텍스트 및 검색 UI */}
       <div className="absolute inset-0 z-20 flex flex-col justify-center px-[120px] text-white">
-        {/* 타이틀 */}
         <h1 className="w-[747px] text-left text-[60px] leading-[74px] font-extrabold whitespace-pre-line">
           <span className="text-[#ACBEFF]">운동</span>
           <span className="text-white">이 필요한 순간,{'\n'}딱 맞는 전문가를 찾아보세요</span>
         </h1>
 
-        {/* 서치바 & 태그 */}
-        <section className="mt-6 flex flex-col items-start gap-4">
-          {/* 서치바 */}
+        {/* 검색바 + 태그 */}
+        <div className="mt-6 flex flex-col items-start gap-4">
+          {/* 검색바 */}
           <div className="h-[50px] w-[700px]">
             <div className="h-full w-full rounded-full bg-gradient-to-r from-[#003EFB] to-[#FF00B2] p-[3px]">
-              <div className="flex h-full w-full items-center rounded-full bg-white px-[16px] py-[17px] pr-[15px]">
+              <div className="flex h-full w-full items-center rounded-full bg-white px-[16px] pr-[15px]">
                 <input
                   type="text"
                   placeholder="원하는 운동을 찾아보세요"
@@ -54,7 +52,7 @@ export default function UserSearchSection() {
             </div>
           </div>
 
-          {/* 태그 버튼 */}
+          {/* 태그 */}
           <div className="flex gap-3">
             {['헬스', '축구', '농구', '테니스'].map((tag) => (
               <div
@@ -65,15 +63,15 @@ export default function UserSearchSection() {
               </div>
             ))}
           </div>
-        </section>
+        </div>
       </div>
 
-      {/* 화살표 버튼 */}
+      {/* 오른쪽 아래 화살표 버튼 */}
       <button
         onClick={handleNext}
         className="absolute right-5 bottom-5 z-30 rounded-full bg-white p-2 shadow-md transition hover:scale-105"
       >
-        <img src="src/features/home/assets/icons/NextArrow.svg" alt="다음" className="h-5 w-5" />
+        <img src={arrowIcon} alt="다음" className="h-5 w-5" />
       </button>
     </section>
   );

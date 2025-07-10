@@ -1,8 +1,9 @@
 // src/pages/UserMainPage.tsx
 import React, { useRef } from 'react';
+
 import RequestCardScroll from '@/features/home/components/RequestCardScroll';
-import mockRequests from '@/features/home/data/dummy';
 import UserSearchSection from '@/features/home/components/UserSearchSection';
+import mockRequests from '@/features/home/data/dummy';
 
 const UserMainPage: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -12,13 +13,15 @@ const UserMainPage: React.FC = () => {
   };
 
   return (
-    <div className="p-10 flex flex-col gap-10">
+    <div className="flex flex-col">
       {/* 유저 검색창 */}
-    <UserSearchSection />
+      <UserSearchSection />
 
       {/* 요청서 섹션 */}
-      <section ref={sectionRef}>
-        <h2 className="text-xl font-bold mb-4">나의 요청서</h2>
+      <section className="mt-[109px] mx-[100px]" ref={sectionRef}>
+        <h2 className="font-pretendard text-[30px] leading-[100%] font-extrabold tracking-[0%]">
+          나의 요청서
+        </h2>
         <RequestCardScroll requests={mockRequests} />
       </section>
     </div>
