@@ -1,4 +1,3 @@
-// src/features/Category/data/dummy.ts
 import HeaderProfile from '@/assets/images/HeaderProfile.png';
 import ExpertImage from '@/features/Category/assets/ExpertProfileDummy.png';
 

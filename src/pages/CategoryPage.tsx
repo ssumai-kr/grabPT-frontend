@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 
 import SportsSelectSection from '@/features/Category/components/SportsSelectSection';
-import { SportsType } from '@/features/Signup/types/SportsType';
+import { SportsType } from '@/types/SportsType';
 
 import CategoryDetailPage from './CategoryDetailPage';
 

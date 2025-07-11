@@ -8,6 +8,7 @@ interface ExpertCardScrollProps {
   experts: ExpertCardProps[];
 }
 
+// 디자인 변경되면 적용해주세요
 const ExpertCardScroll: React.FC<ExpertCardScrollProps> = ({ experts }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);

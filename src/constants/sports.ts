@@ -8,7 +8,7 @@ import Swimming from '@/features/Signup/assets/Swimming.png';
 import Tabletennis from '@/features/Signup/assets/Tabletennis.png';
 import Tennis from '@/features/Signup/assets/Tennis.png';
 import Weight from '@/features/Signup/assets/Weight.png';
-import { SportsType } from '@/features/Signup/types/SportsType';
+import { SportsType } from '@/types/SportsType';
 
 export type SportItem = {
   slug: string;

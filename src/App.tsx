@@ -5,12 +5,12 @@ import UserDashboard from '@/features/UserMypage/components/UserDashboard';
 import UserRequests from '@/features/UserMypage/components/UserRequests';
 import UserReviews from '@/features/UserMypage/components/UserReviews';
 import UserSettings from '@/features/UserMypage/components/UserSettings';
-import UserMainPage from '@/features/home/pages/UserMainPage';
 import Layout from '@/layout/Layout';
 import CategoryPage from '@/pages/CategoryPage';
 import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
 import TrainerMypage from '@/pages/TrainerMypage';
+import UserMainPage from '@/pages/UserMainPage';
 import UserMypage from '@/pages/UserMypage';
 
 /* ───────── 라우트 테이블 ───────── */

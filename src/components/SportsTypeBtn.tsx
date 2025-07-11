@@ -1,4 +1,4 @@
-import type { SportsType } from '@/features/Signup/types/SportsType';
+import type { SportsType } from '@/types/SportsType';
 
 interface SportsTypeBtnProps {
   type: SportsType;

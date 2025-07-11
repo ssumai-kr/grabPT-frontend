@@ -4,7 +4,6 @@ import Pagination from '@/components/Pagination';
 import RequestCard from '@/features/UserMypage/components/RequestCard';
 
 const UserRequests = () => {
-  /* ─ mock data ───────────────────────────────────────── */
   const sample = {
     name: '날다람주날닮았쥐',
     location: '서울시 강서구 화곡동',
@@ -16,14 +15,12 @@ const UserRequests = () => {
   /** 실제 환경에선 API 응답으로 교체 */
   const requests = Array.from({ length: 23 }, () => sample);
 
-  /* ─ pagination ──────────────────────────────────────── */
   const PAGE_SIZE = 5;
   const [page, setPage] = useState(1);
   const total = Math.ceil(requests.length / PAGE_SIZE);
 
   const paged = requests.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  /* ─ UI ──────────────────────────────────────────────── */
   return (
     <div className="flex flex-col items-center">
       {/* 요청 카드 목록 */}

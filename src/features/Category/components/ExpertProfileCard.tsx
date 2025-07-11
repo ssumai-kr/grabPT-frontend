@@ -40,7 +40,7 @@ const ExpertProfileCard = ({
         {/* 별점 + 점수 */}
         <div className="flex items-center gap-[2px]">
           <StarRating rating={rating} size={20} />
-          <p className="font-[Pretendard Variable] text-[6px] leading-[8.4px] font-semibold text-black not-italic">
+          <p className="text-[6px] leading-[8.4px] font-semibold text-black not-italic">
             ({rating.toFixed(1)})
           </p>
         </div>
