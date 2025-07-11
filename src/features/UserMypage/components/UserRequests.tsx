@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import Pagination from '@/components/pagination';
+import Pagination from '@/components/Pagination';
 import RequestCard from '@/features/UserMypage/components/RequestCard';
 
-function UserRequests() {
+const UserRequests = () => {
   /* ─ mock data ───────────────────────────────────────── */
   const sample = {
     name: '날다람주날닮았쥐',
@@ -48,6 +48,6 @@ function UserRequests() {
       )}
     </div>
   );
-}
+};
 
 export default UserRequests;

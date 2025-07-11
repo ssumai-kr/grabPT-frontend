@@ -1,6 +1,5 @@
-// src/features/Category/components/SportsSelectSection.tsx
 import { SPORTS } from '@/constants/sports';
-import { SportsTypeBtn } from '@/features/Signup/components/SportsTypeBtn';
+import SportsTypeBtn from '@/features/Signup/components/SportsTypeBtn';
 import { SportsType } from '@/features/Signup/types/SportsType';
 
 interface SportsSelectSectionProps {
@@ -8,7 +7,7 @@ interface SportsSelectSectionProps {
   onSelect: (type: SportsType) => void;
 }
 
-export const SportsSelectSection = ({ selected, onSelect }: SportsSelectSectionProps) => {
+const SportsSelectSection = ({ selected, onSelect }: SportsSelectSectionProps) => {
   return (
     <section className="w-full px-6 py-20">
       <div className="mx-auto" style={{ width: 'calc(120px * 5 + 27px * 4)' }}>
@@ -42,3 +41,5 @@ export const SportsSelectSection = ({ selected, onSelect }: SportsSelectSectionP
     </section>
   );
 };
+
+export default SportsSelectSection;

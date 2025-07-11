@@ -7,7 +7,7 @@ import img3 from '@/features/home/assets/images/Usermain3.png';
 
 const images = [img1, img2, img3];
 
-export default function UserSearchSection() {
+const UserSearchSection = () => {
   const [current, setCurrent] = useState(0);
   const [keyword, setKeyword] = useState('');
 
@@ -75,4 +75,6 @@ export default function UserSearchSection() {
       </button>
     </section>
   );
-}
+};
+
+export default UserSearchSection;

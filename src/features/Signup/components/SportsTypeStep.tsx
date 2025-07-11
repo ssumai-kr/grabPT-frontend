@@ -11,14 +11,14 @@ import Tabletennis from '@/features/Signup/assets/Tabletennis.png';
 import Tennis from '@/features/Signup/assets/Tennis.png';
 import Weight from '@/features/Signup/assets/Weight.png';
 import SignupBtn from '@/features/Signup/components/SignupBtn';
-import { SportsTypeBtn } from '@/features/Signup/components/SportsTypeBtn';
+import SportsTypeBtn from '@/features/Signup/components/SportsTypeBtn';
 import { SportsType } from '@/features/Signup/types/SportsType';
 
-interface ISportTypeStep {
+interface SportTypeStepProps {
   onNext: () => void;
 }
 
-export const SportsTypeStep = ({ onNext }: ISportTypeStep) => {
+const SportsTypeStep = ({ onNext }: SportTypeStepProps) => {
   const [selectedSportsType, setSelectedSportsType] = useState<SportsType | null>(null);
   return (
     <div className="flex flex-col">
@@ -100,3 +100,5 @@ export const SportsTypeStep = ({ onNext }: ISportTypeStep) => {
     </div>
   );
 };
+
+export default SportsTypeStep;

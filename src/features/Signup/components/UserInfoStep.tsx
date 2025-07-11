@@ -3,11 +3,11 @@ import { useState } from 'react';
 import SignupLogo from '@/features/Signup/assets/SignupLogo.png';
 import SignupBtn from '@/features/Signup/components/SignupBtn';
 
-interface IUserInfoStep {
+interface UserInfoStepProps {
   onNext: () => void;
 }
 
-export const UserInfoStep = ({ onNext }: IUserInfoStep) => {
+const UserInfoStep = ({ onNext }: UserInfoStepProps) => {
   const [VerifyNumberCheckResult, setVerifyNumberCheckResult] = useState<boolean | null>(null);
   const [VerifyNumber, setVerifyNumber] = useState('');
   const handleVerifyNumberCheck = () => {
@@ -107,3 +107,5 @@ export const UserInfoStep = ({ onNext }: IUserInfoStep) => {
     </div>
   );
 };
+
+export default UserInfoStep;
