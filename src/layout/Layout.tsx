@@ -15,16 +15,12 @@ function Layout() {
       {/* Header */}
       <Header />
 
-      <main
-        className={`flex flex-1 flex-col justify-between overflow-y-scroll ${
-          isFullWidthPage ? '' : 'px-[220px] max-[1440px]:px-[180px]'
-        }`}
-      >
-        <Outlet />
-      </main>
-
-      {/* Footer */}
-      <Footer />
+      <section className="flex flex-1 flex-col justify-between overflow-y-scroll">
+        <main className={`${isFullWidthPage ? '' : 'px-[220px] max-[1440px]:px-[180px]'}`}>
+          <Outlet />
+        </main>
+        <Footer />
+      </section>
     </div>
   );
 }
