@@ -7,9 +7,9 @@ import UserReviews from '@/features/UserMypage/components/UserReviews';
 import UserSettings from '@/features/UserMypage/components/UserSettings';
 import Layout from '@/layout/Layout';
 import CategoryPage from '@/pages/CategoryPage';
+import ExpertMypage from '@/pages/ExpertMypage';
 import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
-import TrainerMypage from '@/pages/TrainerMypage';
 import UserMainPage from '@/pages/UserMainPage';
 import UserMypage from '@/pages/UserMypage';
 
@@ -39,7 +39,7 @@ const routes: RouteObject[] = [
       {
         path: 'mypage',
         children: [
-          { path: 'expert', element: <TrainerMypage /> },
+          { path: 'expert', element: <ExpertMypage /> },
 
           {
             path: 'user',
