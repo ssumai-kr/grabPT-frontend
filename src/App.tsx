@@ -12,6 +12,7 @@ import Signup from '@/pages/Signup';
 import TrainerMypage from '@/pages/TrainerMypage';
 import UserMainPage from '@/pages/UserMainPage';
 import UserMypage from '@/pages/UserMypage';
+import RequestsForTrainer from './pages/RequestsForTrainer';
 
 /* ───────── 라우트 테이블 ───────── */
 const routes: RouteObject[] = [
@@ -53,6 +54,14 @@ const routes: RouteObject[] = [
           },
         ],
       },
+
+      /* 요청서 관련 */
+      {
+        path: 'requests',
+        children: [
+          { index: true, element: <RequestsForTrainer /> },
+        ],
+      }
     ],
   },
 ];
