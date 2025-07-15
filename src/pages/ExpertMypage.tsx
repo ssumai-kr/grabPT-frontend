@@ -1,9 +1,9 @@
 import MockImage from '@/assets/images/동영상 등 대체 도형.png';
 import CommentBox from '@/components/CommentBox';
 import ImageSlide from '@/components/ImageSlide';
+import ProfileCard from '@/components/ProfileCard';
 import ReviewSlide from '@/components/ReviewSlide';
 import MypageSection from '@/features/Mypage/components/MypageSection';
-import ProfileCard from '@/layout/components/ProfileCard';
 
 const ExpertMypage = () => {
   const images = Array.from({ length: 7 }, () => MockImage);

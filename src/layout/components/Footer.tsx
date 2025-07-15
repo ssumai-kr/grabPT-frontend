@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="absolute inset-0 bg-[#000000D9]"></div>
 
       {/* 내용들 */}
-      <div className="absolute inset-0 flex justify-between p-12 text-[11px] leading-[140%] font-normal text-white">
+      <div className="absolute inset-0 flex justify-between p-12 pr-28 text-[11px] leading-[140%] font-normal text-white">
         <div className="flex gap-[30px]">
           <div className="w-[30px]">
             <img src={LogoIcon} alt="푸터로고" className="object-cover" />
