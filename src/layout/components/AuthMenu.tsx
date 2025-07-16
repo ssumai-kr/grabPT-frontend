@@ -14,7 +14,7 @@ function AuthMenu() {
   const navigate = useNavigate();
 
   const { isLoggedIn, isExpert, toggleExpert } = useUserRoleStore();
-  const [isOpenProfileDropdown, setIsOpenProfileDropdown] = useState<boolean>(true);
+  const [isOpenProfileDropdown, setIsOpenProfileDropdown] = useState<boolean>(false);
 
   return (
     <div className="flex items-center">

@@ -10,7 +10,7 @@ import { useUserRoleStore } from '@/store/useUserRoleStore';
 const Navbar = () => {
   const { isExpert } = useUserRoleStore();
   const location = useLocation();
-  const [isOpenCategoryDropdown, setIsOpenCategoryDropdown] = useState<boolean>(true);
+  const [isOpenCategoryDropdown, setIsOpenCategoryDropdown] = useState<boolean>(false);
 
   // 페이지 생성 시 path 수정, memo도입 고려
   const menuList = [

@@ -17,10 +17,7 @@ const ProfileCard = () => {
             용암동헬스장 브라이언박 트레이닝 센터
           </p>
           {/* 별이 벗어나는 버그가 있었는데 flex적용하니까 고쳐짐. 이유는 모름;; */}
-          <div className="flex h-[14px] items-end gap-[5px]">
-            <StarRating rating={4} size={14} />
-            <p className="text-[10px] leading-none font-bold">4.0</p>
-          </div>
+          <StarRating rating={4} size={14} fontSize={10} />
         </div>
       </div>
 

@@ -1,6 +1,9 @@
+import clsx from 'clsx';
+
 import Profile from '@/assets/images/HeaderProfile.png';
 import XIcon from '@/assets/images/x.png';
 import StarRating from '@/components/StarRating';
+import { useUserRoleStore } from '@/store/useUserRoleStore';
 
 interface ReviewCardProps {
   name: string;
@@ -10,13 +13,18 @@ interface ReviewCardProps {
 }
 
 const ReviewCard = ({ name, location, rating, content }: ReviewCardProps) => {
+  const { isExpert } = useUserRoleStore();
   return (
     <div className="relative flex h-[180px] w-full flex-col rounded-[10px] bg-white p-[10px] pt-[15px] shadow-[4px_4px_10px_rgba(0,0,0,0.25)]">
       {/* 삭제버튼 */}
-      <img src={XIcon} alt="close" className="absolute top-2 right-2 h-4 w-4" />
+      <img
+        src={XIcon}
+        alt="close"
+        className={clsx('absolute top-2 right-2 h-4 w-4', isExpert && 'hidden')}
+      />
 
       {/* 상단 정보 */}
-      <div className="flex items-start gap-[11px]">
+      <div className="flex gap-[11px]">
         {/* 아바타 */}
         <div>
           <img src={Profile} alt="profile" className="h-[47px]" />
@@ -27,7 +35,7 @@ const ReviewCard = ({ name, location, rating, content }: ReviewCardProps) => {
           <span className="text-[10px] leading-[140%] font-semibold text-[#7A7A7A]">
             {location}
           </span>
-          <StarRating rating={rating} size={10} />
+          <StarRating rating={rating} size={10} fontSize={6} />
         </div>
       </div>
 

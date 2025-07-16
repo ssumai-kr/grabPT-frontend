@@ -1,6 +1,6 @@
 import Dashboard from '@/components/Dashboard';
 
-const UserDashboard = () => {
+const ExpertDashboard = () => {
   return (
     <div className="mt-[80px] flex justify-center">
       <Dashboard></Dashboard>
@@ -8,4 +8,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default ExpertDashboard;

@@ -16,19 +16,17 @@ function ProfileDropdown() {
 
   const DropdownItem = ({ label }: { label: string }) => (
     <div className="flex h-[53px] w-[124px] items-center pl-[30px]">
-      <Link className="text-[#374151]" to="/">
+      <Link className="leading-[normal] font-semibold text-[#374151]" to="/">
         {label}
       </Link>
     </div>
   );
 
   return (
-    <Box width="" height="" className="rounded-xl bg-white">
-      <div className="text-lg leading-[normal] font-semibold">
-        {dropdownItems.map((item) => (
-          <DropdownItem key={item} label={item} />
-        ))}
-      </div>
+    <Box width="" height="" className="flex flex-col rounded-xl bg-white">
+      {dropdownItems.map((item) => (
+        <DropdownItem key={item} label={item} />
+      ))}
     </Box>
   );
 }
