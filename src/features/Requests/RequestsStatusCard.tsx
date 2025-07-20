@@ -15,15 +15,12 @@ interface RequestsStatusCardProps {
   totalPrice: number;
   status: string;
   id: number;
-  handleModalOpen?: () => void;
-  handleModalClose?: () => void;
 }
 
 const RequestsStatusCard = (props: RequestsStatusCardProps) => {
   return (
-    <div className="flex h-[75px] w-[700px] flex-row items-center justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm shadow-xl cursor-pointer hover:shadow-lg transition-shadow duration-200">
+    <div className="flex h-[75px] w-[700px] cursor-pointer flex-row items-center justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm shadow-xl transition-shadow duration-200 hover:shadow-lg">
       <UserRequestHeader nickName={props.nickName} location={props.location} />
-      {/* 우측 정보 */}
       <div className="flex items-center space-x-2">
         <span className="text-sm text-gray-700">{props.numbersOfpt}회</span>
         <span className="text-gray-400">|</span>
