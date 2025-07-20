@@ -27,9 +27,11 @@ const RequestPage = () => {
   const StepComponent = STEP_MAP[step];
 
   return (
-    <div className="flex flex-col items-center gap-8 py-12 text-center">
+    <div className="box-border flex flex-col items-center gap-8 py-12 text-center">
       <StepComponent />
-      <Button onClick={handleNextStep}>{isLast ? '작성 완료' : '다음'}</Button>
+      <Button onClick={handleNextStep} width="w-[26rem]">
+        {isLast ? '작성 완료' : '다음'}
+      </Button>
       <Stepper total={3} current={step} />
     </div>
   );

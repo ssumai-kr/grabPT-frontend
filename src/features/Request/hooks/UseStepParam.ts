@@ -11,7 +11,7 @@ function useStepParam(total = 3) {
 
   /* 공통 내부 함수: URLSearchParams 복사 후 step 수정 */
   const _update = (next: number) => {
-    // 한 번 더 보정
+    // 한 번 더 보정 (클램핑)
     const fixed = Math.min(Math.max(next, 1), total);
     const params = new URLSearchParams(searchParams);
     params.set('step', String(fixed));
