@@ -68,11 +68,11 @@ const routes: RouteObject[] = [
           },
         ],
       },
-      {path: `expert/:id`, element: <ExpertDetail/>} 
+      {path: `expert/:id`, element: <ExpertDetail/>}, 
 
       /* 요청서 관련 */
       {
-        path: 'requests',
+        path: ROUTES.REQUESTS.ROOT.slice(1),
         children: [
           { index: true, element: <RequestsForTrainer /> },
         ],
