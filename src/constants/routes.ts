@@ -4,6 +4,10 @@ const ROUTES = {
     USER: '/user',
     EXPERT: '/expert',
   },
+  
+  CHAT:{
+    ROOT:'/chat'
+  },
 
   AUTH: {
     LOGIN: '/login',
@@ -16,19 +20,20 @@ const ROUTES = {
     EXPERT: '/mypage/expert',
   },
 
+  MYPAGE_EXPERT: {
+    ROOT: '/mypage/expert',
+    PROFILE: '/mypage/expert/profile', // 자기소개
+    REVIEWS: '/mypage/expert/reviews', // 최근후기
+    CREDENTIALS: '/mypage/expert/credentials', // 자격사항 등록
+  },
+
   CATEGORY: {
     ROOT: '/category',
     WILDCARD: '/category/*',
   },
-
-  REQUESTS: {
-    ROOT: '/requests', //요청 현황 페이지
-    WRITE: '/requests/write', //요청서 작성 페이지
-    DETAIL: '/requests/:id', // 요청서 상세 페이지
-    EDIT: '/requests/edit/:id', // 요청서 수정 페이지
-    DELETE: '/requests/delete/:id', // 요청서 삭제 페이지
-    WILDCARD: '/requests/*',
-  },
+  EXPERTDETAIL:{
+    ROOT:'/'
+  }
 } as const;
 
 export default ROUTES;
