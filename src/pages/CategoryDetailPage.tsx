@@ -9,7 +9,7 @@ export default function CategoryDetailPage() {
   const { slug } = useParams(); // ex) tennis
 
   return (
-    <div className="flex flex-col pt-[155px]">
+    <div className="flex flex-col pt-[155px] w-[1477px] mx-auto">
       {/* 상단 제목 */}
 
       <div className="flex items-start gap-[10px]">
