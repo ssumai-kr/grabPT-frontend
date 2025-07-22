@@ -1,6 +1,7 @@
 import { type RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import ROUTES from '@/constants/routes';
+import { ExpertDetailInfo } from '@/features/ExpertDetail/components/ExpertDetailInfo';
 import ExpertCredentials from '@/features/ExpertMypage/components/ExpertCredentials';
 import ExpertDashboard from '@/features/ExpertMypage/components/ExpertDashboard';
 import ExpertProfile from '@/features/ExpertMypage/components/ExpertProfile';
@@ -16,6 +17,7 @@ import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
 import UserMainPage from '@/pages/UserMainPage';
 import UserMypage from '@/pages/UserMypage';
+import ExpertDetailReviews from '@/features/ExpertDetail/components/ExpertDetailReviews';
 import { Chat } from '@/pages/Chat';
 import { ExpertDetail } from '@/pages/ExpertDetail';
 import RequestsForTrainer from './pages/RequestsForTrainer';
@@ -68,6 +70,20 @@ const routes: RouteObject[] = [
           },
         ],
       },
+      {
+        path: ROUTES.EXPERTDETAIL.ROOT.slice(1),
+        element: <ExpertDetail />,
+        children: [
+          {
+            path: ROUTES.EXPERTDETAIL.INFO.replace(ROUTES.EXPERTDETAIL.ROOT + '/', ''),
+            element: <ExpertDetailInfo />,
+          },
+          {
+            path: ROUTES.EXPERTDETAIL.REVIEWS.replace(ROUTES.EXPERTDETAIL.ROOT + '/', ''),
+            element: <ExpertDetailReviews />,
+          },
+        ],
+      },
       {path: `expert/:id`, element: <ExpertDetail/>}, 
 
       /* 요청서 관련 */
@@ -80,8 +96,7 @@ const routes: RouteObject[] = [
     ],
   },
   /* 채팅 */
-  { path: ROUTES.CHAT.ROOT, element: <Chat/>},
-
+  { path: ROUTES.CHAT.ROOT, element: <Chat /> },
 ];
 
 const router = createBrowserRouter(routes);

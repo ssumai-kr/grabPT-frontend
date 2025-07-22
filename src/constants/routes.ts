@@ -31,12 +31,16 @@ const ROUTES = {
     ROOT: '/category',
     WILDCARD: '/category/*',
   },
-  REQUESTS: {
-    ROOT: '/requests', //요청현황
-    ID: '/requests/:id', //요청서 상세 페이지
-  },
+
   EXPERTDETAIL: {
-    ROOT: '/',
+    ROOT: '/expert/:id',
+    INFO: '/expert/:id/info',
+    REVIEWS: '/expert/:id/reviews',
+  },
+
+  REQUESTS: {
+    ROOT: '/requests', // 요청 현황
+    ID: '/requests/:id', // 요청서 상세 페이지
   },
 } as const;
 
