@@ -1,6 +1,8 @@
 import { type RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import ROUTES from '@/constants/routes';
+import { ExpertDetailInfo } from '@/features/ExpertDetail/components/ExpertDetailInfo';
+import ExpertDetailReviews from '@/features/ExpertDetail/components/ExpertDetailReviews';
 import ExpertCredentials from '@/features/ExpertMypage/components/ExpertCredentials';
 import ExpertDashboard from '@/features/ExpertMypage/components/ExpertDashboard';
 import ExpertProfile from '@/features/ExpertMypage/components/ExpertProfile';
@@ -65,6 +67,20 @@ const routes: RouteObject[] = [
               { path: 'reviews', element: <UserReviews /> },
               { path: 'settings', element: <UserSettings /> },
             ],
+          },
+        ],
+      },
+      {
+        path: ROUTES.EXPERTDETAIL.ROOT.slice(1),
+        element: <ExpertDetail />,
+        children: [
+          {
+            path: ROUTES.EXPERTDETAIL.INFO.replace(ROUTES.EXPERTDETAIL.ROOT + '/', ''),
+            element: <ExpertDetailInfo />,
+          },
+          {
+            path: ROUTES.EXPERTDETAIL.REVIEWS.replace(ROUTES.EXPERTDETAIL.ROOT + '/', ''),
+            element: <ExpertDetailReviews />,
           },
         ],
       },

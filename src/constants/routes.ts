@@ -31,9 +31,10 @@ const ROUTES = {
     ROOT: '/category',
     WILDCARD: '/category/*',
   },
-
   EXPERTDETAIL: {
-    ROOT: '/',
+    ROOT: '/expert/:id',
+    INFO: '/expert/:id/info',
+    REVIEWS: '/expert/:id/reviews',
   },
 
   REQUEST: {
