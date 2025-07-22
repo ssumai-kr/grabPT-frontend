@@ -31,7 +31,7 @@ const SelectPriceStep = () => {
       </h1>
 
       <section className="flex flex-col items-center gap-8 py-8">
-        {/* 횟수 ------------------------------------------------ */}
+        {/* 횟수  */}
         <div className="w-80 space-y-2">
           <label className="block text-center text-sm font-semibold">횟수</label>
           <div className="relative">
@@ -41,7 +41,7 @@ const SelectPriceStep = () => {
               min={1}
               value={count}
               onChange={(e) => setCount(Number(e.target.value))}
-              className="h-12 w-full rounded-lg border border-gray-300 px-4 text-center text-lg outline-none focus:border-blue-500"
+              className="h-12 w-full rounded-lg border border-gray-300 pr-12 pl-15.5 text-center text-lg outline-none focus:border-blue-500"
             />
             <span className="absolute top-1/2 right-4 -translate-y-1/2 text-sm text-gray-500">
               회
@@ -49,9 +49,9 @@ const SelectPriceStep = () => {
           </div>
         </div>
 
-        {/* 1당 가격 -------------------------------------------- */}
+        {/* 1당 가격  */}
         <div className="w-80 space-y-2">
-          <label className="block text-center text-sm font-semibold">1당 가격</label>
+          <label className="block text-sm font-semibold">1당 가격</label>
           <div className="relative">
             <input
               type="number"
@@ -60,7 +60,7 @@ const SelectPriceStep = () => {
               step={1000}
               value={unitPrice}
               onChange={(e) => setUnitPrice(Number(e.target.value))}
-              className="h-12 w-full rounded-lg border border-gray-300 px-4 text-center text-lg outline-none focus:border-blue-500"
+              className="box-border h-12 w-full rounded-lg border border-gray-300 pr-12 pl-15.5 text-center text-lg outline-none focus:border-blue-500"
             />
             <span className="absolute top-1/2 right-4 -translate-y-1/2 text-sm text-gray-500">
               원
