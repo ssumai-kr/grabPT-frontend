@@ -7,10 +7,9 @@ interface UserRequestHeaderProps {
   location: string;
 }
 
-const UserRequestHeader = ({nickName, location}: UserRequestHeaderProps) => {
+const UserRequestHeader = ({ nickName, location }: UserRequestHeaderProps) => {
   return (
     <div className="flex flex-row items-center justify-between">
-      {/* 프로필 아이콘 */}
       <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
         <svg className="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -20,15 +19,12 @@ const UserRequestHeader = ({nickName, location}: UserRequestHeaderProps) => {
           />
         </svg>
       </div>
-
-      {/* 텍스트 내용 */}
-      <div className="flex flex-col">
+      <div className="flex flex-col w-[128px]">
         <h3 className="text-lg font-semibold text-gray-900">{nickName}</h3>
-        <p className="text-sm text-gray-500">{location}</p>
+        <p className="text-[12px] text-gray-500">{location}</p>
       </div>
     </div>
   );
 };
-
 
 export default UserRequestHeader;
