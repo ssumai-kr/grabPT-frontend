@@ -40,7 +40,11 @@ const SelectPriceStep = () => {
               aria-label="PT 횟수"
               min={1}
               value={count}
-              onChange={(e) => setCount(Number(e.target.value))}
+              // NaN 방지
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                setCount(Number.isNaN(value) ? 0 : value);
+              }}
               className="h-12 w-full rounded-lg border border-gray-300 pr-12 pl-15.5 text-center text-lg outline-none focus:border-blue-500"
             />
             <span className="absolute top-1/2 right-4 -translate-y-1/2 text-sm text-gray-500">
@@ -59,7 +63,11 @@ const SelectPriceStep = () => {
               min={0}
               step={1000}
               value={unitPrice}
-              onChange={(e) => setUnitPrice(Number(e.target.value))}
+              // NaN 방지
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                setUnitPrice(Number.isNaN(value) ? 0 : value);
+              }}
               className="box-border h-12 w-full rounded-lg border border-gray-300 pr-12 pl-15.5 text-center text-lg outline-none focus:border-blue-500"
             />
             <span className="absolute top-1/2 right-4 -translate-y-1/2 text-sm text-gray-500">
