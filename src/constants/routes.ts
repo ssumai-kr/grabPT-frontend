@@ -38,6 +38,10 @@ const ROUTES = {
     REVIEWS: '/expert/:id/reviews',
   },
 
+  REQUEST: {
+    ROOT: '/request',
+  },
+
   REQUESTS: {
     ROOT: '/requests', // 요청 현황
     ID: '/requests/:id', // 요청서 상세 페이지

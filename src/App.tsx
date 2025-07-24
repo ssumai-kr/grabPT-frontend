@@ -14,6 +14,7 @@ import Layout from '@/layout/Layout';
 import CategoryPage from '@/pages/CategoryPage';
 import ExpertMypage from '@/pages/ExpertMypage';
 import Login from '@/pages/Login';
+import RequestPage from '@/pages/RequestPage';
 import Signup from '@/pages/Signup';
 import UserMainPage from '@/pages/UserMainPage';
 import UserMypage from '@/pages/UserMypage';
@@ -84,6 +85,10 @@ const routes: RouteObject[] = [
           },
         ],
       },
+
+      { path: `expert/:id`, element: <ExpertDetail /> },
+
+      { path: ROUTES.REQUEST.ROOT, element: <RequestPage /> },
       {path: `expert/:id`, element: <ExpertDetail/>}, 
 
       /* 요청서 관련 */
