@@ -19,15 +19,21 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install pnpm manually
-        run: npm install -g pnpm@10.13.1
+      # ✅ 수동으로 pnpm 설치
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm@10.13.1
+          pnpm -v
 
+      # ✅ 의존성 설치
       - name: Install dependencies
         run: pnpm install
 
+      # ✅ ESLint 실행
       - name: Run ESLint
         run: pnpm lint
 
+      # ✅ 빌드 실행
       - name: Build
         run: pnpm build
         env:
