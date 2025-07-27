@@ -12,17 +12,17 @@ import UserRequests from '@/features/UserMypage/components/UserRequests';
 import UserReviews from '@/features/UserMypage/components/UserReviews';
 import UserSettings from '@/features/UserMypage/components/UserSettings';
 import Layout from '@/layout/Layout';
-import CategoryPage from '@/pages/CategoryPage';
-import { Chat } from '@/pages/Chat';
-import { ExpertDetail } from '@/pages/ExpertDetail';
-import ExpertMypage from '@/pages/ExpertMypage';
-import Login from '@/pages/Login';
-import RequestDetailPage from '@/pages/RequestDetailPage';
-import RequestPage from '@/pages/RequestPage';
-import RequestsForTrainer from '@/pages/RequestsForTrainer';
-import Signup from '@/pages/Signup';
-import UserMainPage from '@/pages/UserMainPage';
-import UserMypage from '@/pages/UserMypage';
+import Login from '@/pages/Auth/Login';
+import Signup from '@/pages/Auth/Signup';
+import CategoryPage from '@/pages/Category/CategoryPage';
+import { Chat } from '@/pages/Chat/Chat';
+import { ExpertDetail } from '@/pages/ExpertDetail/ExpertDetail';
+import UserMainPage from '@/pages/Home/UserMainPage';
+import ExpertMypage from '@/pages/MyPage/ExpertMypage';
+import UserMypage from '@/pages/MyPage/UserMypage';
+import RequestDetailPage from '@/pages/Requests/RequestDetailPage';
+import RequestPage from '@/pages/Requests/RequestPage';
+import RequestsForTrainer from '@/pages/Requests/RequestsForTrainer';
 
 const routes: RouteObject[] = [
   /* 온보딩 */
