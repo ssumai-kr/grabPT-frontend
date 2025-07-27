@@ -3,7 +3,6 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 
 import SlideArrow from '@/components/SlideArrow';
-import { TitleLine } from '@/components/TitleLine';
 
 interface ImageSlideProps {
   title: string;
@@ -17,7 +16,7 @@ const CARD_CLASS = 'basis-[calc((100%_-_48px)_/_3)] w-[calc((100%_-_48px)_/_3)]'
 
 // 사진슬라이드
 // 구현하다보니까 요구사항이 많아지고 좀 복잡하네요... 모바일까지 고려하면 라이브러리 도입이 어떤가 싶습니다 ㅜ
-const ImageSlide = ({ title, images }: ImageSlideProps) => {
+const ImageSlide = ({ images }: ImageSlideProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [startIdx, setStartIdx] = useState(0);
   const [cardStepPx, setCardStepPx] = useState(0); // 카드 1장 + gap 실제 px
@@ -62,6 +61,7 @@ const ImageSlide = ({ title, images }: ImageSlideProps) => {
         {/* 뷰포트 마스크 */}
         <div className="overflow-hidden">
           {/* 트랙 */}
+          {/* 인라인 스타일 경고가 뜨는데 라이브러리 도입예정이기 때문에 냅두겠습니다 */}
           <div
             ref={trackRef}
             className="flex gap-6 transition-transform duration-300 ease-in-out"

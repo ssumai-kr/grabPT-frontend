@@ -9,6 +9,13 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   { ignores: ['dist', 'node_modules/*', '!src/**/*'] },
+  {
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
 
   // JS / TS Recommended
   eslint.configs.recommended,
@@ -35,6 +42,30 @@ export default tseslint.config(
       sourceType: 'module',
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+    rules: {
+      'react/prop-types': 'off',
+      'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+      'react/no-unescaped-entities': 'off',
+    },
+  },
+  {
+    files: ['prettier.config.cjs'],
+    languageOptions: {
+      globals: {
+        module: 'readonly',
+        require: 'readonly',
+      },
+      sourceType: 'script',
     },
   },
 
