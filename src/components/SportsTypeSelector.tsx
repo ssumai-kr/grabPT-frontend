@@ -9,7 +9,6 @@ interface SportsTypeSelectorProps {
   onSelectEnd?: (type: SportsType) => void;
 }
 
-
 const SportsTypeSelector = ({ value, onChange, onSelectEnd }: SportsTypeSelectorProps) => {
   const handleClick = (t: SportsType) => {
     onChange(t);
