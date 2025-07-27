@@ -3,11 +3,11 @@ import { SPORTS } from '@/constants/sports';
 import type { SportsType } from '@/types/SportsType';
 
 interface SportsTypeSelectorProps {
-  options: { type: SportsType; img: string }[]; // ✅ 추가
   value: SportsType | null;
   onChange: (type: SportsType) => void;
   onSelectEnd?: (type: SportsType) => void;
 }
+
 
 const SportsTypeSelector = ({ value, onChange, onSelectEnd }: SportsTypeSelectorProps) => {
   const handleClick = (t: SportsType) => {
