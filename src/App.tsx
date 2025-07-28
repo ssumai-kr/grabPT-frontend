@@ -20,6 +20,7 @@ import { ExpertDetail } from '@/pages/ExpertDetail/ExpertDetail';
 import UserMainPage from '@/pages/Home/UserMainPage';
 import ExpertMypage from '@/pages/MyPage/ExpertMypage';
 import UserMypage from '@/pages/MyPage/UserMypage';
+import ProposalDetailPage from '@/pages/Proposals/ProposalDetailPage';
 import RequestDetailPage from '@/pages/Requests/RequestDetailPage';
 import RequestPage from '@/pages/Requests/RequestPage';
 import RequestsForTrainer from '@/pages/Requests/RequestsForTrainer';
@@ -82,6 +83,15 @@ const routes: RouteObject[] = [
           { index: true, element: <RequestsForTrainer /> }, // 리스트
           { path: ROUTES.REQUESTS.NEW, element: <RequestPage /> }, // 작성
           { path: ROUTES.REQUESTS.DETAIL, element: <RequestDetailPage /> }, // 작성
+        ],
+      },
+
+      {
+        path: ROUTES.PROPOSALS.ROOT,
+        children: [
+          { index: true, element: <>나의 제안 현황</> },
+          { path: ROUTES.PROPOSALS.NEW, element: <>제안서 작성</> },
+          { path: ROUTES.PROPOSALS.DETAIL, element: <ProposalDetailPage /> },
         ],
       },
     ],
