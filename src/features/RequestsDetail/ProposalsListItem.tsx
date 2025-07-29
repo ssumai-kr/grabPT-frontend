@@ -12,11 +12,11 @@ const ProposalsListItem = ({ data }: ProposalsListItemProps) => {
       <div className="flex gap-3.5">
         <img src={Profile} alt="제안 트레이너 프로필" className="h-24" />
 
-        <div className="flex flex-col">
-          <p className="text-button text-2xl font-semibold">{data.nickname} 전문가님의 제안</p>
+        <div className="flex flex-col justify-between">
+          <p className="text-button text-2xl font-bold">{data.nickname} 전문가님의 제안</p>
           <p className="text-base font-bold">{data.center}</p>
-          <StarRating rating={data.averageRate} fontSize={10} />
-          <p className="text-xs font-normal">{data.address}</p>
+          <StarRating rating={data.averageRate} size={14} fontSize={10} />
+          <p className="text-xs font-semibold">{data.address}</p>
         </div>
       </div>
 

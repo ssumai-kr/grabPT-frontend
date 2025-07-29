@@ -41,9 +41,11 @@ type ProposalsForRequestResponseDto = {
 };
 
 export type ProposalsListType = {
+  // 제안서 상세페이지로 리다이렉트하기 위해 제안서 고유 id 필요합니다!
   nickname: string;
   center: string;
   address: string;
+  // pt횟수 누락되어있습니다
   count: number;
   price: number;
   averageRate: number;
