@@ -21,6 +21,8 @@ import UserMainPage from '@/pages/Home/UserMainPage';
 import ExpertMypage from '@/pages/MyPage/ExpertMypage';
 import UserMypage from '@/pages/MyPage/UserMypage';
 import ProposalDetailPage from '@/pages/Proposals/ProposalDetailPage';
+import ProposalFormPage from '@/pages/Proposals/ProposalFormPage';
+import ProposalsListPage from '@/pages/Proposals/ProposalsListPage';
 import ProposalsForRequest from '@/pages/Requests/ProposalsForRequest';
 import RequestDetailPage from '@/pages/Requests/RequestDetailPage';
 import RequestPage from '@/pages/Requests/RequestPage';
@@ -91,8 +93,8 @@ const routes: RouteObject[] = [
       {
         path: ROUTES.PROPOSALS.ROOT,
         children: [
-          { index: true, element: <>나의 제안 현황</> },
-          { path: ROUTES.PROPOSALS.NEW, element: <>제안서 작성</> },
+          { index: true, element: <ProposalsListPage /> },
+          { path: ROUTES.PROPOSALS.NEW, element: <ProposalFormPage /> },
           { path: ROUTES.PROPOSALS.DETAIL, element: <ProposalDetailPage /> },
         ],
       },
