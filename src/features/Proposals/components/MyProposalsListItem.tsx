@@ -1,6 +1,5 @@
 import Profile from '@/assets/images/HeaderProfile.png';
 import Box from '@/components/Box';
-import Pagination from '@/components/Pagination';
 
 const MyProposalsListItem = () => {
   return (
