@@ -1,12 +1,25 @@
+import { useEffect, useRef } from 'react';
+
 import clsx from 'clsx';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import useScrollToTop from '@/hooks/useScrollToTop';
 import Footer from '@/layout/components/Footer';
 import Header from '@/layout/components/Header';
+import useScrollStore from '@/store/useScrollStore';
 
 function Layout() {
   const location = useLocation();
   const isFullWidthPage = location.pathname === '/';
+
+  // 스크롤 조작 ref, store에 넘겨주기
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    useScrollStore.getState().setContainerRef(scrollRef); // 안전하게 등록
+  }, []);
+
+  // 경로 변경 시 스크롤
+  useScrollToTop(location);
 
   return (
     <div className="flex h-screen flex-col">
