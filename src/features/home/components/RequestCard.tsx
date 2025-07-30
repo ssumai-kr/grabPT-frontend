@@ -1,5 +1,6 @@
 // import { X } from 'lucide-react';
 import UserRequestHeader from '@/features/Requests/UserRequestHeader';
+
 import Hashtag from './Hashtag';
 
 // import type { RequestCardProps } from '@/features/home/types/request';
@@ -52,7 +53,7 @@ interface RequestCardInMainProps {
 
 const RequestCardInMain = ({ name, location, tags, text }: RequestCardInMainProps) => {
   return (
-    <div className="flex w-[340px] h-[220px] flex-col gap-[12px] rounded-xl px-[10px] py-[15px] shadow-[4px_4px_10px_rgba(0,0,0,0.25)] transition-transform duration-200 hover:scale-[1.02] cursor-pointer">
+    <div className="flex h-[220px] max-w-[340px] cursor-pointer flex-col gap-[12px] rounded-xl px-[10px] py-[15px] shadow-[4px_4px_10px_rgba(0,0,0,0.25)] transition-transform duration-200 hover:scale-[1.02] lg:w-[320px] xl:w-[320px] 2xl:w-[340px]">
       <UserRequestHeader nickName={name} location={location} />
       <div className="flex flex-wrap gap-[6px]">
         {tags.map((tag, idx) => (
