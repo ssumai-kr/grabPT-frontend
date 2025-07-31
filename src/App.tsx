@@ -16,6 +16,7 @@ import Login from '@/pages/Auth/Login';
 import Signup from '@/pages/Auth/Signup';
 import CategoryPage from '@/pages/Category/CategoryPage';
 import { Chat } from '@/pages/Chat/Chat';
+import ContractFormPage from '@/pages/Contracts/ContractFormPage';
 import { ExpertDetail } from '@/pages/ExpertDetail/ExpertDetail';
 import UserMainPage from '@/pages/Home/UserMainPage';
 import ExpertMypage from '@/pages/MyPage/ExpertMypage';
@@ -90,12 +91,22 @@ const routes: RouteObject[] = [
         ],
       },
 
+      // 제안서
       {
         path: ROUTES.PROPOSALS.ROOT,
         children: [
           { index: true, element: <ProposalsListPage /> },
           { path: ROUTES.PROPOSALS.NEW, element: <ProposalFormPage /> },
           { path: ROUTES.PROPOSALS.DETAIL, element: <ProposalDetailPage /> },
+        ],
+      },
+
+      // 계약
+      {
+        path: ROUTES.CONTRACTS.ROOT,
+        children: [
+          { path: ROUTES.CONTRACTS.NEW, element: <ContractFormPage /> },
+          { path: ROUTES.CONTRACTS.DETAIL, element: <ProposalDetailPage /> },
         ],
       },
     ],

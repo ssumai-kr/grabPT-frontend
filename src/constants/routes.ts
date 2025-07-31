@@ -59,6 +59,7 @@ const ROUTES = {
   },
 
   CONTRACTS: {
+    ROOT: '/contracts',
     NEW: '/contracts/new',
     DETAIL: '/contracts/:id',
   },
