@@ -43,9 +43,11 @@ const routes: RouteObject[] = [
     errorElement: <>없는 페이지입니다.</>,
 
     children: [
+      // 홈
       { index: true, element: <UserMainPage /> },
       { path: ROUTES.HOME.EXPERT, element: <ExpertMainPage /> },
 
+      // 카테고리
       { path: 'category/*', element: <CategoryPage /> },
 
       /* 마이페이지 ─ Expert */
@@ -78,7 +80,6 @@ const routes: RouteObject[] = [
         element: <ExpertDetail />,
         children: [
           { index: true, element: <ExpertDetailInfo /> }, // 기본 탭
-          { path: ROUTES.EXPERT_DETAIL.TABS.INFO, element: <ExpertDetailInfo /> },
           { path: ROUTES.EXPERT_DETAIL.TABS.REVIEWS, element: <ExpertDetailReviews /> },
         ],
       },
