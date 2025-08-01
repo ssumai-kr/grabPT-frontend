@@ -19,6 +19,7 @@ import { Chat } from '@/pages/Chat/Chat';
 import ContractDetailPage from '@/pages/Contracts/ContractDetailPage';
 import ContractFormPage from '@/pages/Contracts/ContractFormPage';
 import { ExpertDetail } from '@/pages/ExpertDetail/ExpertDetail';
+import ExpertMainPage from '@/pages/Home/ExpertMainPage';
 import UserMainPage from '@/pages/Home/UserMainPage';
 import ExpertMypage from '@/pages/MyPage/ExpertMypage';
 import UserMypage from '@/pages/MyPage/UserMypage';
@@ -43,6 +44,7 @@ const routes: RouteObject[] = [
 
     children: [
       { index: true, element: <UserMainPage /> },
+      { path: ROUTES.HOME.EXPERT, element: <ExpertMainPage /> },
 
       { path: 'category/*', element: <CategoryPage /> },
 
