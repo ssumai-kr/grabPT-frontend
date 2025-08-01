@@ -17,9 +17,7 @@ const RequestDetailPage = () => {
   // api연결 시 isWriter 함수로 변경 (요청서의 작성자 id === 현재 유저 id)
   const [isWriter] = useState<boolean>(false);
   const TabItems: TabItem[] = [
-    // { label: '정보', to: `/requests/${id}` },
     { label: '정보', to: urlFor.requestDetail(Number(id)) },
-    // { label: '제안 목록', to: `/requests/${id}/proposals` },
     { label: '제안 목록', to: urlFor.requestProposals(Number(id)) },
   ];
 
