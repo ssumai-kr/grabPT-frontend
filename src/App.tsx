@@ -16,6 +16,7 @@ import Login from '@/pages/Auth/Login';
 import Signup from '@/pages/Auth/Signup';
 import CategoryPage from '@/pages/Category/CategoryPage';
 import { Chat } from '@/pages/Chat/Chat';
+import ContractDetailPage from '@/pages/Contracts/ContractDetailPage';
 import ContractFormPage from '@/pages/Contracts/ContractFormPage';
 import { ExpertDetail } from '@/pages/ExpertDetail/ExpertDetail';
 import UserMainPage from '@/pages/Home/UserMainPage';
@@ -106,7 +107,7 @@ const routes: RouteObject[] = [
         path: ROUTES.CONTRACTS.ROOT,
         children: [
           { path: ROUTES.CONTRACTS.NEW, element: <ContractFormPage /> },
-          { path: ROUTES.CONTRACTS.DETAIL, element: <ProposalDetailPage /> },
+          { path: ROUTES.CONTRACTS.DETAIL, element: <ContractDetailPage /> },
         ],
       },
     ],

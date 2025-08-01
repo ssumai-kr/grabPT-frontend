@@ -19,7 +19,8 @@ import UserInformationForm from '@/features/Contract/components/UserInformationF
 // 계약서 작성페이지입니다.
 const ContractFormPage = () => {
   const [isAgree, setIsAgree] = useState<boolean>(false);
-
+  const [memberSign, setMemberSign] = useState<string | null>(null);
+  const [expertSign, setExpertSign] = useState<string | null>(null);
   const handleAgree = () => {
     setIsAgree((prev) => !prev);
   };
@@ -78,18 +79,14 @@ const ContractFormPage = () => {
             <p className="text-center text-base font-bold">
               상기 계약 내용을 충분히 이해하고 상호 합의하여 계약을 체결합니다.
             </p>
-            <div className="mt-4 grid grid-cols-2">
-              <SignatureBox title={'회원'} />
-              <SignatureBox title={'전문가'} />
+            <div className="mt-4 grid grid-cols-2 gap-10">
+              <SignatureBox title="회원" value={memberSign} onChange={setMemberSign} />
+              <SignatureBox title="전문가" value={expertSign} onChange={setExpertSign} />
             </div>
           </div>
 
-          <p className="text-center">
-            {
-              <p className="text-center text-sm font-bold">
-                {format(new Date(), 'yyyy년 M월 d일', { locale: ko })}
-              </p>
-            }
+          <p className="text-center text-sm font-bold">
+            {format(new Date(), 'yyyy년 M월 d일', { locale: ko })}
           </p>
 
           <div>
