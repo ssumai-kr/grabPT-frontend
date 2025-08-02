@@ -26,8 +26,8 @@ const SelectPriceStep = () => {
       </div>
 
       <h1 className="text-5xl font-extrabold">
-        희망하는 PT <span className="text-[var(--color-button)]">횟수</span> 와{' '}
-        <span className="text-[var(--color-button)]">가격</span>을 입력해주세요
+        희망하는 PT <span className="text-button">횟수</span> 와{' '}
+        <span className="text-button">가격</span>을 입력해주세요
       </h1>
 
       <section className="mt-[80px] mb-[20px] flex flex-col items-center gap-8">
