@@ -5,12 +5,14 @@ import RealtimeMatchingStatus from '@/components/RealtimeMatchingStatus';
 import { SPORTS } from '@/constants/sports';
 import ExpertCardScroll from '@/features/Category/components/ExpertCardScroll';
 import { dummyExperts } from '@/features/Category/data/dummy';
+import useGeolocation from '@/hooks/useGeolocation';
 
 // ⭐️ slug-label 매핑용
 
 const CategoryDetailPage = () => {
   const { slug } = useParams<{ slug: string }>(); // ① slug 파라미터
   const sport = SPORTS.find((s) => s.slug === slug); // ② 매핑
+  const { address, loading, error } = useGeolocation();
 
   // 잘못된 slug면 목록으로 리다이렉트
   if (!sport) return <Navigate to="/category" replace />;
@@ -24,7 +26,11 @@ const CategoryDetailPage = () => {
         </p>
         <div className="mt-[19.5px] ml-[10px] h-[17px] w-[152px]">
           <p className="leading-[100%] font-semibold sm:text-[12px] xl:text-[17px]">
-            서울시 강서구 화곡3동
+            {loading
+              ? '위치 불러오는 중...'
+              : error
+                ? error
+                : (address ?? `위치를 불러오지 못함`)}
           </p>
         </div>
       </div>
