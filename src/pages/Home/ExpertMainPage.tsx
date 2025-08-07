@@ -5,8 +5,10 @@ import mockRequests from '@/features/home/data/dummy';
 import { useProProfileQuery } from '@/hooks/useGetProProfile';
 
 const ExpertMainPage = () => {
-  const { data, isLoading, isError } = useProProfileQuery(5);
+  const { data, isLoading, isError } = useProProfileQuery(5); //임시로 userId 5번 설정
   const profileData = data?.result;
+
+  console.log(profileData);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError || !profileData) return <div>에러 발생</div>;
@@ -18,7 +20,7 @@ const ExpertMainPage = () => {
       </h1>
 
       <div className="mt-[66px]">
-        <ProfileCard />
+        <ProfileCard profileData={profileData}/>
       </div>
       <div className="mt-[145px]">
         <RequestSlider title={'받은 요청서'} requests={mockRequests} />
