@@ -6,7 +6,7 @@ import ROUTES from '@/constants/routes';
 import type { ProProfileType } from '@/types/ProPrifleType';
 
 interface ProfileCardProps {
-  profileData: ProProfileType;
+  profileData?: ProProfileType;
 }
 
 const ProfileCard = ({ profileData }: ProfileCardProps) => {
