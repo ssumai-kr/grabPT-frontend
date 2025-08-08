@@ -33,7 +33,7 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
     dots: true,
     beforeChange: (_: number, next: number) => setCurrentSlide(next),
     nextArrow: <NextArrow />,
-    prevArrow: currentSlide === 0 ? <></> : <PrevArrow />,
+    prevArrow: currentSlide === 0 ? undefined : <PrevArrow />,
     responsive: [
       { breakpoint: 1536, settings: { slidesToShow: 3 } },
       { breakpoint: 1280, settings: { slidesToShow: 2 } },

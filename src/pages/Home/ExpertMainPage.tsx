@@ -5,7 +5,7 @@ import mockRequests from '@/features/home/data/dummy';
 import { useProProfileQuery } from '@/hooks/useGetProProfile';
 
 const ExpertMainPage = () => {
-  const { data, isLoading, isError } = useProProfileQuery(5); //임시로 userId 5번 설정
+  const { data, isLoading, isError } = useProProfileQuery();
   const profileData = data?.result;
 
   console.log(profileData);
@@ -16,7 +16,7 @@ const ExpertMainPage = () => {
   return (
     <section className="mt-[70px] mb-[140px] flex flex-col items-center">
       <h1 className="text-[40px] font-bold">
-        안녕하세요! {profileData?.proName} <span className="text-button">전문가</span>님!
+        안녕하세요! {profileData?.userName} <span className="text-button">전문가</span>님!
       </h1>
 
       <div className="mt-[66px]">
