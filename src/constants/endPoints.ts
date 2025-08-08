@@ -5,7 +5,12 @@ export const END_POINT = {
 
   HOME: {},
 
-  MYPAGE: {},
+  MYPAGE: {
+    LIST: {
+      //요청서 조회 페이지만 있어서 list로 작성
+      list: `/api/requestion/my`,
+    },
+  },
 
   CATEGORY: {
     realtime: (categoryCode: SportsSlugType) => `/api/v1/requests/${categoryCode}`,
@@ -17,12 +22,18 @@ export const END_POINT = {
     },
     FORM: {},
     DETAIL: {},
-    PROPOSALS_FOR_REQUESTS: {},
+    PROPOSALS_FOR_REQUESTS: (requestionId: number) =>
+      `/api/suggestion/requestionList/${requestionId}`,
   },
 
-  PROPOSALS: {},
+  PROPOSALS: {
+    list: '/api/suggestion/mySuggestions',
+  },
 
-  CHAT: {},
+  CHAT: {
+    list: '/chatRoom/list',
+    messages: (roomId: number) => `/chatRoom/${roomId}/messages`,
+  },
 
   CONTRACTS: {},
 
