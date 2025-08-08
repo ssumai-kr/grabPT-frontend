@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import { urlFor } from '@/constants/routes';
 import ExpertProfileCard from '@/features/Category/components/ExpertProfileCard';
-import type { ExpertCardItem } from '@/types/ExpertCardItemType';
 import ArrowRight from '@/features/home/assets/icons/ArrowRight';
+import type { ExpertCardItem } from '@/types/ExpertCardItemType';
 
 interface ExpertCardScrollProps {
   experts: ExpertCardItem[];
@@ -12,28 +13,48 @@ interface ExpertCardScrollProps {
 
 const ExpertCardScroll = ({ experts }: ExpertCardScrollProps) => {
   const navigate = useNavigate();
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
 
   const navigateToExpertDetail = (id: number) => {
     navigate(urlFor.expertDetail(id));
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollRef.current) {
-        setShowLeftArrow(scrollRef.current.scrollLeft > 0);
-      }
-    };
+  const updateArrowVisibility = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const atLeft = el.scrollLeft <= 0;
+    const atRight = Math.ceil(el.scrollLeft + el.clientWidth) >= el.scrollWidth; // 반올림으로 오차 보정
+    setShowLeftArrow(!atLeft);
+    setShowRightArrow(!atRight);
+  };
 
-    const scrollEl = scrollRef.current;
-    scrollEl?.addEventListener('scroll', handleScroll);
-    return () => scrollEl?.removeEventListener('scroll', handleScroll);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onScroll = () => updateArrowVisibility();
+    el.addEventListener('scroll', onScroll, { passive: true });
+
+    updateArrowVisibility();
+
+    const onResize = () => updateArrowVisibility();
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+    };
   }, []);
 
   const scrollBy = (offset: number) => {
-    scrollRef.current?.scrollBy({ left: offset, behavior: 'smooth' });
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: offset, behavior: 'smooth' });
+
+    requestAnimationFrame(updateArrowVisibility);
+    setTimeout(updateArrowVisibility, 350);
   };
 
   if (!experts?.length) {
@@ -77,13 +98,15 @@ const ExpertCardScroll = ({ experts }: ExpertCardScrollProps) => {
       </div>
 
       {/* 오른쪽 버튼 */}
-      <button
-        className="absolute right-3 z-20 m-0 flex h-[60px] w-[60px] items-center justify-center rounded-full border border-gray-300 bg-white p-0 shadow transition-transform duration-200 hover:scale-105 hover:shadow-lg"
-        onClick={() => scrollBy(320)}
-        aria-label="다음"
-      >
-        <ArrowRight className="aspect-square h-[60px] w-[60px] flex-shrink-0" />
-      </button>
+      {showRightArrow && (
+        <button
+          className="absolute right-3 z-20 m-0 flex h-[60px] w-[60px] items-center justify-center rounded-full border border-gray-300 bg-white p-0 shadow transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+          onClick={() => scrollBy(320)}
+          aria-label="다음"
+        >
+          <ArrowRight className="aspect-square h-[60px] w-[60px] flex-shrink-0" />
+        </button>
+      )}
     </div>
   );
 };
