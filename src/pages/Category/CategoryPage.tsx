@@ -1,5 +1,5 @@
 // src/features/Category/pages/CategoryPage.tsx
-import { useState } from 'react';
+//import { useState } from 'react';
 
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
@@ -7,10 +7,14 @@ import type { SportItem } from '@/constants/sports';
 import SportsSelectSection from '@/features/Category/components/SportsSelectSection';
 
 import CategoryDetailPage from './CategoryDetailPage';
+import { useSelectedSportStore } from '@/store/useSelectedCategoryStore';
 
 export default function CategoryPage() {
-  const [selected, setSelected] = useState<SportItem | null>(null);
+  //const [selected, setSelected] = useState<SportItem | null>(null);
   const navigate = useNavigate();
+
+  const selected = useSelectedSportStore((s) => s.selected);
+  const setSelected = useSelectedSportStore((s) => s.setSelected);
 
   const handleSelect = (type: SportItem) => {
     setSelected(type);
