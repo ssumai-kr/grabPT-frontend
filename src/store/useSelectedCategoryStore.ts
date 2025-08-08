@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
 import type { SportItem } from '@/constants/sports';
 
 type SelectedSportState = {
@@ -18,6 +19,6 @@ export const useSelectedSportStore = create<SelectedSportState>()(
     {
       name: 'selected-sport', // storage key
       storage: createJSONStorage(() => sessionStorage), // 필요하면 localStorage로 교체
-    }
-  )
+    },
+  ),
 );

@@ -1,6 +1,7 @@
 // src/hooks/useGetUserInfo.ts
 import { useQuery } from '@tanstack/react-query';
-import { getLocation, type UserInfo} from '@/apis/getUserInfo';
+
+import { type UserInfo, getLocation } from '@/apis/getUserInfo';
 
 export function useGetUserInfo(accessToken?: string) {
   return useQuery<UserInfo>({

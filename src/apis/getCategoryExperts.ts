@@ -2,16 +2,13 @@
 import { publicInstance } from '@/libs/axios';
 import type { getCategoryExpertsInfoDto } from '@/types/CategoryExpertsType';
 
-export const getCategoryExperts = async (
-  categoryCode: string,
-  region: string
-) => {
+export const getCategoryExperts = async (categoryCode: string, region: string) => {
   try {
     const { data } = await publicInstance.get<getCategoryExpertsInfoDto>(
       `/api/v1/category/${encodeURIComponent(categoryCode)}/trainers`,
       {
         params: { region },
-      }
+      },
     );
     return data;
   } catch (error) {

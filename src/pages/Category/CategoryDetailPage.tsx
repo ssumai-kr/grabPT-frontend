@@ -18,7 +18,7 @@ const CategoryDetailPage = () => {
   const { address, loading, error } = useGeolocation();
   const token = localStorage.getItem('accessToken') ?? undefined;
   const { data: userData } = useGetUserInfo(token);
-  const { data: expertsList } = useGetCategoryExperts(slug, '역삼동');
+  const { data: expertsList } = useGetCategoryExperts(slug, location);
   const expertCards = useMemo<ExpertCardItem[]>(
     () =>
       (expertsList ?? []).map((e) => ({

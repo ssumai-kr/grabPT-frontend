@@ -21,27 +21,22 @@ export interface UserInfo {
 
 export interface ApiResponse<T> {
   isSuccess: boolean;
-  code: string;       // e.g., "COMMON200"
-  message: string;    // e.g., "성공입니다."
+  code: string; // e.g., "COMMON200"
+  message: string; // e.g., "성공입니다."
   result: T;
 }
 
 // /api/v1/users/info 응답 타입
 export type GetUserInfoResponse = ApiResponse<UserInfo>;
 
-
-
 /** accessToken으로 사용자 정보 조회 */
 export async function getLocation(accessToken: string): Promise<GetUserInfoResponse> {
   try {
-    const { data } = await publicInstance.get<ApiResponse<UserInfo>>(
-      '/api/users/info',
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const { data } = await publicInstance.get<ApiResponse<UserInfo>>('/api/users/info', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return data;
   } catch (error) {
     console.error(error);

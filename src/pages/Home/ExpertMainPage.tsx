@@ -20,7 +20,7 @@ const ExpertMainPage = () => {
       </h1>
 
       <div className="mt-[66px]">
-        <ProfileCard profileData={profileData}/>
+        <ProfileCard profileData={profileData} />
       </div>
       <div className="mt-[145px]">
         <RequestSlider title={'받은 요청서'} requests={mockRequests} />

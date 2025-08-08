@@ -1,11 +1,11 @@
-import type { CommonResponseDto } from "./commonResponseDto";
+import type { CommonResponseDto } from './commonResponseDto';
 
 export type Address = {
   city: string;
   district: string;
   street: string;
   zipcode: string;
-}
+};
 
 export type ProProfileType = {
   proId: number;
@@ -22,6 +22,6 @@ export type ProProfileType = {
   pricePerSession: number;
   totalSessions: number;
   address: Address[];
-}
+};
 
-export type getProPrifleResponseDto = CommonResponseDto<ProProfileType>
+export type getProPrifleResponseDto = CommonResponseDto<ProProfileType>;

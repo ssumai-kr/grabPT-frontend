@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+
 import { getProProfile } from '@/apis/getProProfile';
 import type { getProPrifleResponseDto } from '@/types/ProPrifleType';
 
