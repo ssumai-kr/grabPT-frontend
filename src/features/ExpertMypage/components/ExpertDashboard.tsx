@@ -11,9 +11,8 @@ const ExpertDashboard = () => {
   useEffect(() => {
     if (data) setUserInfo(data);
   }, [data]);
-
   return (
-    <div className="mt-[80px] flex justify-center">
+    <div className="mx-auto mt-[80px] flex items-center justify-center">
       <Dashboard userInfo={userInfo} />
     </div>
   );

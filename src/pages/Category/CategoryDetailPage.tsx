@@ -18,7 +18,7 @@ const CategoryDetailPage = () => {
   const { address, loading, error } = useGeolocation();
   const token = localStorage.getItem('accessToken') ?? undefined;
   const { data: userData } = useGetUserInfo(token);
-  const { data: expertsList } = useGetCategoryExperts(slug, "역삼동");
+  const { data: expertsList } = useGetCategoryExperts(slug, address);
   const expertCards = useMemo<ExpertCardItem[]>(
     () =>
       (expertsList ?? []).map((e) => ({
@@ -32,7 +32,7 @@ const CategoryDetailPage = () => {
     [expertsList],
   );
 
-  const loc = userData?.address.street;
+  const loc = userData?.address[0].street;
 
   useEffect(() => {
     if (loc) setLocation(loc);
