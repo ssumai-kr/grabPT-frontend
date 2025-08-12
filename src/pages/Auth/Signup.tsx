@@ -15,10 +15,23 @@ import { useSignupStore } from '@/store/useSignupStore';
 
 const Signup = () => {
   const nav = useNavigate();
-  const { role } = useSignupStore();
+  const { role, setUserInfo, setOauthId, setOauthProvider, setUserName } = useSignupStore();
   const [step, setStep] = useState<number>(0);
   const { mutate: userSignup } = useUserSignup();
   const { mutate: proSignup } = useProSignup();
+
+  // 쿠키 값 가져오기
+  function getCookieValue(name: string) {
+    const match = document.cookie.split('; ').find((row) => row.startsWith(name + '='));
+    return match ? match.split('=')[1] : '';
+  }
+  //쿠키 디코딩 로직
+  function decodeBase64Utf8(base64String: string) {
+    if (!base64String) return '';
+    const binary = atob(base64String);
+    const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
 
   const handleNext = () => {
     if (role === 2 && step === 2) {
@@ -42,12 +55,21 @@ const Signup = () => {
       setStep((prev) => prev - 1);
     }
   };
-
+  const oauthId = decodeBase64Utf8(getCookieValue('oauthId') || '');
+  const oauthProvider = decodeBase64Utf8(getCookieValue('oauthProvider') || '');
+  const username = decodeBase64Utf8(getCookieValue('oauthName') || '');
+  const email = decodeBase64Utf8(getCookieValue('oauthEmail') || '');
   useEffect(() => {
+    setOauthId(oauthId);
+    setOauthProvider(oauthProvider);
+    setUserName(username);
+    // 이메일은 "카카오 외" 공급자이고 쿠키에 값이 있을 때만 초기화 (빈 문자열로 덮어쓰지 않도록)
+    if (oauthProvider !== 'kakao' && email!== '') {
+      setUserInfo({ email });
+    }
     if (step === 6) {
       if (role === 1) {
         const payload = useSignupStore.getState().getUserSignupDto();
-
         console.log('📦 보내는 user-signup payload:', payload); //
         userSignup(
           {
@@ -76,7 +98,21 @@ const Signup = () => {
         });
       }
     }
-  }, [nav, step, role, userSignup, proSignup]);
+  }, [
+    email,
+    nav,
+    oauthId,
+    oauthProvider,
+    proSignup,
+    role,
+    setOauthId,
+    setOauthProvider,
+    setUserInfo,
+    setUserName,
+    step,
+    userSignup,
+    username,
+  ]);
 
   return (
     <div className="relative flex h-dvh w-full items-center justify-center bg-gradient-to-bl from-[#8CAFFF] to-[#FFFFFF]">

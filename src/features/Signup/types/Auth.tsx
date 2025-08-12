@@ -9,6 +9,12 @@ export type BaseSignupRequestDto = SignupUserInfoStepDto &
     oauthProvider: string;
     role: number;
   };
+export type SocialLoginResponseDto = {
+  oauthEmail: string | null;
+  oauthName: string;
+  oauthId: string;
+  oauthProvider: string;
+};
 export type SignupUserAgreementDto = {
   agreedTermsId: number[];
   agreeMarketing: boolean;
