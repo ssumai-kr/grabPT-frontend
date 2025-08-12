@@ -67,7 +67,9 @@ export const postProSignup = async (
 
 export const getSocialLoginInfo = async (): Promise<CommonResponseDto<SocialLoginInfo>> => {
   const { data } = await publicInstance.get(END_POINT.AUTH.SOCIAL_INFO);
+  console.log('소셜 로그인 정보:', data);
   return data;
+  
 };
 export const postSmsVerify = async (
   body: SmsVerifyRequestDto,

@@ -38,7 +38,7 @@ export const useSignupStore = create<
   }
 >((set, get) => ({
   userInfo: {
-    email: 'kkim02@gmail.com',
+    email: '',
     phoneNum: '',
     address: { city: '', district: '', street: '', streetCode: '', zipcode: '', specAddress: '' },
   },
@@ -46,7 +46,7 @@ export const useSignupStore = create<
   sportsTypeInfo: { categoryId: 0 },
   nicknameInfo: { nickname: '' },
   profileImageInfo: null,
-  socialLoginInfo: { username: '', oauthId: '', oauthProvider: '' },
+  socialLoginInfo: { username: '', oauthId: '', oauthProvider: '', email:null },
   role: 0,
   agreementInfo: { agreedTermsId: [], agreeMarketing: false },
 
@@ -83,6 +83,7 @@ export const useSignupStore = create<
         username: '',
         oauthId: '',
         oauthProvider: '',
+        email: null,
       },
       role: 0,
       agreementInfo: { agreedTermsId: [], agreeMarketing: false },

@@ -10,10 +10,10 @@ export type BaseSignupRequestDto = SignupUserInfoStepDto &
     role: number;
   };
 export type SocialLoginInfo = {
-  email: string;
+  email: string|null;
   username: string;
   oauthId: string;
-  oauthProvider: string;
+  oauthProvider: 'kakao' | 'naver' | 'google' | '';
 };
 export type SignupUserAgreementDto = {
   agreedTermsId: number[];

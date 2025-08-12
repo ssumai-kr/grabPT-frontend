@@ -47,12 +47,6 @@ const Signup = () => {
 
   useEffect(() => {
     if (step === 6) {
-      setSocialLoginInfo({
-        username: socialLoginData.data?.username || '',
-        oauthId: socialLoginData.data?.oauthId || '',
-        oauthProvider: socialLoginData.data?.oauthProvider || '',
-        email: socialLoginData.data?.email || '',
-      });
       if (role === 1) {
         const payload = useSignupStore.getState().getUserSignupDto();
 
@@ -84,7 +78,7 @@ const Signup = () => {
         });
       }
     }
-  }, [nav, step, role, userSignup, proSignup, setSocialLoginInfo]);
+  }, [nav, step, role, userSignup, proSignup, setSocialLoginInfo, socialLoginData.data?.username, socialLoginData.data?.oauthId, socialLoginData.data?.oauthProvider, socialLoginData.data?.email]);
 
   return (
     <div className="relative flex h-dvh w-full items-center justify-center bg-gradient-to-bl from-[#8CAFFF] to-[#FFFFFF]">
