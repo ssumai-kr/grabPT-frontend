@@ -13,12 +13,20 @@ import { useProSignup } from '@/features/Signup/hooks/useProSignup';
 import { useUserSignup } from '@/features/Signup/hooks/useUserSignup';
 import { useSignupStore } from '@/store/useSignupStore';
 
+
 const Signup = () => {
   const nav = useNavigate();
-  const { role } = useSignupStore();
+  const { role,   } = useSignupStore();
   const [step, setStep] = useState<number>(0);
   const { mutate: userSignup } = useUserSignup();
   const { mutate: proSignup } = useProSignup();
+
+const getCookieValue = (key:string) => {
+    return document.cookie
+        .split('; ')
+        .map(cookie => cookie.split('='))
+        .find(([cookieKey]) => cookieKey === key)?.[1] || null;
+};
 
   const handleNext = () => {
     if (role === 2 && step === 2) {

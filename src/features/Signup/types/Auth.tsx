@@ -3,12 +3,14 @@ import type { SportsTypeStepDto } from '@/types/SportsTypeStepDto';
 export type BaseSignupRequestDto = SignupUserInfoStepDto &
   SportsTypeStepDto &
   SignupNicknameStepDto &
-  SignupUserAgreementDto & {
+  SignupUserAgreementDto & SocialLoginInfo & {
+    role: number;
+  };
+  export type SocialLoginInfo ={
     username: string;
     oauthId: string;
     oauthProvider: string;
-    role: number;
-  };
+  }
 export type SignupUserAgreementDto = {
   agreedTermsId: number[];
   agreeMarketing: boolean;

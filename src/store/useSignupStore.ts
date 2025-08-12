@@ -5,6 +5,7 @@ import type {
   SignupProInfoStepDto,
   SignupUserAgreementDto,
   SignupUserInfoStepDto,
+  SocialLoginInfo,
 } from '@/features/Signup/types/Auth';
 import type { SportsTypeStepDto } from '@/types/SportsTypeStepDto';
 
@@ -13,9 +14,12 @@ interface SignupState {
   proInfo: SignupProInfoStepDto;
   sportsTypeInfo: SportsTypeStepDto;
   nicknameInfo: SignupNicknameStepDto;
+  // socialLoginInfo: SocialLoginInfo;
+  //
   username: string;
   oauthId: string;
   oauthProvider: string;
+  //
   role: number;
   agreementInfo: SignupUserAgreementDto;
   profileImageInfo: File | null;
@@ -25,6 +29,7 @@ interface SignupState {
   setSportsTypeInfo: (info: Partial<SportsTypeStepDto>) => void;
   setNicknameInfo: (info: Partial<SignupNicknameStepDto>) => void;
   setProfileImageInfo: (file: File | null) => void;
+  setSocialLoginInfo: (info: SocialLoginInfo) => void;
   setUserName: (info: string) => void;
   setOauthId: (info: string) => void;
   setOauthProvider: (info: string) => void;
