@@ -59,7 +59,7 @@ const UserInfoStep = ({ onNext }: UserInfoStepProps) => {
         specAddress: data.specAddress,
       },
     });
-    console.log(userInfo);
+    console.log('이메일이 담겨있나용:', userInfo);
     onNext();
   };
   const phoneNum = watch('phoneNum');

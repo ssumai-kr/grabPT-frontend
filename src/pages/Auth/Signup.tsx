@@ -55,12 +55,18 @@ const Signup = () => {
       setStep((prev) => prev - 1);
     }
   };
-
+  const oauthId = decodeBase64Utf8(getCookieValue('oauthId') || '');
+  const oauthProvider = decodeBase64Utf8(getCookieValue('oauthProvider') || '');
+  const username = decodeBase64Utf8(getCookieValue('oauthName') || '');
+  const email = decodeBase64Utf8(getCookieValue('oauthEmail') || '');
   useEffect(() => {
-    setOauthId(decodeBase64Utf8(getCookieValue('oauthId') || ''));
-    setOauthProvider(decodeBase64Utf8(getCookieValue('oauthProvider') || ''));
-    setUserName(decodeBase64Utf8(getCookieValue('oauthName') || ''));
-    setUserInfo({ email: decodeBase64Utf8(getCookieValue('oauthEmail') || '') });
+    setOauthId(oauthId);
+    setOauthProvider(oauthProvider);
+    setUserName(username);
+    // 이메일은 "카카오 외" 공급자이고 쿠키에 값이 있을 때만 초기화 (빈 문자열로 덮어쓰지 않도록)
+    if (oauthProvider !== 'kakao' && email.length > 2) {
+      setUserInfo({ email });
+    }
     if (step === 6) {
       if (role === 1) {
         const payload = useSignupStore.getState().getUserSignupDto();
@@ -94,7 +100,10 @@ const Signup = () => {
       }
     }
   }, [
+    email,
     nav,
+    oauthId,
+    oauthProvider,
     proSignup,
     role,
     setOauthId,
@@ -103,6 +112,7 @@ const Signup = () => {
     setUserName,
     step,
     userSignup,
+    username,
   ]);
 
   return (
