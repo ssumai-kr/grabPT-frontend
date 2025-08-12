@@ -46,7 +46,7 @@ export const useSignupStore = create<
   sportsTypeInfo: { categoryId: 0 },
   nicknameInfo: { nickname: '' },
   profileImageInfo: null,
-  socialLoginInfo: { username: '', oauthId: '', oauthProvider: '', email:null },
+  socialLoginInfo: { username: '', oauthId: '', oauthProvider: '', email: null },
   role: 0,
   agreementInfo: { agreedTermsId: [], agreeMarketing: false },
 

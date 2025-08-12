@@ -78,7 +78,18 @@ const Signup = () => {
         });
       }
     }
-  }, [nav, step, role, userSignup, proSignup, setSocialLoginInfo, socialLoginData.data?.username, socialLoginData.data?.oauthId, socialLoginData.data?.oauthProvider, socialLoginData.data?.email]);
+  }, [
+    nav,
+    step,
+    role,
+    userSignup,
+    proSignup,
+    setSocialLoginInfo,
+    socialLoginData.data?.username,
+    socialLoginData.data?.oauthId,
+    socialLoginData.data?.oauthProvider,
+    socialLoginData.data?.email,
+  ]);
 
   return (
     <div className="relative flex h-dvh w-full items-center justify-center bg-gradient-to-bl from-[#8CAFFF] to-[#FFFFFF]">

@@ -69,7 +69,6 @@ export const getSocialLoginInfo = async (): Promise<CommonResponseDto<SocialLogi
   const { data } = await publicInstance.get(END_POINT.AUTH.SOCIAL_INFO);
   console.log('소셜 로그인 정보:', data);
   return data;
-  
 };
 export const postSmsVerify = async (
   body: SmsVerifyRequestDto,
@@ -81,7 +80,7 @@ export const postSmsSend = async (body: SmsSendRequestDto): Promise<CommonRespon
   const { data } = await publicInstance.post(END_POINT.AUTH.SMS_VERIFY.send, body);
   return data;
 };
-export const getCheckNickname = async (nickname: string): Promise<CommonResponseDto<string>> => {
+export const getCheckNickname = async (nickname: string): Promise<CommonResponseDto<boolean>> => {
   const { data } = await publicInstance.get(END_POINT.AUTH.NICKNAME_CHECK, {
     params: { nickname },
   });

@@ -2,9 +2,9 @@ import type { SportsSlugType } from '@/types/SportsType';
 
 export const END_POINT = {
   AUTH: {
-    SIGNUP:{
-userSignup: '/api/auth/user-signup',
-proSignup: '/api/auth/pro-signup',
+    SIGNUP: {
+      userSignup: '/api/auth/user-signup',
+      proSignup: '/api/auth/pro-signup',
     },
     SMS_VERIFY: {
       send: '/api/sms/send',
