@@ -1,23 +1,23 @@
-// src/apis/patchMyPage.ts
-import { publicInstance } from '@/libs/axios';
+import { multipartInstance } from '@/libs/axios';
 
 export interface MypageAddressPayload {
   city: string;
   district: string;
   street: string;
   zipcode: string;
-  streetCode?: string;   // UI용
-  specAddress?: string;  // UI용
+  // ↓ UI용 필드는 서버 전송에서 제외
+  streetCode?: string;
+  specAddress?: string;
 }
 
 export interface MyPagePatchPayload {
   nickname?: string;
   address?: MypageAddressPayload;
-  profileImageFile?: File;
+  profileImageFile?: File; // 선택
 }
 
 export const patchMyPage = async (payload: MyPagePatchPayload) => {
-  // 서버 스펙: request는 query, image는 multipart body
+  // 서버 DTO 모양에 맞춰 request JSON 구성
   const requestObj = {
     nickname: payload.nickname ?? '',
     address: payload.address
@@ -30,35 +30,16 @@ export const patchMyPage = async (payload: MyPagePatchPayload) => {
       : undefined,
   };
 
-  const requestQuery = encodeURIComponent(JSON.stringify(requestObj));
+  // multipart/form-data 조립
+  const fd = new FormData();
 
-  const formData = new FormData();
-  // 이미지 없을 때도 파트 존재 기대하는 서버 대비
-  formData.append(
-    'image',
-    payload.profileImageFile ?? new Blob([], { type: 'application/octet-stream' }),
-    payload.profileImageFile ? payload.profileImageFile.name : ''
-  );
+  // @RequestParam("request") String 으로 받으므로 문자열로 전송
+  fd.append('request', JSON.stringify(requestObj));
 
-  const { data } = await publicInstance.patch(
-    `/mypage?request=${requestQuery}`,
-    formData,
-    {
-      // ⛔ 인스턴스 기본 JSON 헤더를 무력화
-      transformRequest: [
-        (data, headers) => {
-          // axios 머지된 기본 헤더에서 Content-Type 제거 -> 브라우저가 boundary 포함해 자동 설정
-          delete (headers as any)['Content-Type'];
-          delete (headers as any)['content-type'];
-          // 필요하면 Accept만 유지
-          headers['Accept'] = 'application/json';
-          return data;
-        },
-      ],
-      // 여기서 Content-Type 직접 지정하지 마세요!
-      // headers: { 'Content-Type': 'multipart/form-data' },
-    }
-  );
-
+  // @RequestPart(value="image", required=false)
+  if (payload.profileImageFile) {
+    fd.append('image', payload.profileImageFile);
+  }
+  const { data } = await multipartInstance.patch('/mypage', fd);
   return data;
 };
