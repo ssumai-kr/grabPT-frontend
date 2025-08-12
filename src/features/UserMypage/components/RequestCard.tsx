@@ -32,7 +32,11 @@ const RequestCard = ({ name, tags, content, location, profileImg }: RequestCardP
         <div className="flex items-start gap-[11px]">
           {/* 아바타 */}
           <div>
-            <img src={profileImg ?? Profile} alt="profile" className="h-[50px] w-[50px] rounded-full" />
+            <img
+              src={profileImg ?? Profile}
+              alt="profile"
+              className="h-[50px] w-[50px] rounded-full"
+            />
           </div>
 
           <div className="flex flex-col">

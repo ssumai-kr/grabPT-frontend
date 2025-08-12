@@ -13,7 +13,11 @@ const UserRequestHeader = ({ nickName, profileImg, location }: UserRequestHeader
     <div className="flex flex-row items-center">
       <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
         {profileImg ? (
-          <img src={profileImg} alt="profile" className="h-[50px] w-[50px] rounded-full object-cover" />
+          <img
+            src={profileImg}
+            alt="profile"
+            className="h-[50px] w-[50px] rounded-full object-cover"
+          />
         ) : (
           <svg className="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
             <path

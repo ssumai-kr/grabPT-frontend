@@ -26,7 +26,7 @@ export const QUERY_KEYS = {
     list: (parmas: getChatRoomListRequestDto) => ['chatList', parmas.keyword],
     messages: (params: getMessagesRequestDto) => ['messages', params.roomId, params.cursor],
   },
-  matcingRequestsList : (params: getRequestsListRequestDto) => [
+  matcingRequestsList: (params: getRequestsListRequestDto) => [
     'matchingreqeustsList',
     params.sortBy,
     params.page,

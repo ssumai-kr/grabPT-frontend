@@ -1,11 +1,11 @@
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 
 import Profile from '@/assets/images/HeaderProfile.png';
 import XIcon from '@/assets/images/x.png';
 import Box from '@/components/Box';
 import StarRating from '@/components/StarRating';
 import { useUserRoleStore } from '@/store/useUserRoleStore';
-import { useNavigate } from 'react-router-dom';
 
 interface ReviewCardProps {
   name?: string;
@@ -24,10 +24,10 @@ const ReviewCard = ({ rating, content, center, proId, proNickName, imageURL }: R
 
   const boxClick = () => {
     navigate(`/expert/${proId}`);
-  }
+  };
 
   return (
-    <Box onClick={boxClick} className='cursor-pointer'>
+    <Box onClick={boxClick} className="cursor-pointer">
       <div className="relative flex w-full flex-col p-[10px] pt-[15px]">
         {/* 삭제버튼 */}
         <img

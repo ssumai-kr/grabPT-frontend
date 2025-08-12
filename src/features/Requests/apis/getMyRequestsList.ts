@@ -4,6 +4,7 @@ import type {
   getRequestsListResponseDto,
 } from '@/features/Requests/types/getRequestsListType';
 import { privateInstance } from '@/libs/axios';
+
 //import type { RequestStatusResponseDto } from '../types/getMatchingRequestListType';
 
 // parameter: sortBy, page, size
@@ -17,7 +18,6 @@ export const getRequestsList = async (
     throw e as Error;
   }
 };
-
 
 export const getMatcingRequestsList = async (
   params: getRequestsListRequestDto,

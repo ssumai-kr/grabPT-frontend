@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { getMatcingRequestsList, getRequestsList } from '@/features/Requests/apis/getMyRequestsList';
+import {
+  getMatcingRequestsList,
+  getRequestsList,
+} from '@/features/Requests/apis/getMyRequestsList';
 import type {
   getRequestsListRequestDto,
   getRequestsListResponseDto,
@@ -19,7 +22,7 @@ export const useGetRequestsList = (params: getRequestsListRequestDto) =>
     retry: 2, //2번까지 재시도
   });
 
-  //트레이너에게 온 요청 현황
+//트레이너에게 온 요청 현황
 export const useGetMatchingRequestsList = (params: getRequestsListRequestDto) =>
   useQuery<getRequestsListResponseDto, Error, getRequestsListResultType>({
     queryKey: QUERY_KEYS.matcingRequestsList(params),

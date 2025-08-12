@@ -58,7 +58,14 @@ interface RequestCardInMainProps {
   profileImg?: string;
 }
 
-const RequestCardInMain = ({ name, location, tags, text, id, profileImg }: RequestCardInMainProps) => {
+const RequestCardInMain = ({
+  name,
+  location,
+  tags,
+  text,
+  id,
+  profileImg,
+}: RequestCardInMainProps) => {
   const navigate = useNavigate();
   const daysPerWeek = `주 ${tags.daysPerWeek}회`;
   const tagsResult = [
