@@ -14,7 +14,7 @@ const UserRequests = () => {
   const token = localStorage.getItem('accessToken') ?? undefined;
   const { data } = useGetUserInfo(token);
 
-  const location = `${data?.address[0].city} ${data?.address[0].district} ${data?.address[0].street}`
+  const location = `${data?.address[0].city} ${data?.address[0].district} ${data?.address[0].street}`;
   const total = myRequestsList?.totalPages ?? 1;
   if (error) return <ErrorComponent />;
   return (
@@ -27,6 +27,7 @@ const UserRequests = () => {
             key={`${page}-${idx}`}
             location={location}
             name={data?.nickname ?? '사용자'}
+            profileImg={data?.profileImageUrl}
             tags={{
               availableTimes: rq.availableTimes,
               daysPerWeek: rq.availableDays.length,
