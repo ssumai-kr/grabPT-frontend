@@ -37,7 +37,7 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
   //임시방편용 사용자 이름
   const token = localStorage.getItem('accessToken') ?? undefined;
   const { data: userInfo } = useGetUserInfo(token);
-  const name = userInfo?.name;
+  const name = userInfo?.nickname;
   return (
     <section
       ref={containerRef}
