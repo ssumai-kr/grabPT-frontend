@@ -42,8 +42,8 @@ export const useGetMessagesInfinite = (params: getMessagesRequestDto) => {
     staleTime: 0,
     gcTime: 300_000,
     retry: 2,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 };

@@ -42,7 +42,7 @@ export function useUnreadCount() {
 
       // STOMP 구독
       if (connected) {
-        sub = subscribe(`/subscribe/chat/${userId}/unread-count`, async (val) => {
+        sub = subscribe(`/subscribe/chat/${userId}/unread-count`, (val) => {
           setCount(typeof val === 'number' ? val : Number(val ?? 0));
         });
       }
