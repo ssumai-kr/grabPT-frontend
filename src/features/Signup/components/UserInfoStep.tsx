@@ -316,17 +316,18 @@ const UserInfoStep = ({ onNext }: UserInfoStepProps) => {
           </div>
         </div>
         {postModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
-            <div
-              id="daum-postcode"
-              className="relative flex h-[600px] w-[600px] items-center justify-center rounded-[0.625rem] bg-white shadow-lg"
-            />
-            <button
-              onClick={() => setPostModalOpen(false)}
-              className="absolute top-[16rem] right-[19.5rem] h-6 w-6 cursor-pointer rounded-full text-gray-500 hover:bg-gray-400 hover:text-white"
-            >
-              ✕
-            </button>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/20"
+            onClick={() => setPostModalOpen(false)}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="relative p-8" onClick={(e) => e.stopPropagation()}>
+              <div
+                id="daum-postcode"
+                className="flex h-[600px] w-[600px] items-center justify-center rounded-[0.625rem] bg-white shadow-lg"
+              />
+            </div>
           </div>
         )}
       </div>
