@@ -10,7 +10,7 @@ import { useProProfileQuery } from '@/hooks/useGetProProfile';
 
 const ExpertProfile = () => {
   const { data, isLoading, isError } = useProProfileQuery();
-    const profileData = data?.result;
+  const profileData = data?.result;
 
   const images = Array.from({ length: 7 }, () => MockImage);
 
@@ -20,7 +20,7 @@ const ExpertProfile = () => {
     <div className="mt-16 flex flex-col items-center gap-12">
       {/* 프로필 컴포넌트 */}
       <div className="flex justify-center px-[77px]">
-        <ProfileCard profileData={profileData}/>
+        <ProfileCard profileData={profileData} />
       </div>
 
       {/* 전문가소개 */}

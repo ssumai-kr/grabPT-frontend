@@ -6,6 +6,6 @@ import type { getProPrifleResponseDto } from '@/types/ProPrifleType';
 export const useProProfileQuery = () => {
   return useQuery<getProPrifleResponseDto>({
     queryKey: ['pro-profile'], // userId 제거
-    queryFn: getProProfile,    // 바로 함수 참조 가능
+    queryFn: getProProfile, // 바로 함수 참조 가능
   });
 };

@@ -56,10 +56,10 @@ const Dashboard = ({ userInfo }: DashboardProps) => {
 
   // PATCH /mypage 훅
   const { mutate: patchMyPageMutate, isPending: isSaving } = usePatchMyPage(() => {
-  setIsEdit(false);
-  setProfileImageFile(undefined);
-  setAddressDirty(false);
-});
+    setIsEdit(false);
+    setProfileImageFile(undefined);
+    setAddressDirty(false);
+  });
 
   // 기존 유저 주소(보기모드 및 기본값)
   const originalAddress = userInfo?.address?.[0];
@@ -145,23 +145,22 @@ const Dashboard = ({ userInfo }: DashboardProps) => {
   const imageDirty = !!profileImageFile;
 
   const onSubmit = (values: FormValues) => {
-  if (values.nickname.trim() !== (userInfo?.nickname ?? '') && !nicknameVerified) {
-    setError('nickname', { type: 'validate', message: '닉네임 중복 확인을 완료해주세요.' });
-    return;
-  }
+    if (values.nickname.trim() !== (userInfo?.nickname ?? '') && !nicknameVerified) {
+      setError('nickname', { type: 'validate', message: '닉네임 중복 확인을 완료해주세요.' });
+      return;
+    }
 
-  patchMyPageMutate({
-    nickname: values.nickname.trim(),
-    address: {
-      city: inputAddress?.city ?? originalAddress?.city ?? '',
-      district: inputAddress?.district ?? originalAddress?.district ?? '',
-      street: inputAddress?.street ?? originalAddress?.street ?? '',
-      zipcode: inputAddress?.zipcode ?? originalAddress?.zipcode ?? '',
-    },
-    profileImageFile: profileImageFile || undefined, // 선택 시만 포함
-  });
-};
-
+    patchMyPageMutate({
+      nickname: values.nickname.trim(),
+      address: {
+        city: inputAddress?.city ?? originalAddress?.city ?? '',
+        district: inputAddress?.district ?? originalAddress?.district ?? '',
+        street: inputAddress?.street ?? originalAddress?.street ?? '',
+        zipcode: inputAddress?.zipcode ?? originalAddress?.zipcode ?? '',
+      },
+      profileImageFile: profileImageFile || undefined, // 선택 시만 포함
+    });
+  };
 
   const handleEnterEdit = () => {
     setIsEdit(true);
@@ -183,9 +182,9 @@ const Dashboard = ({ userInfo }: DashboardProps) => {
 
   const nicknameChanged = (watchedNickname?.trim() ?? '') !== (userInfo?.nickname ?? '');
   const canSubmit =
-  (isDirty || addressDirty || imageDirty) &&
-  !isSubmitting &&
-  (!nicknameChanged || nicknameVerified);
+    (isDirty || addressDirty || imageDirty) &&
+    !isSubmitting &&
+    (!nicknameChanged || nicknameVerified);
   // 카카오 우편번호 로더
   const ensureDaumLoaded = () =>
     new Promise<void>((resolve) => {

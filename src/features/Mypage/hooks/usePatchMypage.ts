@@ -1,6 +1,7 @@
 // src/features/Mypage/hooks/usePatchMyPage.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { patchMyPage, type MyPagePatchPayload } from '../apis/patchMypage';
+
+import { type MyPagePatchPayload, patchMyPage } from '../apis/patchMypage';
 
 export const USER_INFO_QUERY_KEY = ['userInfo'] as const;
 

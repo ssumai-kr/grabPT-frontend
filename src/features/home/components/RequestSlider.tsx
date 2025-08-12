@@ -37,7 +37,7 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
   //임시방편용 사용자 이름
   const token = localStorage.getItem('accessToken') ?? undefined;
   const { data: userInfo } = useGetUserInfo(token);
-  const name = userInfo?.name
+  const name = userInfo?.name;
   return (
     <section
       ref={containerRef}
@@ -53,7 +53,7 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
             <div key={i} className="h-[230px] px-4">
               <RequestCardInMain
                 id={r.requestId}
-                name={name ?? "사용자"}
+                name={name ?? '사용자'}
                 location={r.location}
                 tags={{
                   availableTimes: r.availableTimes,
