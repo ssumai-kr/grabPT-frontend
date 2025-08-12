@@ -39,7 +39,7 @@ export const useGetMessagesInfinite = (params: getMessagesRequestDto) => {
     }),
 
     enabled: Boolean(roomId),
-    staleTime: 1_000,
+    staleTime: 0,
     gcTime: 300_000,
     retry: 2,
     refetchOnMount: false,
