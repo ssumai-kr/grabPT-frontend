@@ -22,7 +22,7 @@ interface InputAddressType {
   street: string; // 법정동/읍/면(=bname)
   streetCode: string; // 도로명 상세(파싱)
   zipcode: string;
-  specAddress?: string; // 상세주소 (서버 전송 X, 화면용)
+  specAddress?: string; // 상세주소 TODO: api 수정 필요
 }
 
 declare global {
