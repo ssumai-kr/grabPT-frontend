@@ -22,7 +22,6 @@ export default function UnreadCountController() {
     const sub = subscribe(dest, async (val) => {
       const next = typeof val === 'number' ? val : Number(val ?? 0);
       await queryClient.invalidateQueries({ queryKey: ['chatList'], refetchType: 'active' });
-      console.log('시발');
       setUnReadCount(Number.isFinite(next) ? next : 0);
     });
     return () => unsubscribe(sub);
