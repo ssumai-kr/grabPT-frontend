@@ -14,6 +14,7 @@ import {
   MyProfileEditCancelButton,
   MyProfileEditSaveButton,
 } from '@/components/myProfileEditButton';
+import { useEditPhotos, useEditProDescription } from '@/hooks/useEditProProfile';
 //import MypageSection from '@/features/Mypage/components/MypageSection';
 import { useProProfileQuery } from '@/hooks/useGetProProfile';
 import type { PtPrice } from '@/types/ProPrifleType';
@@ -30,7 +31,10 @@ const ExpertProfile = () => {
   const [prices, setPrices] = useState<PtPrice[]>([]);
   const [pricePerOne, setPricePerOne] = useState<number | null>(null);
   const [centerName, setCenterName] = useState<string>('');
-  const [centerDescription, setCenterDescription] = useState<string>("");
+  const [centerDescription, setCenterDescription] = useState<string>('');
+  const [resetSeed, setResetSeed] = useState(0);
+
+  console.log(photos);
 
   const handleCommentEdit = () => {
     setIsCommentedit((prev) => !prev);
@@ -41,22 +45,66 @@ const ExpertProfile = () => {
   const handlePriceEdit = () => {
     setIsPriceEdit((prev) => !prev);
   };
+
+  const handlePhotosCancel = () => {
+    setIsPhotosEdit(false);
+    setResetSeed((s) => s + 1); // ← 자식 강제 리셋
+  };
+
   const handleLocationEdit = () => {
     setIsLocationEdit((prev) => !prev);
   };
 
+  const { mutate: mutateComment, isPending: isCommentLoading } = useEditProDescription();
+
+  const handleCommentSave = () => {
+    mutateComment(
+      { description: comment }, // comment는 입력 state
+      {
+        onSuccess: () => {
+          setIsCommentedit(false); // 편집 모드 종료
+        },
+      },
+    );
+  };
+
+  const { mutate: mutatePhoto, isPending: isPhotoLoading } = useEditPhotos();
+
+  const handlePhotosSave = () => {
+  // file이 있는 항목만 추출
+  const files: File[] = photos
+    .map((p) => p.file)
+    .filter((f): f is File => !!f);
+
+  if (files.length === 0) {
+    console.warn('업로드할 파일이 없습니다.');
+    setIsPhotosEdit(false);
+    return;
+  }
+
+  mutatePhoto(files, {
+    onSuccess: () => {
+      setIsPhotosEdit(false);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+};
+
+
   const { data, isLoading, isError } = useProProfileQuery();
   const profileData = data?.result;
 
-useEffect(() => {
-  setComment(profileData?.description || '');
-  setPhotos(profileData?.photos || []);
-  setPrices(profileData?.ptPrices || []);
-  setPricePerOne(profileData?.pricePerSession || null);
-  setCenterName(profileData?.center || '');
-  setCenterDescription(profileData?.centerDescription || "");
-  console.log(photos);
-} ,[profileData]);
+  useEffect(() => {
+    setComment(profileData?.description || '');
+    setPhotos(profileData?.photos || []);
+    setPrices(profileData?.ptPrices || []);
+    setPricePerOne(profileData?.pricePerSession || null);
+    setCenterName(profileData?.center || '');
+    setCenterDescription(profileData?.centerDescription || '');
+    console.log(photos);
+  }, [profileData]);
 
   const images = Array.from({ length: 7 }, () => MockImage);
   // const MockImg = [
@@ -87,15 +135,13 @@ useEffect(() => {
           ) : (
             <div className="flex items-center gap-2">
               <MyProfileEditCancelButton onClick={handleCommentEdit} />
-              <MyProfileEditSaveButton />
+              <MyProfileEditSaveButton onClick={handleCommentSave} />
             </div>
           )}
         </div>
         <hr className="mt-[10px] border-t-2 border-[#B8B8B8]" />
         {/* 보기 모드 */}
-        {!isCommentEdit && (
-          <p className="mt-[45px] h-[400px] w-full">{profileData?.description}</p>
-        )}
+        {!isCommentEdit && <p className="mt-[45px] h-[400px] w-full">{profileData?.description}</p>}
 
         {/* 수정 모드 */}
         {isCommentEdit && (
@@ -123,20 +169,23 @@ useEffect(() => {
             <MyProfileEditButton onClick={handlePhotosEdit} />
           ) : (
             <div className="flex items-center gap-2">
-              <MyProfileEditCancelButton onClick={handlePhotosEdit} />
-              <MyProfileEditSaveButton />
+              <MyProfileEditCancelButton onClick={handlePhotosCancel} />
+              <MyProfileEditSaveButton onClick={handlePhotosSave} />
             </div>
           )}
         </div>
         <hr className="mt-[10px] border-t-2 border-[#B8B8B8]" />
       </div>
       {/* <ImageSlide title="소개 사진" images={images} /> */}
-      {images ? (
-        <ProfileImageSlide images={photos} isEditable={isPhotosEdit} />
+      {photos ? (
+        <ProfileImageSlide
+          key={`photos-${resetSeed}-${isPhotosEdit ? 'edit' : 'view'}`}
+          images={photos}
+          isEditable={isPhotosEdit}
+        />
       ) : (
         <div>이미지가 없습니다.</div>
       )}
-      {isPhotosEdit && <Button>사진추가</Button>}
 
       {/* 프로그램 가격 표 */}
       <div className="w-full">
@@ -191,15 +240,13 @@ useEffect(() => {
         <hr className="mt-[10px] mb-[45px] border-t-2 border-[#B8B8B8]" />
         {!isLocationEdit ? (
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-4 h-[40px]">
+            <div className="flex h-[40px] items-center gap-4">
               <div className="text-[20px] font-semibold">센터명</div>
               <div className="text-[#013EFB]">{profileData?.center}</div>
             </div>
             <div className="flex flex-col gap-2">
               <div className="text-[20px] font-semibold">위치 설명</div>
-              <div className="h-[300px]">
-                {centerDescription}
-              </div>
+              <div className="h-[300px]">{centerDescription}</div>
             </div>
           </div>
         ) : (

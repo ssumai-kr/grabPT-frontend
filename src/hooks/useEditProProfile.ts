@@ -1,9 +1,15 @@
 // src/features/Mypage/hooks/useEditProDescription.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { editProDescription, type ProDescriptionPayload } from '@/apis/EditProProfile';
 
-export const USE_PRO_PROFILE_KEY = ['proProfile']; // 실제 키와 맞춰서 사용하세요
-export const USE_MY_PROFILE_KEY = ['myProfile'];   // 선택
+import {
+  type ProDescriptionPayload,
+  type ProPhotosPayload,
+  editProDescription,
+  editProPhotos,
+} from '@/apis/EditProProfile';
+
+export const USE_PRO_PROFILE_KEY = ['pro-profile']; // 실제 키와 맞춰서 사용하세요
+export const USE_MY_PROFILE_KEY = ['myProfile']; // 선택
 
 export function useEditProDescription() {
   const queryClient = useQueryClient();
@@ -15,7 +21,17 @@ export function useEditProDescription() {
       queryClient.invalidateQueries({ queryKey: USE_PRO_PROFILE_KEY });
       queryClient.invalidateQueries({ queryKey: USE_MY_PROFILE_KEY });
     },
-    // 필요 시 에러 처리
-    // onError: (err) => { /* toast 등 */ },
   });
 }
+
+export const useEditPhotos = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (files: File[]) => editProPhotos(files),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: USE_PRO_PROFILE_KEY });
+      queryClient.invalidateQueries({ queryKey: USE_MY_PROFILE_KEY });
+    },
+  });
+};
