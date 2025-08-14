@@ -1,8 +1,7 @@
-// store/useUserRoleStore.ts
 import { create } from 'zustand';
 
-import { useDecodedCookie as decodeCookie } from '@/hooks/useDecodedCookies';
 import type { Role } from '@/routes/types';
+import { decodeCookie } from '@/utils/decodeCookie';
 
 type AuthStatus = 'Loading' | 'Guest' | 'Authorized';
 
