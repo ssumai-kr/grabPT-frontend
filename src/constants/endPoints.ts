@@ -31,6 +31,9 @@ export const END_POINT = {
     REVIEWS: {
       reviews: `/mypage/pro/reviews`,
     },
+    PROFILE: {
+      profile: '/mypage/pro/',
+    },
   },
   CATEGORY: {
     realtime: (categoryCode: SportsSlugType) => `/api/v1/requests/${categoryCode}`,
