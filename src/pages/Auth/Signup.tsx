@@ -11,8 +11,8 @@ import UserInfoStep from '@/features/Signup/components/UserInfoStep';
 import UserTypeStep from '@/features/Signup/components/UserTypeStep';
 import { useProSignup } from '@/features/Signup/hooks/useProSignup';
 import { useUserSignup } from '@/features/Signup/hooks/useUserSignup';
-import { useDecodedCookie } from '@/hooks/useDecodedCookies';
 import { useSignupStore } from '@/store/useSignupStore';
+import { decodeCookie } from '@/utils/decodeCookie';
 
 const Signup = () => {
   const nav = useNavigate();
@@ -43,10 +43,10 @@ const Signup = () => {
       setStep((prev) => prev - 1);
     }
   };
-  const oauthId = useDecodedCookie('oauthId') || '';
-  const oauthProvider = useDecodedCookie('oauthProvider') || '';
-  const username = useDecodedCookie('oauthName') || '';
-  const email = useDecodedCookie('oauthEmail') || '';
+  const oauthId = decodeCookie('oauthId') || '';
+  const oauthProvider = decodeCookie('oauthProvider') || '';
+  const username = decodeCookie('oauthName') || '';
+  const email = decodeCookie('oauthEmail') || '';
   useEffect(() => {
     setOauthId(oauthId);
     setOauthProvider(oauthProvider);
@@ -67,7 +67,7 @@ const Signup = () => {
           {
             onSuccess: (res) => {
               console.log('User signup success:', res);
-              nav('/');
+              // nav('/');
             },
             onError: (err) => {
               console.error('User signup failed:', err);
@@ -85,7 +85,7 @@ const Signup = () => {
           {
             onSuccess: (res) => {
               console.log('Pro signup success:', res);
-              nav('/expert');
+              // nav('/expert');
             },
             onError: (err) => {
               console.error('Pro signup failed:', err);

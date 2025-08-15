@@ -9,6 +9,7 @@ const ROUTES = {
   AUTH: {
     LOGIN: '/login',
     SIGNUP: '/signup',
+    CALLBACK: '/authcallback',
   },
   OAUTH: '/auth/callback',
 
@@ -45,7 +46,7 @@ const ROUTES = {
       REVIEWS: 'reviews',
     },
   },
-
+  EXPERT_SETTLEMENT: '/expert/settlement',
   MATCHING_STATUS: {
     ROOT: '/matching',
 
