@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import type { ProPricePayload, ptPriceUpdateRequestDtoList } from '@/apis/EditProProfile';
-import MockImage from '@/assets/images/동영상 등 대체 도형.png';
-import Button from '@/components/Button';
 import CommentBox from '@/components/CommentBox';
 //import ImageSlide from '@/components/ImageSlide';
 import ProfileCard from '@/components/ProfileCard';
@@ -40,7 +38,7 @@ const ExpertProfile = () => {
   const [pricesForPayLoad, setPricesForPayLoad] = useState<ptPriceUpdateRequestDtoList[]>([]);
   const [centerName, setCenterName] = useState<string>('');
   const [centerDescription, setCenterDescription] = useState<string>('');
-  const [resetSeed, setResetSeed] = useState(0);
+  const [resetSeed, _setResetSeed] = useState(0);
 
   const { data, isLoading, isError } = useProProfileQuery();
   const profileData = data?.result;
@@ -126,7 +124,7 @@ const ExpertProfile = () => {
     setIsLocationEdit(false);
   };
 
-  const { mutate: mutateComment, isPending: isCommentLoading } = useEditProDescription();
+  const { mutate: mutateComment } = useEditProDescription();
 
   const handleCommentSave = () => {
     mutateComment(
@@ -139,7 +137,7 @@ const ExpertProfile = () => {
     );
   };
 
-  const { mutate: mutatePhoto, isPending: isPhotoLoading } = useEditPhotos();
+  const { mutate: mutatePhoto } = useEditPhotos();
 
   const handlePhotosSave = () => {
     const files: File[] = [];
@@ -216,10 +214,6 @@ const ExpertProfile = () => {
         },
       },
     );
-  };
-
-  const handleCenterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCenterName(e.target.value);
   };
 
   // const MockImg = [
