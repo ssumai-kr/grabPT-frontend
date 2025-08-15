@@ -49,8 +49,8 @@ function AuthMenu() {
       <button
         type="button"
         onClick={async () => {
-          await getAccessToken(54);
-          setUserId(54);
+          await getAccessToken(59);
+          setUserId(59);
           LogIn();
           setUser();
           // 초기 알람 세팅
@@ -62,7 +62,7 @@ function AuthMenu() {
         }}
         className="mr-3 rounded-full bg-orange-300 p-2 text-sm text-white"
       >
-        54
+        59
       </button>
       {/* expert로 로그인*/}
       <button
