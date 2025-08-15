@@ -17,11 +17,11 @@ const ProposalDetailPage = () => {
   const navigateToExpertProfile = () => navigate(urlFor.expertDetail(suggestion?.expertId));
   const 채팅상담 = () => {
     if (suggestion === undefined) return;
-    const data = postCreateChatRoom({ userId: suggestion.userId, proId: suggestion.expertId });
+    postCreateChatRoom({ userId: suggestion.userId, proId: suggestion.expertId });
     navigate(ROUTES.CHAT.ROOT);
   };
   const { mutateAsync: matchAsync } = usePostMatching({
-    requestionId: suggestion?.requestionId!, // 데이터 로드 후 재렌더 시 최신 값으로 갱신됨
+    requestionId: suggestion?.requestionId, // 데이터 로드 후 재렌더 시 최신 값으로 갱신됨
     suggestionId,
   });
 

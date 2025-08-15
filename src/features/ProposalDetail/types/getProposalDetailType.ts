@@ -14,6 +14,8 @@ export type proposalDetailType = {
   message: string;
   location: string;
   photoUrls: string[];
+  requestionId: number;
+  suggestionId: number;
 };
 
 export type getProposalDetailResponseDto = CommonResponseDto<proposalDetailType>;

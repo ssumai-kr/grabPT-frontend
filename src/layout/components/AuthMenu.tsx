@@ -68,6 +68,24 @@ function AuthMenu() {
       <button
         type="button"
         onClick={async () => {
+          await getAccessToken(61);
+          setUserId(61);
+          LogIn();
+          setExpert();
+          // 초기 알람 세팅
+          const initialAlarm = await getAlarmList();
+          useAlarmStore.getState().setAlarmCount(initialAlarm.result.length);
+          // 초기 안 읽은 개수 세팅
+          const initial = await getUnreadCount(); // 4) 초기 unread 1회 호출
+          useUnreadStore.getState().setUnReadCount(initial.result);
+        }}
+        className="mr-6 cursor-pointer rounded-full bg-orange-600 p-2 text-sm text-white"
+      >
+        E(61)
+      </button>
+      <button
+        type="button"
+        onClick={async () => {
           await getAccessToken(62);
           setUserId(62);
           LogIn();

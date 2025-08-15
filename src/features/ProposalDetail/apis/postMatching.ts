@@ -2,7 +2,7 @@ import { privateInstance } from '@/libs/axios';
 import type { CommonResponseDto } from '@/types/commonResponseDto';
 
 export type postMatchingRequestDto = {
-  requestionId: number;
+  requestionId: number | undefined;
   suggestionId: number;
 };
 
