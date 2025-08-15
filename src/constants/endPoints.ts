@@ -30,7 +30,7 @@ export const END_POINT = {
     },
     PROFILE: {
       profile: '/mypage/pro/',
-    }
+    },
   },
   CATEGORY: {
     realtime: (categoryCode: SportsSlugType) => `/api/v1/requests/${categoryCode}`,

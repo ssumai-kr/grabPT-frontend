@@ -1,4 +1,5 @@
 import type { SlideImage } from '@/components/ProfileImageSlide';
+
 import type { CommonResponseDto } from './commonResponseDto';
 
 export type Address = {
@@ -11,7 +12,7 @@ export type Address = {
 export type PtPrice = {
   sessionCount: number;
   price: number;
-}
+};
 
 export type ProProfileType = {
   proId: number;

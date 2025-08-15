@@ -1,5 +1,5 @@
 // src/apis/user.ts
-import { privateInstance, publicInstance } from '@/libs/axios';
+import { privateInstance } from '@/libs/axios';
 
 export interface Address {
   city: string;
@@ -41,4 +41,3 @@ export async function getUserInfo(): Promise<GetUserInfoResponse> {
     throw new Error('GET /mypage 실패');
   }
 }
-
