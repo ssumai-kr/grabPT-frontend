@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import imageCompression from 'browser-image-compression';
 import Slider from 'react-slick';
 
 import DeleteIcon from '@/assets/images/x.png';
@@ -70,7 +71,13 @@ const ProfileImageSlideCard = ({
 const ProfileImageSlide = ({ title, images, isEditable, onChange }: ProfileImageSlideProps) => {
   // 편집용 로컬 상태로 복사 (prop 변경 시 동기화)
   const [list, setList] = useState<SlideImage[]>(images ?? []);
-  useEffect(() => setList(images ?? []), [images]);
+  const [isCompressing, setIsCompressing] = useState(false);
+
+  useEffect(() => {
+    if (!isEditable) {
+      setList(images ?? []);
+    }
+  }, [images, isEditable]);
 
   // 파일 업로더
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -93,35 +100,48 @@ const ProfileImageSlide = ({ title, images, isEditable, onChange }: ProfileImage
   };
 
   const handleDelete = (idx: number) => {
-    const removed = list[idx];
-    const next = list.filter((_, i) => i !== idx);
-    setList(next);
-    onChange?.(next);
+    setList((prev) => {
+      const removed = prev[idx];
+      const next = prev.filter((_, i) => i !== idx);
 
-    // 로컬 미리보기 URL이면 revoke
-    if (removed && createdUrlsRef.current.includes(removed.imageUrl)) {
-      URL.revokeObjectURL(removed.imageUrl);
-      createdUrlsRef.current = createdUrlsRef.current.filter((u) => u !== removed.imageUrl);
-    }
+      if (removed && createdUrlsRef.current.includes(removed.imageUrl)) {
+        URL.revokeObjectURL(removed.imageUrl);
+        createdUrlsRef.current = createdUrlsRef.current.filter((u) => u !== removed.imageUrl);
+      }
+
+      onChange?.(next); // 삭제 후 남은 모든 이미지 전달
+      return next;
+    });
   };
 
   const handleClickAdd = () => fileInputRef.current?.click();
 
-  // 파일 선택 시 file도 같이 저장
   const handleFilesSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     if (!files.length) return;
 
-    const appended: SlideImage[] = files.map((file) => {
-      const url = URL.createObjectURL(file);
+    setIsCompressing(true);
+
+    const appended: SlideImage[] = [];
+    for (const file of files) {
+      const compressedBlob = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      });
+      const compressedFile = new File([compressedBlob], file.name, { type: file.type });
+      const url = URL.createObjectURL(compressedFile);
       createdUrlsRef.current.push(url);
-      return { imageUrl: url, description: '', file }; // ✅ file 추가
+      appended.push({ imageUrl: url, file: compressedFile });
+    }
+
+    setList((prev) => {
+      const updated = [...prev, ...appended];
+      onChange?.(updated); // 추가 후 전체 목록 전달
+      return updated;
     });
 
-    const next = [...list, ...appended];
-    setList(next);
-    onChange?.(next);
-
+    setIsCompressing(false);
     e.target.value = '';
   };
 
@@ -150,24 +170,54 @@ const ProfileImageSlide = ({ title, images, isEditable, onChange }: ProfileImage
             />
           ))}
       </Slider>
+
       {isEditable && (
         <div className="mt-[20px] mb-3 flex w-full items-center justify-center gap-2">
-          <button
-            type="button"
-            onClick={handleClickAdd}
-            className="cursor-pointer rounded-[10px] bg-[#003EFB] px-4 py-2 text-white"
-          >
-            이미지 추가
-          </button>
-          {/* 숨겨진 파일 입력 */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            onChange={handleFilesSelected}
-          />
+          {isCompressing ? (
+            // 압축 로딩 UI
+            <div className="flex items-center gap-2 text-gray-600">
+              <svg
+                className="h-5 w-5 animate-spin text-[#003EFB]"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+              <span>이미지 압축 중...</span>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={handleClickAdd}
+                className="cursor-pointer rounded-[10px] bg-[#003EFB] px-4 py-2 text-white hover:bg-blue-700"
+              >
+                이미지 추가
+              </button>
+              {/* 숨겨진 파일 입력 */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={handleFilesSelected}
+              />
+            </>
+          )}
         </div>
       )}
     </div>

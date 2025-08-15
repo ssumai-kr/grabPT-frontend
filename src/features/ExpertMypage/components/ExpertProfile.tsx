@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+import type { ProPricePayload, ptPriceUpdateRequestDtoList } from '@/apis/EditProProfile';
 import MockImage from '@/assets/images/동영상 등 대체 도형.png';
 import Button from '@/components/Button';
 import CommentBox from '@/components/CommentBox';
@@ -14,7 +15,12 @@ import {
   MyProfileEditCancelButton,
   MyProfileEditSaveButton,
 } from '@/components/myProfileEditButton';
-import { useEditPhotos, useEditProDescription } from '@/hooks/useEditProProfile';
+import {
+  useEditPhotos,
+  useEditProCenter,
+  useEditProDescription,
+  useEditProPrice,
+} from '@/hooks/useEditProProfile';
 //import MypageSection from '@/features/Mypage/components/MypageSection';
 import { useProProfileQuery } from '@/hooks/useGetProProfile';
 import type { PtPrice } from '@/types/ProPrifleType';
@@ -27,32 +33,97 @@ const ExpertProfile = () => {
   const [isPriceEdit, setIsPriceEdit] = useState(false);
   const [isLocationEdit, setIsLocationEdit] = useState(false);
   const [comment, setComment] = useState('');
+  const [originPhotos, setOriginPhotos] = useState<SlideImage[]>([]);
   const [photos, setPhotos] = useState<SlideImage[]>([]);
   const [prices, setPrices] = useState<PtPrice[]>([]);
   const [pricePerOne, setPricePerOne] = useState<number | null>(null);
+  const [pricesForPayLoad, setPricesForPayLoad] = useState<ptPriceUpdateRequestDtoList[]>([]);
   const [centerName, setCenterName] = useState<string>('');
   const [centerDescription, setCenterDescription] = useState<string>('');
   const [resetSeed, setResetSeed] = useState(0);
 
-  console.log(photos);
+  const { data, isLoading, isError } = useProProfileQuery();
+  const profileData = data?.result;
+
+  useEffect(() => {
+    setComment(profileData?.description || '');
+    setOriginPhotos(profileData?.photos || []);
+    setPhotos(profileData?.photos || []);
+    setPrices(profileData?.ptPrices || []);
+    setPricePerOne(profileData?.pricePerSession || null);
+    setCenterName(profileData?.center || '');
+    setCenterDescription(profileData?.centerDescription || '');
+
+    const initialPrices: ptPriceUpdateRequestDtoList[] = [];
+
+    // 1회 가격 먼저 추가
+    if (profileData?.pricePerSession != null) {
+      initialPrices.push({
+        totalSessions: 1,
+        pricePerSession: profileData.pricePerSession,
+      });
+    }
+
+    // 추가 횟수별 가격들 변환해서 추가
+    if (Array.isArray(profileData?.ptPrices)) {
+      profileData?.ptPrices.forEach((p) => {
+        initialPrices.push({
+          totalSessions: p.sessionCount,
+          pricePerSession: p.price,
+        });
+      });
+    }
+
+    setPricesForPayLoad(initialPrices);
+  }, [profileData]);
 
   const handleCommentEdit = () => {
     setIsCommentedit((prev) => !prev);
   };
   const handlePhotosEdit = () => {
-    setIsPhotosEdit((prev) => !prev);
+    // 편집 시작 시 원본 복사
+    setPhotos([...originPhotos.map((p) => ({ ...p }))]);
+    setIsPhotosEdit(true);
   };
   const handlePriceEdit = () => {
-    setIsPriceEdit((prev) => !prev);
+    setIsPriceEdit(true);
+    setPricesForPayLoad(
+      profileData?.ptPrices?.map((p) => ({
+        totalSessions: p.sessionCount,
+        pricePerSession: p.price,
+      })) ?? [],
+    );
+  };
+  const handlePriceCancel = () => {
+    setPricePerOne(profileData?.pricePerSession ?? null);
+    setPrices(profileData?.ptPrices ?? []);
+    setPricesForPayLoad(
+      profileData
+        ? [
+            { totalSessions: 1, pricePerSession: profileData.pricePerSession ?? 0 },
+            ...(profileData.ptPrices?.map((p) => ({
+              totalSessions: p.sessionCount,
+              pricePerSession: p.price,
+            })) ?? []),
+          ]
+        : [],
+    );
+    setIsPriceEdit(false);
   };
 
   const handlePhotosCancel = () => {
+    setPhotos([...originPhotos.map((p) => ({ ...p }))]); // 원본 복구
     setIsPhotosEdit(false);
-    setResetSeed((s) => s + 1); // ← 자식 강제 리셋
   };
 
-  const handleLocationEdit = () => {
+  const handleCenterEdit = () => {
     setIsLocationEdit((prev) => !prev);
+  };
+
+  const handleCenterCancel = () => {
+    setCenterName(profileData?.center ?? '');
+    setCenterDescription(profileData?.centerDescription ?? '');
+    setIsLocationEdit(false);
   };
 
   const { mutate: mutateComment, isPending: isCommentLoading } = useEditProDescription();
@@ -71,42 +142,86 @@ const ExpertProfile = () => {
   const { mutate: mutatePhoto, isPending: isPhotoLoading } = useEditPhotos();
 
   const handlePhotosSave = () => {
-  // file이 있는 항목만 추출
-  const files: File[] = photos
-    .map((p) => p.file)
-    .filter((f): f is File => !!f);
+    const files: File[] = [];
+    const urls: string[] = [];
 
-  if (files.length === 0) {
-    console.warn('업로드할 파일이 없습니다.');
-    setIsPhotosEdit(false);
-    return;
-  }
+    photos.forEach((p) => {
+      if (p.file instanceof File) {
+        files.push(p.file);
+      } else if (p.imageUrl) {
+        urls.push(p.imageUrl);
+      }
+    });
 
-  mutatePhoto(files, {
-    onSuccess: () => {
-      setIsPhotosEdit(false);
-    },
-    onError: (e) => {
-      console.error(e);
-    },
-  });
-};
+    if (files.length === 0 && urls.length === 0) {
+      console.warn('보낼 이미지가 없습니다.');
+      return;
+    }
 
+    mutatePhoto(
+      { files, urls },
+      {
+        onSuccess: () => {
+          setOriginPhotos([...photos.map((p) => ({ ...p }))]); // 저장한 상태를 원본으로
+          setIsPhotosEdit(false);
+        },
+      },
+    );
+  };
 
-  const { data, isLoading, isError } = useProProfileQuery();
-  const profileData = data?.result;
+  const { mutate: mutatePrice, isPending: isPriceLoading } = useEditProPrice();
 
-  useEffect(() => {
-    setComment(profileData?.description || '');
-    setPhotos(profileData?.photos || []);
-    setPrices(profileData?.ptPrices || []);
-    setPricePerOne(profileData?.pricePerSession || null);
-    setCenterName(profileData?.center || '');
-    setCenterDescription(profileData?.centerDescription || '');
-    console.log(photos);
-  }, [profileData]);
+  const handlePriceSave = () => {
+    if (pricePerOne == null || isNaN(pricePerOne)) {
+      alert('1회 가격을 입력해주세요.');
+      return;
+    }
+    if (!pricePerOne || pricePerOne <= 0) {
+      alert('1회 가격은 0원보다 커야 합니다.');
+      return;
+    }
 
-  const images = Array.from({ length: 7 }, () => MockImage);
+    // 1회 가격 + 추가 가격들을 합쳐서 Request Body 생성
+    const payload: ProPricePayload = {
+      ptPriceUpdateRequestDtoList: [
+        { totalSessions: 1, pricePerSession: pricePerOne },
+        ...pricesForPayLoad, // ProfilePriceInput에서 onChange로 관리되는 배열
+      ],
+    };
+
+    mutatePrice(payload, {
+      onSuccess: () => {
+        setIsPriceEdit(false);
+      },
+    });
+  };
+
+  const { mutate: mutateCenter } = useEditProCenter();
+
+  const handlePricesChange = useCallback((items: ptPriceUpdateRequestDtoList[]) => {
+    setPricesForPayLoad(items);
+  }, []);
+
+  const handleCenterSave = () => {
+    if (!centerName.trim()) {
+      alert('센터명을 입력해주세요.');
+      return;
+    }
+
+    mutateCenter(
+      { center: centerName, centerDescription },
+      {
+        onSuccess: () => {
+          setIsLocationEdit(false);
+        },
+      },
+    );
+  };
+
+  const handleCenterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCenterName(e.target.value);
+  };
+
   // const MockImg = [
   //   'https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66113e2bd2b7407c8202a97d2241a96625',
   //   'https://item.kakaocdn.net/do/0e4b127426b0440a5f3f136031e28414616b58f7bf017e58d417ccb3283deeb3',
@@ -180,8 +295,9 @@ const ExpertProfile = () => {
       {photos ? (
         <ProfileImageSlide
           key={`photos-${resetSeed}-${isPhotosEdit ? 'edit' : 'view'}`}
-          images={photos}
+          images={photos} // 편집 모드든 보기 모드든 photos state만 쓴다
           isEditable={isPhotosEdit}
+          onChange={setPhotos}
         />
       ) : (
         <div>이미지가 없습니다.</div>
@@ -195,8 +311,11 @@ const ExpertProfile = () => {
             <MyProfileEditButton onClick={handlePriceEdit} />
           ) : (
             <div className="flex items-center gap-2">
-              <MyProfileEditCancelButton onClick={handlePriceEdit} />
-              <MyProfileEditSaveButton />
+              <MyProfileEditCancelButton onClick={handlePriceCancel} />
+              <MyProfileEditSaveButton
+                onClick={handlePriceSave}
+                disabled={!pricePerOne || pricePerOne <= 0 || isPriceLoading}
+              />
             </div>
           )}
         </div>
@@ -206,7 +325,6 @@ const ExpertProfile = () => {
         {/* 보기 모드 */}
         {!isPriceEdit && (
           <div className="flex flex-col gap-3">
-            {/* 서버 값으로 map 하세요. 예시는 더미 */}
             <ProfilePrice count={1} price={pricePerOne} />
             {prices.map((price, idx) => (
               <ProfilePrice key={idx} count={price.sessionCount} price={price.price} />
@@ -217,7 +335,12 @@ const ExpertProfile = () => {
         {/* 수정 모드 */}
         {isPriceEdit && (
           <div className="flex flex-col gap-3">
-            <ProfilePriceInput pricePerOne={pricePerOne} ptPrices={prices} />
+            <ProfilePriceInput
+              pricePerOne={pricePerOne}
+              onChangePricePerOne={setPricePerOne}
+              ptPrices={pricesForPayLoad.filter((p) => p.totalSessions !== 1)}
+              onChange={handlePricesChange}
+            />
           </div>
         )}
       </div>
@@ -229,15 +352,16 @@ const ExpertProfile = () => {
         <div className="flex w-full justify-between">
           <TitleLine title="센터" />
           {!isLocationEdit ? (
-            <MyProfileEditButton onClick={handleLocationEdit} />
+            <MyProfileEditButton onClick={handleCenterEdit} />
           ) : (
             <div className="flex items-center gap-2">
-              <MyProfileEditCancelButton onClick={handleLocationEdit} />
-              <MyProfileEditSaveButton />
+              <MyProfileEditCancelButton onClick={handleCenterCancel} />
+              <MyProfileEditSaveButton onClick={handleCenterSave} />
             </div>
           )}
         </div>
         <hr className="mt-[10px] mb-[45px] border-t-2 border-[#B8B8B8]" />
+
         {!isLocationEdit ? (
           <div className="flex flex-col gap-4">
             <div className="flex h-[40px] items-center gap-4">
@@ -252,11 +376,12 @@ const ExpertProfile = () => {
         ) : (
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-4">
-              <label className="text-[20px] font-semibold">{profileData?.center}</label>
+              <label className="text-[20px] font-semibold">센터명</label>
               <input
                 type="text"
                 className="h-[40px] w-[260px] rounded-[10px] border border-[#BABABA] px-2"
-                placeholder={centerName}
+                value={centerName}
+                onChange={(e) => setCenterName(e.target.value)}
               />
             </div>
             <div className="flex flex-col gap-2">

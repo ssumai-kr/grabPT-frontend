@@ -3,9 +3,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   type ProDescriptionPayload,
-  type ProPhotosPayload,
+  type ProPricePayload,
   editProDescription,
   editProPhotos,
+  editProPrice,
+  editProCenter,
+  type ProCenterPayload,
 } from '@/apis/EditProProfile';
 
 export const USE_PRO_PROFILE_KEY = ['pro-profile']; // 실제 키와 맞춰서 사용하세요
@@ -26,9 +29,30 @@ export function useEditProDescription() {
 
 export const useEditPhotos = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (files: File[]) => editProPhotos(files),
+    mutationFn: ({ files, urls }: { files: File[]; urls: string[] }) => editProPhotos(files, urls),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: USE_PRO_PROFILE_KEY });
+      queryClient.invalidateQueries({ queryKey: USE_MY_PROFILE_KEY });
+    },
+  });
+};
+
+export const useEditProPrice = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: ProPricePayload) => editProPrice(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: USE_PRO_PROFILE_KEY });
+      queryClient.invalidateQueries({ queryKey: USE_MY_PROFILE_KEY });
+    },
+  });
+};
+
+export const useEditProCenter = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: ProCenterPayload) => editProCenter(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: USE_PRO_PROFILE_KEY });
       queryClient.invalidateQueries({ queryKey: USE_MY_PROFILE_KEY });
