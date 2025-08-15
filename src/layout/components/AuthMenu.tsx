@@ -49,8 +49,8 @@ function AuthMenu() {
       <button
         type="button"
         onClick={async () => {
-          await getAccessToken(3);
-          setUserId(3);
+          await getAccessToken(54);
+          setUserId(54);
           LogIn();
           setUser();
           // 초기 알람 세팅
@@ -62,14 +62,14 @@ function AuthMenu() {
         }}
         className="mr-3 rounded-full bg-orange-300 p-2 text-sm text-white"
       >
-        3
+        54
       </button>
       {/* expert로 로그인*/}
       <button
         type="button"
         onClick={async () => {
-          await getAccessToken(156);
-          setUserId(156);
+          await getAccessToken(62);
+          setUserId(62);
           LogIn();
           setExpert();
           // 초기 알람 세팅
@@ -81,7 +81,7 @@ function AuthMenu() {
         }}
         className="mr-6 cursor-pointer rounded-full bg-orange-600 p-2 text-sm text-white"
       >
-        E(61)
+        E(62)
       </button>
       <button
         type="button"
@@ -89,6 +89,7 @@ function AuthMenu() {
           setUserId(null);
           localStorage.removeItem('accessToken');
           LogOut();
+          navigate('/');
         }}
         className="mr-6 cursor-pointer rounded-full bg-red-500 p-2 text-sm text-white"
       >
