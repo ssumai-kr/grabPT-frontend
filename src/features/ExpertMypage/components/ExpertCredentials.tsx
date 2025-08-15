@@ -1,9 +1,10 @@
-import MypageSection from '@/features/Mypage/components/MypageSection';
+import {CirtificationCard, CirtificationEditCard} from '@/components/CirtificationCard';
 
 const ExpertCredentials = () => {
   return (
-    <div className="mt-16">
-      <MypageSection title="자격 사항 등록" />
+    <div className="mt-16 flex flex-col justify-center items-center">
+      <CirtificationCard />
+      <CirtificationEditCard />
     </div>
   );
 };
