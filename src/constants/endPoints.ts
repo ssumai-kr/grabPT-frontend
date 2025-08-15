@@ -28,6 +28,9 @@ export const END_POINT = {
     CREDENTIALS: {
       credentials: '/mypage/pro/certification',
     },
+    REVIEWS: {
+      reviews: `/mypage/pro/reviews`,
+    },
   },
   CATEGORY: {
     realtime: (categoryCode: SportsSlugType) => `/api/v1/requests/${categoryCode}`,
