@@ -1,32 +1,59 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { postCreateChatRoom } from '@/apis/postCreateChatRoom';
 import Button from '@/components/Button';
+import ROUTES, { urlFor } from '@/constants/routes';
 import { useGetProposalDetail } from '@/features/ProposalDetail/hooks/useGetProposalDetail';
+import { usePostMatching } from '@/features/ProposalDetail/hooks/usePostMatching';
 import { onErrorImage } from '@/utils/onErrorImage';
 
 // 제안서 상세페이지입니다
 
 const ProposalDetailPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const suggestionId = Number(id);
-  const { data } = useGetProposalDetail(suggestionId);
-  console.log(data);
+  const { data: suggestion } = useGetProposalDetail(suggestionId);
+  const navigateToExpertProfile = () => navigate(urlFor.expertDetail(suggestion?.expertId));
+  const 채팅상담 = () => {
+    if (suggestion === undefined) return;
+    const data = postCreateChatRoom({ userId: suggestion.userId, proId: suggestion.expertId });
+    navigate(ROUTES.CHAT.ROOT);
+  };
+  const { mutateAsync: matchAsync } = usePostMatching({
+    requestionId: suggestion?.requestionId!, // 데이터 로드 후 재렌더 시 최신 값으로 갱신됨
+    suggestionId,
+  });
+
+  const 매칭수락 = async () => {
+    if (!suggestion) return;
+    const res = await matchAsync(); // 클릭 시에만 POST 실행
+    if (res?.isSuccess) {
+      navigate(urlFor.contractForm(res.result.contractId));
+    } else {
+      // 실패 처리(토스트 등) 필요하면 추가
+    }
+  };
   return (
     <section className="my-10 flex flex-col items-center">
       <div className="flex flex-col items-center gap-2">
         <img
-          src={data?.profileImageUrl}
+          src={suggestion?.profileImageUrl}
           onError={onErrorImage}
           alt="트레이너 프로필"
           className="h-45 rounded-full object-cover"
         />
-        <span className="mt-5 text-4xl font-bold text-[#21272A]">{data?.nickname}</span>
-        <span className="text-button text-sm font-semibold">{data?.center} </span>
+        <span className="mt-5 text-4xl font-bold text-[#21272A]">{suggestion?.nickname}</span>
+        <span className="text-button text-sm font-semibold">{suggestion?.center} </span>
       </div>
 
       <div className="mt-12 flex w-full justify-end gap-4">
-        <Button width="w-[155px]">프로필 방문</Button>
-        <Button width="w-[274px]">채팅 상담</Button>
+        <Button width="w-[155px]" onClick={navigateToExpertProfile}>
+          프로필 방문
+        </Button>
+        <Button width="w-[274px]" onClick={채팅상담}>
+          채팅 상담
+        </Button>
       </div>
 
       <div className="mt-12 flex w-full flex-col gap-12 text-2xl font-extrabold">
@@ -45,16 +72,16 @@ const ProposalDetailPage = () => {
             <span className="mr-5">회</span>
             <input
               type="number"
-              value={data?.suggestedPrice}
+              value={suggestion?.suggestedPrice}
               aria-label="제안 PT 가격"
               readOnly
               className="mr-1.5 h-12 w-[260px] rounded-xl border-2 border-[#BABABA] px-8 text-end text-2xl text-[#9F9F9F]"
             />
             <span className="mr-5">원</span>
 
-            {data?.isDiscounted && (
+            {suggestion?.isDiscounted && (
               <p className="absolute top-full right-0 mt-1 mr-5 text-sm font-extrabold text-[#FF0000]">
-                - {data.discountAmount}원
+                - {suggestion.discountAmount}원
               </p>
             )}
           </div>
@@ -64,20 +91,20 @@ const ProposalDetailPage = () => {
           <span>
             제안 <span className="text-button">상세 설명</span>
           </span>
-          <p className="mt-2 text-xl font-medium">{data?.message}</p>
+          <p className="mt-2 text-xl font-medium">{suggestion?.message}</p>
         </div>
 
         <div>
           <span>
             상세 <span className="text-button">위치</span>
           </span>
-          <p className="mt-2 text-xl font-medium">{data?.location}</p>
+          <p className="mt-2 text-xl font-medium">{suggestion?.location}</p>
         </div>
 
         <div className="w-full">
           <span className="text-button">사진</span>
           <div className="mt-5 grid w-full grid-cols-5 gap-5">
-            {data?.photoUrls.map((imageUrl, idx) => (
+            {suggestion?.photoUrls.map((imageUrl, idx) => (
               <img
                 key={idx}
                 src={imageUrl}
@@ -91,7 +118,7 @@ const ProposalDetailPage = () => {
         </div>
       </div>
 
-      <Button width="w-96" className="mt-18">
+      <Button width="w-96" className="mt-18" onClick={매칭수락}>
         매칭 수락
       </Button>
     </section>

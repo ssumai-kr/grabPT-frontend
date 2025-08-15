@@ -4,6 +4,9 @@ export type proposalDetailType = {
   nickname: string;
   center: string;
   profileImageUrl: string;
+  expertId: number;
+  matchingId: number | null;
+  userId: number;
   suggestedPrice: number;
   originalPrice: number;
   discountAmount: number;
