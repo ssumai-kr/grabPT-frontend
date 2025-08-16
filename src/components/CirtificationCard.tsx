@@ -1,35 +1,75 @@
 import { useEffect, useRef, useState } from 'react';
+
 import Button from './Button';
 
 interface CirtificationCardProps {
-  CirtificationCode?: number;
+  CirtificationCode?: string;
   CirtificationDescription?: string;
+  imageUrl?: string;
 }
-/*
-0:학력
-1:자격증
-2:경력인증
-3:수상기록
-*/
+const codeMap: Record<string, string> = {
+  ACADEMIC: '학력',
+  CERTIFICATE: '자격증',
+  CAREER: '경력인증',
+  AWARD: '수상기록',
+};
 
 export const CirtificationCard = ({
   CirtificationCode,
   CirtificationDescription,
+  imageUrl,
 }: CirtificationCardProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div className="flex h-[50px] w-[600px] items-center justify-between rounded-[10px] bg-[#EFEFEF]">
-      <div className="w-[140px] text-center">{CirtificationCode ?? '수상'}</div>
-      <div className="h-[30px] w-[1px] border border-[#ACACAC]"></div>
-      <div className="w-[460px] text-center">{CirtificationDescription ?? '내용'}</div>
-    </div>
+    <>
+      <div className="flex h-[50px] w-[600px] items-center justify-between rounded-[10px] bg-[#EFEFEF]">
+        <div className="w-[140px] text-center">
+          {CirtificationCode ? codeMap[CirtificationCode] || CirtificationCode : '수상'}
+        </div>
+        <div className="h-[30px] w-[1px] border border-[#ACACAC]"></div>
+        <div
+          className="w-[460px] cursor-pointer text-center text-blue-600 underline"
+          onClick={() => {
+            if (imageUrl) setIsModalOpen(true);
+          }}
+        >
+          {CirtificationDescription ?? '내용'}
+        </div>
+      </div>
+
+      {isModalOpen && imageUrl && (
+        <div
+          className="bg-opacity-30 fixed inset-1 z-50 flex items-start justify-center backdrop-blur-sm pt-[10vh]"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="flex max-h-[90%] max-w-[90%] flex-col rounded-lg bg-gray-200 p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={imageUrl}
+              alt="증명 이미지"
+              className="max-h-[80vh] max-w-full object-contain"
+            />
+            <button
+              className="mt-4 self-end rounded px-4 py-2 bg-[#003efb] hover:bg-[#0f2b91] text-white rounded-[10px] cursor-pointer active:bg-[#0f2b91]"
+              onClick={() => setIsModalOpen(false)}
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
 export const CirtificationEditCard = () => {
-  const options = ["학력", "자격증", "경력인증", "수상기록"];
+  const options = ['학력', '자격증', '경력인증', '수상기록'];
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(options[0]);
-  const [fileName, setFileName] = useState<string>(""); // 파일명 상태
+  const [fileName, setFileName] = useState<string>(''); // 파일명 상태
   const dropdownRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null); // 숨겨진 파일 input 참조
 
@@ -41,16 +81,13 @@ export const CirtificationEditCard = () => {
   // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -69,19 +106,19 @@ export const CirtificationEditCard = () => {
           유형
           <div ref={dropdownRef} className="relative w-[120px]">
             <div
-              className="h-[50px] w-full cursor-pointer rounded-[10px] border border-gray-300 bg-white px-3 flex items-center justify-between"
+              className="flex h-[50px] w-full cursor-pointer items-center justify-between rounded-[10px] border border-gray-300 bg-white px-3"
               onClick={() => setIsOpen((prev) => !prev)}
             >
-              <span className="text-center w-full">{selected}</span>
-              <span className="text-gray-500 text-sm">▼</span>
+              <span className="w-full text-center">{selected}</span>
+              <span className="text-sm text-gray-500">▼</span>
             </div>
             {isOpen && (
-              <ul className="absolute top-full left-0 mt-1 w-full rounded-[10px] border border-gray-300 bg-white shadow-lg z-10">
+              <ul className="absolute top-full left-0 z-10 mt-1 w-full rounded-[10px] border border-gray-300 bg-white shadow-lg">
                 {options.map((option) => (
                   <li
                     key={option}
-                    className={`cursor-pointer px-3 py-2 rounded-[10px] hover:bg-gray-100 text-center ${
-                      selected === option ? "bg-gray-100 font-semibold" : ""
+                    className={`cursor-pointer rounded-[10px] px-3 py-2 text-center hover:bg-gray-300 ${
+                      selected === option ? 'bg-gray-100 font-semibold' : ''
                     }`}
                     onClick={() => handleSelect(option)}
                   >
@@ -96,9 +133,7 @@ export const CirtificationEditCard = () => {
         {/* 내용 입력 */}
         <label className="flex flex-col">
           내용
-          <input
-            className="h-[50px] w-[400px] rounded-[10px] border border-gray-300 bg-white text-center"
-          />
+          <input className="h-[50px] w-[400px] rounded-[10px] border border-gray-300 bg-white text-center" />
         </label>
       </div>
 
@@ -107,7 +142,7 @@ export const CirtificationEditCard = () => {
         className="flex h-[50px] w-[530px] cursor-pointer items-center justify-center rounded-[10px] border border-gray-300 bg-[#B7C3FB] text-center text-[#003EFB]"
         onClick={() => fileInputRef.current?.click()}
       >
-        {fileName || "사진 첨부(필수)"}
+        {fileName || '사진 첨부(필수)'}
       </div>
       <input
         type="file"
