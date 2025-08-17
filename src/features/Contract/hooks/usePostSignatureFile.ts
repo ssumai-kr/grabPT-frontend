@@ -13,7 +13,7 @@ export const usePostUserSignatureFile = () =>
     mutationFn: (vars) => postUserSignatureFile(vars),
     onSuccess: (data) => console.log('회원 서명 업로드 성공:', data),
     // onError: (err) => console.log('회원 서명 업로드 실패:', err.response?.data),
-    onError: (err) => console.log('회원 서명 업로드 실패:', err.response?.data),
+    onError: (err) => console.log('회원 서명 업로드 실패:', err),
   });
 
 /** 전문가 서명 업로드 훅 */
