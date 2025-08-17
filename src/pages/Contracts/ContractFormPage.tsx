@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useParams } from 'react-router-dom';
 
 import AppLogo from '@/assets/images/AppLogo.png';
 import Button from '@/components/Button';
@@ -15,15 +16,24 @@ import InformationCard from '@/features/Contract/components/InformationCard';
 import ServiceInformationForm from '@/features/Contract/components/ServiceInformationForm';
 import SignatureBox from '@/features/Contract/components/SignatureBox';
 import UserInformationForm from '@/features/Contract/components/UserInformationForm';
+import { useGetContractInfo } from '@/features/Contract/hooks/useGetContractInfo';
+import { useUserRoleStore } from '@/store/useUserRoleStore';
 
 // 계약서 작성페이지입니다.
 const ContractFormPage = () => {
+  const { id } = useParams();
+  const contractId = Number(id);
+  console.log(contractId);
   const [isAgree, setIsAgree] = useState<boolean>(false);
   const [memberSign, setMemberSign] = useState<string | null>(null);
   const [expertSign, setExpertSign] = useState<string | null>(null);
+  const isExpert = useUserRoleStore((s) => s.isExpert);
   const handleAgree = () => {
     setIsAgree((prev) => !prev);
   };
+
+  const { data } = useGetContractInfo(contractId);
+  console.log(data);
 
   return (
     <section className="mb-8 flex flex-col items-center">
@@ -39,13 +49,14 @@ const ContractFormPage = () => {
           <div>
             <div className="grid grid-cols-2 gap-15">
               <InformationCard title={'회원 정보'} borderColor={'blue'}>
-                <UserInformationForm />
+                <UserInformationForm isCanEdit={!isExpert} />
               </InformationCard>
               <InformationCard title={'전문 정보'} borderColor={'red'}>
-                <UserInformationForm />
+                <UserInformationForm isCanEdit={isExpert} />
               </InformationCard>
             </div>
             <div className="mt-6">
+              {/* 이건 불러와서 정보 넣어주기 */}
               <InformationCard title={'서비스 이용 정보'} borderColor={'blue'}>
                 <ServiceInformationForm />
               </InformationCard>
@@ -80,8 +91,18 @@ const ContractFormPage = () => {
               상기 계약 내용을 충분히 이해하고 상호 합의하여 계약을 체결합니다.
             </p>
             <div className="mt-4 grid grid-cols-2 gap-10">
-              <SignatureBox title="회원" value={memberSign} onChange={setMemberSign} />
-              <SignatureBox title="전문가" value={expertSign} onChange={setExpertSign} />
+              <SignatureBox
+                title="회원"
+                value={memberSign}
+                onChange={setMemberSign}
+                isCanEdit={!isExpert}
+              />
+              <SignatureBox
+                title="전문가"
+                value={expertSign}
+                onChange={setExpertSign}
+                isCanEdit={isExpert}
+              />
             </div>
           </div>
 
