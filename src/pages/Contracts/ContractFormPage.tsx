@@ -17,23 +17,81 @@ import ServiceInformationForm from '@/features/Contract/components/ServiceInform
 import SignatureBox from '@/features/Contract/components/SignatureBox';
 import UserInformationForm from '@/features/Contract/components/UserInformationForm';
 import { useGetContractInfo } from '@/features/Contract/hooks/useGetContractInfo';
+import {
+  usePostProSignatureFile,
+  usePostUserSignatureFile,
+} from '@/features/Contract/hooks/usePostSignatureFile';
 import { useUserRoleStore } from '@/store/useUserRoleStore';
+// 추가: dataURL -> File, 업로드 훅
+import { dataURLtoFile } from '@/utils/dataURLtoFile';
 
 // 계약서 작성페이지입니다.
 const ContractFormPage = () => {
   const { id } = useParams();
   const contractId = Number(id);
-  console.log(contractId);
+
   const [isAgree, setIsAgree] = useState<boolean>(false);
+
+  // 서명(base64) — 미리보기 용
   const [memberSign, setMemberSign] = useState<string | null>(null);
   const [expertSign, setExpertSign] = useState<string | null>(null);
+
+  // 업로드 결과 URL (#1 결과 보관)
+  const [memberSignUrl, setMemberSignUrl] = useState<string | null>(null);
+  const [expertSignUrl, setExpertSignUrl] = useState<string | null>(null);
+
   const isExpert = useUserRoleStore((s) => s.isExpert);
-  const handleAgree = () => {
-    setIsAgree((prev) => !prev);
-  };
+  const handleAgree = () => setIsAgree((prev) => !prev);
 
   const { data } = useGetContractInfo(contractId);
   console.log(data);
+
+  // 업로드 훅 (user/pro 각각)
+  const { mutate: uploadUserSign, isPending: uploadingUser } = usePostUserSignatureFile();
+  const { mutate: uploadProSign, isPending: uploadingPro } = usePostProSignatureFile();
+  const uploading = uploadingUser || uploadingPro;
+
+  const handleSubmit = () => {
+    if (!isAgree) {
+      // 필요하면 토스트/알림으로 교체
+      console.warn('개인정보 수집·이용 동의를 체크하세요.');
+      return;
+    }
+
+    // 역할에 따라 해당 서명만 업로드 (#1: imageUrl만 확보)
+    if (!isExpert) {
+      if (!memberSign) {
+        console.warn('회원 서명을 입력하세요.');
+        return;
+      }
+      const file = dataURLtoFile(memberSign, `member-sign-${Date.now()}.png`);
+      console.log(file instanceof File, file.type, file.size); // true, "image/png", 크기
+      uploadUserSign(
+        { contractId, file },
+        {
+          onSuccess: ({ result }) => {
+            setMemberSignUrl(result.imageUrl);
+            // TODO(#2): userData에 imageUrl 합쳐 최종 완료 API 호출
+          },
+        },
+      );
+    } else {
+      if (!expertSign) {
+        console.warn('전문가 서명을 입력하세요.');
+        return;
+      }
+      const file = dataURLtoFile(expertSign, `expert-sign-${Date.now()}.png`);
+      uploadProSign(
+        { contractId, file },
+        {
+          onSuccess: ({ result }) => {
+            setExpertSignUrl(result.imageUrl);
+            // TODO(#2): userData에 imageUrl 합쳐 최종 완료 API 호출
+          },
+        },
+      );
+    }
+  };
 
   return (
     <section className="mb-8 flex flex-col items-center">
@@ -112,12 +170,25 @@ const ContractFormPage = () => {
 
           <div>
             <div className="grid w-full grid-cols-2 gap-3">
-              <Button width="w-full">취소</Button>
-              <Button width="w-full">작성 완료</Button>
+              <Button width="w-full" disabled={uploading}>
+                취소
+              </Button>
+              <Button width="w-full" onClick={handleSubmit} disabled={uploading}>
+                {uploading ? '업로드 중…' : '작성 완료'}
+              </Button>
             </div>
           </div>
+
+          {/* 확인용(#1): 업로드 결과 URL 표시 */}
+          {memberSignUrl && (
+            <p className="mt-2 text-xs text-gray-600">회원 서명 URL: {memberSignUrl}</p>
+          )}
+          {expertSignUrl && (
+            <p className="text-xs text-gray-600">전문가 서명 URL: {expertSignUrl}</p>
+          )}
         </div>
       </section>
+
       <p className="text-xl font-semibold">
         *회원과 전문가 모두 작성완료 상태가 되어야 제출 및 결제가 가능합니다.
       </p>
