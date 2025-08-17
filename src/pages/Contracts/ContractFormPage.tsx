@@ -58,7 +58,7 @@ const ContractFormPage = () => {
             <div className="mt-6">
               {/* 이건 불러와서 정보 넣어주기 */}
               <InformationCard title={'서비스 이용 정보'} borderColor={'blue'}>
-                <ServiceInformationForm />
+                <ServiceInformationForm data={data} />
               </InformationCard>
             </div>
           </div>
