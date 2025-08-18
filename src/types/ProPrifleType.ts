@@ -1,5 +1,6 @@
 import type { SlideImage } from '@/components/ProfileImageSlide';
 import type { CommonResponseDto } from './commonResponseDto';
+import type { certificationResponse } from '@/apis/getProCertifications';
 
 export type Address = {
   city: string;
@@ -31,6 +32,9 @@ export type ProProfileType = {
   totalSessions: number;
   ptPrices?: PtPrice[];
   address: Address[];
+  introduction?: string | null;
+  name?: string | null;
+  certifications?: certificationResponse[] | null;
 };
 
 export type getProProfileResponseDto = CommonResponseDto<ProProfileType>;
