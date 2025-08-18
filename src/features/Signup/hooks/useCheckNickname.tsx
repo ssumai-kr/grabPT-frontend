@@ -10,7 +10,8 @@ export const useCheckNickname = () => {
       console.log('닉네임 중복 요청 성공:', data);
     },
     onError: (error) => {
-      console.error('닉네임 중복 요청 실패:', error);
+      alert('닉네임 중복 요청 실패');
+      console.log('닉네임 중복 처리 로직 실패', error);
     },
   });
 };

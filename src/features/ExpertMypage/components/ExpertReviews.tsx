@@ -1,21 +1,17 @@
 import { useState } from 'react';
 
-import ErrorComponent from '@/components/ErrorComponent';
 import Pagination from '@/components/Pagination';
 import ReviewCard from '@/components/ReviewCard';
-import { useGetMyReviewsList } from '@/features/Requests/hooks/useGetMyReviewsList';
+import { useGetExpertReviews } from '@/features/ExpertMypage/hooks/useGetExpertReviews';
 
 const ExpertReviews = () => {
   const [page, setPage] = useState(1);
-  const { data: myReviewsList, isPending, error } = useGetMyReviewsList({ page, size: 6 });
-  if (error) return <ErrorComponent />;
-  const total = myReviewsList?.totalPages ?? 1;
-
+  const { data: reviews } = useGetExpertReviews({ page, size: 6 });
+  const total = reviews?.totalPages ?? 1;
   return (
-    <div className="flex justify-center">
-      {isPending && <>스켈레톤 ui</>}
+    <div className="flex flex-col items-center justify-center">
       <div className="mt-[50px] flex w-[800px] flex-col gap-[30px]">
-        {myReviewsList?.content.map((rv, idx) => (
+        {reviews?.content.map((rv, idx) => (
           <div key={idx}>
             <ReviewCard
               name={rv.nickName}
@@ -26,7 +22,11 @@ const ExpertReviews = () => {
           </div>
         ))}
       </div>
-      <Pagination total={total} page={page} onChange={setPage} />
+      {
+        <div className="mt-8">
+          <Pagination total={total} page={page} onChange={setPage} />
+        </div>
+      }
     </div>
   );
 };
