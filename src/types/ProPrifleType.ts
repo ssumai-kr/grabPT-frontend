@@ -1,4 +1,5 @@
 import type { SlideImage } from '@/components/ProfileImageSlide';
+
 import type { CommonResponseDto } from './commonResponseDto';
 import type { certificationResponse } from '@/apis/getProCertifications';
 
@@ -12,7 +13,7 @@ export type Address = {
 export type PtPrice = {
   sessionCount: number;
   price: number;
-}
+};
 
 export type ProProfileType = {
   proId: number;

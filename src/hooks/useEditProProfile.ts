@@ -2,13 +2,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
+  type ProCenterPayload,
   type ProDescriptionPayload,
   type ProPricePayload,
+  editProCenter,
   editProDescription,
   editProPhotos,
   editProPrice,
-  editProCenter,
-  type ProCenterPayload,
 } from '@/apis/EditProProfile';
 
 export const USE_PRO_PROFILE_KEY = ['pro-profile']; // 실제 키와 맞춰서 사용하세요

@@ -36,7 +36,7 @@ const ProfileCard = ({ profileData }: ProfileCardProps) => {
         </div>
       </div>
 
-      <div className="sm:flex h-full items-end py-[17px] xs:hidden">
+      <div className="xs:hidden h-full items-end py-[17px] sm:flex">
         <button
           className="h-[26px] w-[88px] cursor-pointer rounded-[10px] bg-[#003EFB] px-[20px] py-[8px] text-[10px] leading-0 font-semibold text-white"
           onClick={() => navigate(ROUTES.MYPAGE.EXPERT)}

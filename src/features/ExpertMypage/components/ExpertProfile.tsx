@@ -139,7 +139,6 @@ const ExpertProfile = () => {
   };
 
   const { mutate: mutatePhoto } = useEditPhotos();
-
   const handlePhotosSave = () => {
     const newPhotos: File[] = [];
     const existingPhotoUrls: string[] = [];
