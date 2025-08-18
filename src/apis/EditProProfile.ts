@@ -34,10 +34,7 @@ export const editProPhotos = async (existingPhotoUrls: string[], newPhotos: File
   // 서버 스펙: request = {"existingPhotoUrls":[...]}
   // 우선 JSON Blob 방식
   const requestJson = { existingPhotoUrls };
-  formData.append(
-    'request',
-    new Blob([JSON.stringify(requestJson)], { type: 'application/json' }),
-  );
+  formData.append('request', new Blob([JSON.stringify(requestJson)], { type: 'application/json' }));
 
   // 만약 위 방식이 400/415 뜨면 ↓로 교체
   // formData.append('request', JSON.stringify(requestJson));
@@ -49,7 +46,6 @@ export const editProPhotos = async (existingPhotoUrls: string[], newPhotos: File
   const { data } = await multipartInstance.patch('/mypage/pro/photos', formData);
   return data;
 };
-
 
 export const editProPrice = async (payload: ProPricePayload) => {
   const { data } = await privateInstance.patch('/mypage/pro/ptPrice', payload);

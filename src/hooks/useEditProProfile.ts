@@ -45,7 +45,6 @@ export const useEditPhotos = () => {
   });
 };
 
-
 export const useEditProPrice = () => {
   const queryClient = useQueryClient();
   return useMutation({

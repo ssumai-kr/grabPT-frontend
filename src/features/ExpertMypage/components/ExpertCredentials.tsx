@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import imageCompression from 'browser-image-compression';
@@ -25,13 +25,15 @@ const ExpertCredentials = () => {
 
   const queryClient = useQueryClient();
   const { data } = useGetProCertifications();
-  const certifications = data?.result.certifications || [];
+  const certifications = useMemo(
+    () => data?.result?.certifications ?? [],
+    [data?.result?.certifications],
+  );
 
   useEffect(() => {
     if (certifications.length > 0) {
-      setCertificationList(certifications);
-      setOriginalList(certifications);
-      // 새로운 파일 배열 초기화 (빈 배열로 시작)
+      setCertificationList([...certifications]);
+      setOriginalList([...certifications]);
       setNewFiles([]);
     }
   }, [certifications]);
@@ -135,7 +137,7 @@ const ExpertCredentials = () => {
           </div>
         )}
       </div>
-      <hr className="mt-[10px] border-t-2 border-[#B8B8B8] w-[600px]" />
+      <hr className="mt-[10px] w-[600px] border-t-2 border-[#B8B8B8]" />
       <div className="mt-[20px] flex flex-col items-center justify-center">
         {certificationList.map((certification, index) => (
           <div key={index} className="mb-4">

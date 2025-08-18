@@ -1,7 +1,7 @@
+import type { certificationResponse } from '@/apis/getProCertifications';
 import type { SlideImage } from '@/components/ProfileImageSlide';
 
 import type { CommonResponseDto } from './commonResponseDto';
-import type { certificationResponse } from '@/apis/getProCertifications';
 
 export type Address = {
   city: string;

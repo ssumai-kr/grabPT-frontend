@@ -11,12 +11,10 @@ export const getProProfile = async () => {
   }
 };
 
-
-
 export const getProProfileWithUserId = async (userId: number) => {
   const { data } = await publicInstance.get<getProProfileResponseDto>(
     `/api/category-proprofile/${userId}`,
-    { headers: { accept: 'application/json' } }
+    { headers: { accept: 'application/json' } },
   );
   return data;
 };

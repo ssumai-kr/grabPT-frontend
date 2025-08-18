@@ -51,7 +51,11 @@ export const ExpertDetailInfo = () => {
     <div className="flex w-[800px] flex-col items-center justify-center">
       <div className="mt-10 flex w-full flex-col items-center justify-center gap-4">
         {/* <img src={ExpertDetailBgImg} alt="전문가 프로필 뱌경화면" className="w-full" /> */}
-        <img src={profileData?.profileImageUrl || Profile} alt="전문가 프로필 사진" className="h-[11.25rem] w-[11.25rem] rounded-full" />
+        <img
+          src={profileData?.profileImageUrl || Profile}
+          alt="전문가 프로필 사진"
+          className="h-[11.25rem] w-[11.25rem] rounded-full"
+        />
         <div className="flex flex-col items-center justify-center">
           <span className="font-roboto text-[2rem] font-semibold">{profileData?.name}</span>
           <span className="font-inter text-[0.875rem] font-semibold text-[#003EFB]">

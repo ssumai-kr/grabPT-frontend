@@ -21,10 +21,9 @@ const codeMap: Record<string, string> = {
 interface CirtificationEditCardProps {
   onAdd: (
     cert: { certificationType: string; description: string; imageUrl: string },
-    file: File
+    file: File,
   ) => void;
 }
-
 
 export const CirtificationCard = ({
   CirtificationCode,
@@ -131,7 +130,7 @@ export const CirtificationEditCard = ({ onAdd }: CirtificationEditCardProps) => 
         description,
         imageUrl: fileUrl, // 미리보기 url
       },
-      file
+      file,
     );
 
     // 입력 초기화
@@ -210,4 +209,3 @@ export const CirtificationEditCard = ({ onAdd }: CirtificationEditCardProps) => 
     </div>
   );
 };
-
