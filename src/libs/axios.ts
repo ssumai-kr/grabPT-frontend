@@ -1,6 +1,21 @@
-import axios from 'axios';
+import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
 
-// 헤더 없는 요청 인스턴스 (로그인, 회원가입, 실시간요청현황 열람 등 guest용)
+import { END_POINT } from '@/constants/endPoints';
+// 상단: 필요 타입/함수 import (리프레시 API 경로는 프로젝트에 맞게 유지)
+
+import { refreshSession } from '@/utils/refreshSession';
+
+// ---- 동시 리프레시 방지 상태 & 큐 타입 ----
+type RetryQueueItem = {
+  resolve: (value: any) => void;
+  reject: (reason?: any) => void;
+  config: AxiosRequestConfig;
+};
+
+let isRefreshing = false; // 지금 리프레시 중인지
+const retryQueue: RetryQueueItem[] = []; // 리프레시 동안 재시도 대기열
+
+// 헤더 없는 요청 인스턴스 (실시간 요청 현황 열람 등 guest용)
 export const publicInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_API_URL,
   headers: { 'Content-Type': 'application/json' },
@@ -8,6 +23,108 @@ export const publicInstance = axios.create({
   withCredentials: false, // 쿠키/세션 차단 속성
   // validateStatus: (status) => status < 500, // 4xx도 클라이언트에서 처리 => 할 줄 몰라서 꺼버림 ㅎ
 });
+
+// 리프레시 종료 시 큐에 쌓인 원 요청들 일괄 처리
+function processQueue(error: any) {
+  while (retryQueue.length) {
+    const { resolve, reject, config } = retryQueue.shift()!;
+    if (error) {
+      reject(error);
+    } else {
+      // 쿠키가 갱신되었으므로 같은 인스턴스로 원요청 재시도 (다음 단계에서 인스턴스 주입)
+      privateInstance.request(config).then(resolve).catch(reject);
+    }
+  }
+}
+
+// 공통 응답 인터셉터 부착: 401 처리 + 중복 리프레시 방지 + 큐 재시도
+function attachAuthInterceptors(instance: AxiosInstance) {
+  console.log('여기는 들어옴?');
+  instance.interceptors.response.use(
+    (response) => response,
+    async (error: AxiosError) => {
+      console.log('[INTCPT] status=', error.response?.status, 'url=', error.config?.url);
+      // 어떤 인스턴스가 실패했는지(쿠키 동반 여부)
+      console.log('[INTCPT] withCreds=', instance.defaults.withCredentials);
+
+      // 서버가 에러 본문을 줬다면 같이 확인 (스택/메시지/에러코드 등)
+      console.log('[INTCPT] data=', (error.response as any)?.data);
+
+      // 원 요청의 헤더/플래그를 빠르게 확인
+      console.log('[INTCPT] original headers=', (error.config || {}).headers);
+      console.log(
+        '[INTCPT] flags _retry/skipAuth=',
+        (error.config as any)?._retry,
+        (error.config as any)?.skipAuth,
+      );
+      console.log('여기는 들어왔음?');
+      const status = error.response?.status;
+      const originalRequest = (error.config || {}) as AxiosRequestConfig & {
+        _retry?: boolean;
+        skipAuth?: boolean;
+      };
+
+      // 인증 관련 엔드포인트 또는 skipAuth 요청은 우회
+      const url = typeof originalRequest.url === 'string' ? originalRequest.url : '';
+      const isAuthEndpoint = END_POINT.AUTH.REGEX.test(url);
+
+      if (status === 401 && !originalRequest?.skipAuth && !isAuthEndpoint) {
+        // 동일 요청 무한 루프 방지
+        if (originalRequest._retry) {
+          return Promise.reject(error);
+        }
+        originalRequest._retry = true;
+
+        try {
+          console.log('[INTCPT] Entered refresh try block');
+          // 진행 중 리프레시에 합류, 없으면 새로 시작
+          if (!isRefreshing) {
+            console.log('[INTCPT] No refresh in progress, starting new refresh');
+            isRefreshing = true;
+            console.log('[INTCPT] isRefreshing flag set to true');
+            refreshSession()
+              .then(() => {
+                console.log('[INTCPT] refreshSession request initiated');
+                console.log('[INTCPT] refreshSession succeeded, processing queue');
+                processQueue(null);
+              })
+              .catch((refreshErr) => {
+                console.log('[INTCPT] refreshSession failed:', refreshErr);
+                processQueue(refreshErr);
+                throw refreshErr;
+              })
+              .finally(() => {
+                console.log('[INTCPT] refreshSession finished, resetting isRefreshing flag');
+                isRefreshing = false;
+              });
+          }
+
+          // 현재 요청을 큐에 등록하고, 리프레시 완료까지 대기
+          const retryResult = await new Promise<any>((resolve, reject) => {
+            retryQueue.push({ resolve, reject, config: originalRequest });
+          });
+          return retryResult;
+        } catch (refreshErr) {
+          // 5xx는 서버 쪽 문제 추적용으로 한 줄 더
+          if (status && status >= 500) {
+            console.error('[INTCPT] server-error', status, 'url=', url);
+          }
+          // 리프레시 실패: 세션 종료 처리
+          // window.location.href = '/login';
+          return Promise.reject(refreshErr);
+        }
+      }
+
+      if (!error.response) {
+        console.warn('[INTCPT] network-like error:', error.message);
+        return Promise.reject(error);
+      }
+
+      // 위 조건에 해당하지 않는 모든 에러는 그대로 전파하여 호출부가 명확히 처리하도록 함
+      return Promise.reject(error);
+    },
+  );
+}
 
 // https://medium.com/%40velja/token-refresh-with-axios-interceptors-for-a-seamless-authentication-experience-854b06064bde
 // 여기서 찾은 권장패턴입니다. 추후 활성화
@@ -69,9 +186,11 @@ export const privateInstance = axios.create({
 declare module 'axios' {
   export interface AxiosRequestConfig {
     skipAuth?: boolean;
+    _retry?: boolean;
   }
   export interface InternalAxiosRequestConfig {
     skipAuth?: boolean;
+    _retry?: boolean;
   }
 }
 
@@ -81,6 +200,10 @@ export const multipartInstance = axios.create({
   timeout: 10_000,
   withCredentials: true,
 });
+
+// attachAuthInterceptors(publicInstance); // 임시: 어떤 인스턴스가 401을 받는지 확인용
+attachAuthInterceptors(privateInstance);
+attachAuthInterceptors(multipartInstance);
 
 // // 요청 시 토큰 자동 주입
 // multipartInstance.interceptors.request.use(

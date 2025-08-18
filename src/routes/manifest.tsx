@@ -14,6 +14,7 @@ import UserReviews from '@/features/UserMypage/components/UserReviews';
 import UserSettings from '@/features/UserMypage/components/UserSettings';
 import Layout from '@/layout/Layout';
 import AlarmController from '@/layout/controller/AlarmController';
+import { AuthCallback } from '@/pages/Auth/AuthCallback';
 import Login from '@/pages/Auth/Login';
 import Signup from '@/pages/Auth/Signup';
 import CategoryPage from '@/pages/Category/CategoryPage';
@@ -34,7 +35,7 @@ import ProposalsForRequest from '@/pages/Requests/ProposalsForRequest';
 import RequestDetailPage from '@/pages/Requests/RequestDetailPage';
 import RequestFormPage from '@/pages/Requests/RequestFormPage';
 import RequestsListPage from '@/pages/Requests/RequestsListPage';
-import type { AppRoute } from '@/routes/types';
+import type { AppRoute } from '@/types/Role';
 
 /**
  * 권한 메모
@@ -46,9 +47,10 @@ import type { AppRoute } from '@/routes/types';
  */
 export const routesManifest: AppRoute[] = [
   /* 온보딩 (게스트 전용) */
-  { path: ROUTES.AUTH.LOGIN, element: <Login />, guestOnly: true },
-  { path: ROUTES.AUTH.SIGNUP, element: <Signup />, guestOnly: true },
-
+  // 나중에 guestOnly 옵션 추가해여함
+  { path: ROUTES.AUTH.LOGIN, element: <Login />, roles: ['GUEST'] },
+  { path: ROUTES.AUTH.SIGNUP, element: <Signup />, roles: ['GUEST'] },
+  { path: ROUTES.AUTH.CALLBACK, element: <AuthCallback /> },
   /* 레이아웃 래퍼 */
   {
     path: ROUTES.HOME.ROOT,
@@ -61,14 +63,14 @@ export const routesManifest: AppRoute[] = [
       </>
     ),
     errorElement: <>없는 페이지입니다.</>,
-
+    roles: ['EXPERT', 'GUEST', 'USER'],
     children: [
       // 홈
-      { index: true, element: <UserMainPage /> }, // 필요 시 roles: ['USER']
-      { path: ROUTES.HOME.EXPERT, element: <ExpertMainPage /> }, // 필요 시 roles: ['EXPERT']
+      { index: true, element: <UserMainPage />, roles: ['USER', 'GUEST'] }, // 필요 시 roles: ['USER']
+      { path: ROUTES.HOME.EXPERT, element: <ExpertMainPage />, roles: ['EXPERT'] }, // 필요 시 roles: ['EXPERT']
 
       // 카테고리
-      { path: 'category/*', element: <CategoryPage /> },
+      { path: 'category/*', element: <CategoryPage />, roles: ['EXPERT', 'GUEST', 'USER'] },
 
       /* 마이페이지 ─ Expert */
       {
@@ -157,11 +159,7 @@ export const routesManifest: AppRoute[] = [
         element: <ProposalFormPage />,
         roles: ['USER', 'EXPERT'],
       },
-      {
-        path: ROUTES.MATCHING_STATUS.PROPOSALS.DETAIL,
-        element: <ProposalDetailPage />,
-        roles: ['USER', 'EXPERT'],
-      },
+      { path: ROUTES.MATCHING_STATUS.PROPOSALS.DETAIL, element: <ProposalDetailPage /> },
 
       // 계약
       {

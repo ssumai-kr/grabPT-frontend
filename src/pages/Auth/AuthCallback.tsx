@@ -1,25 +1,32 @@
 import { useEffect } from 'react';
 
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import LoadingMuscle from '@/components/LoadingMuscle';
 import { useRoleStore } from '@/store/useRoleStore';
+import { decodeCookie } from '@/utils/decodeCookie';
 
-export default function AuthCallback() {
-  const navigate = useNavigate();
-  const [sp] = useSearchParams();
-  const bootstrap = useRoleStore((s) => s.bootstrap);
+export const AuthCallback = () => {
+  const nav = useNavigate();
+  const { setRole, setUserId } = useRoleStore();
 
   useEffect(() => {
-    (async () => {
-      try {
-        await bootstrap(); // 서버의 HttpOnly 쿠키 기반 /me 호출 → store 갱신
-        navigate(sp.get('next') || '/', { replace: true });
-      } catch (e) {
-        console.error('Auth bootstrap failed', e);
-        navigate('/login', { replace: true });
-      }
-    })();
-  }, [bootstrap, navigate, sp]);
+    const roleRaw = decodeCookie('role');
+    const userIdRaw = Number(decodeCookie('userId'));
+    console.log(roleRaw);
+    console.log(userIdRaw);
+    setUserId(userIdRaw);
+    if (roleRaw === 'EXPERT') {
+      setRole('EXPERT');
+      nav('/expert', { replace: true });
+    } else if (roleRaw === 'USER') {
+      setRole('USER');
+      nav('/', { replace: true });
+    } else {
+      setRole('GUEST');
+      nav('/', { replace: true });
+    }
+  }, [nav, setRole, setUserId]);
 
-  return <div>로그인 처리 중...</div>;
-}
+  return <LoadingMuscle />;
+};

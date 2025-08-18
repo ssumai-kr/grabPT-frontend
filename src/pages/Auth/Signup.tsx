@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
+import ROUTES from '@/constants/routes';
 import BackBtn from '@/features/Signup/assets/BackBtn.svg';
 import AgreementStep from '@/features/Signup/components/AgreementStep';
 import ExpertInfoStep from '@/features/Signup/components/ExpertInfoStep';
@@ -67,10 +68,12 @@ const Signup = () => {
           {
             onSuccess: (res) => {
               console.log('User signup success:', res);
-              // nav('/');
+              nav(ROUTES.AUTH.CALLBACK);
             },
             onError: (err) => {
               console.error('User signup failed:', err);
+              alert('회원가입 실패');
+              setStep(5);
             },
           },
         );
@@ -85,10 +88,12 @@ const Signup = () => {
           {
             onSuccess: (res) => {
               console.log('Pro signup success:', res);
-              // nav('/expert');
+              nav(ROUTES.AUTH.CALLBACK);
             },
             onError: (err) => {
               console.error('Pro signup failed:', err);
+              alert('회원가입 실패');
+              setStep(5);
             },
           },
         );

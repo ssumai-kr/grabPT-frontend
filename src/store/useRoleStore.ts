@@ -1,40 +1,40 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-import type { Role } from '@/routes/types';
-import { decodeCookie } from '@/utils/decodeCookie';
-
-type AuthStatus = 'Loading' | 'Guest' | 'Authorized';
+import type { Role } from '@/types/Role';
 
 interface AuthState {
-  status: AuthStatus;
   role: Role | null;
+  userId: number | null;
+  setUserId: (id: number) => void;
+  setRole: (role: Role) => void;
   isLoggedIn: boolean;
-  bootstrap: () => Promise<void>;
+  resetAuth: () => void;
 }
 
-export const useRoleStore = create<AuthState>((set) => ({
-  status: 'Loading',
-  role: null,
-  isLoggedIn: false,
-  bootstrap: async () => {
-    // Set timeout at the very top
-    const timeout = setTimeout(() => {
-      set({ status: 'Guest', role: null, isLoggedIn: false });
-    }, 3000); // 3초
-    try {
-      // Cookie-based accessToken retrieval via decoded cookie helper
-      const tokenValue = decodeCookie('accessToken');
-      const roleValue = decodeCookie('role');
-      const token = tokenValue ? decodeURIComponent(tokenValue) : null;
-      const roleRaw = roleValue ? decodeURIComponent(roleValue) : null;
-      if (!token) {
-        set({ status: 'Guest', role: 'GUEST', isLoggedIn: false });
-        return;
-      }
-      const role = roleRaw === '1' ? 'USER' : roleRaw === '2' ? 'EXPERT' : 'GUEST';
-      set({ status: 'Authorized', role, isLoggedIn: true });
-    } finally {
-      clearTimeout(timeout);
-    }
-  },
-}));
+export const useRoleStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      role: 'GUEST',
+      userId: null,
+      isLoggedIn: false,
+      setUserId(id: number) {
+        set({ userId: id });
+      },
+      setRole: (role: Role) =>
+        set({
+          role,
+          isLoggedIn: role === 'USER' || role === 'EXPERT',
+        }),
+      resetAuth: () =>
+        set({
+          role: 'GUEST',
+          userId: null,
+          isLoggedIn: false,
+        }),
+    }),
+    {
+      name: 'role-storage',
+    },
+  ),
+);
