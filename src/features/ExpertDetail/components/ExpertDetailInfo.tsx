@@ -12,15 +12,17 @@ import { TitleLine } from '@/components/TitleLine';
 import ROUTES from '@/constants/routes';
 import { useGetProProfileWithUserId } from '@/hooks/useGetProProfile';
 import type { PtPrice } from '@/types/ProPrifleType';
+import { postCreateChatRoom } from '@/apis/postCreateChatRoom';
 
 export const ExpertDetailInfo = () => {
   const [photos, setPhotos] = useState<SlideImage[]>([]);
   const [certifications, setCertifications] = useState<certificationResponse[]>([]);
   const [pricePerOne, setPricePerOne] = useState<number | null>(null);
   const [prices, setPrices] = useState<PtPrice[]>([]);
+  const navigate = useNavigate();
 
   const { id } = useParams();
-  const userId = Number(id);
+  const proId = Number(id);
 
   const nav = useNavigate();
   const handleChatButton = () => {
@@ -28,7 +30,8 @@ export const ExpertDetailInfo = () => {
   };
   // const { data: credentialList } = useGetCredentialList();
   // console.log(credentialList);
-  const { data } = useGetProProfileWithUserId(userId);
+
+  const { data } = useGetProProfileWithUserId(proId);
 
   const profileData = data?.result;
 
@@ -46,6 +49,11 @@ export const ExpertDetailInfo = () => {
       setPrices(profileData.ptPrices);
     }
   }, [profileData]);
+  const 채팅상담 = () => {
+      if (profileData === undefined) return;
+      postCreateChatRoom({ userId: profileData.proId, proId: profileData.proId });
+      navigate(ROUTES.CHAT.ROOT);
+    };
 
   return (
     <div className="flex w-[800px] flex-col items-center justify-center">
