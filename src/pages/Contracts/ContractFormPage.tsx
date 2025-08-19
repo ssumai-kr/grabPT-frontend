@@ -317,7 +317,7 @@ const ContractFormPage = () => {
   const handleCreatePdf = async () => {
     createPdf(contractId);
     postCustomOrder({ price: 10000, item_name: 'test', matching_id: 6 });
-    window.open('https://도메인명/payment', '_blank');
+    window.open('https://api.grapt.com/payment.html', '_blank');
   };
 
   return (
