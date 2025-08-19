@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Button from './Button';
+import { createPortal } from 'react-dom';
 
 interface CirtificationCardProps {
   CirtificationCode?: string;
@@ -21,10 +22,9 @@ const codeMap: Record<string, string> = {
 interface CirtificationEditCardProps {
   onAdd: (
     cert: { certificationType: string; description: string; imageUrl: string },
-    file: File
+    file: File,
   ) => void;
 }
-
 
 export const CirtificationCard = ({
   CirtificationCode,
@@ -35,11 +35,23 @@ export const CirtificationCard = ({
 }: CirtificationCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // ✅ 모달 열릴 때 body 스크롤 방지
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isModalOpen]);
+
   return (
     <>
       <div className="relative flex h-[50px] w-[600px] items-center justify-between rounded-[10px] bg-[#EFEFEF]">
         <div className="w-[140px] text-center">
-          {CirtificationCode ? codeMap[CirtificationCode] || CirtificationCode : '수상'}
+          {CirtificationCode ? codeMap[CirtificationCode] || CirtificationCode : "수상"}
         </div>
         <div className="h-[30px] w-[1px] border border-[#ACACAC]"></div>
         <div
@@ -48,7 +60,7 @@ export const CirtificationCard = ({
             if (imageUrl) setIsModalOpen(true);
           }}
         >
-          {CirtificationDescription ?? '내용'}
+          {CirtificationDescription ?? "내용"}
         </div>
         {/* 삭제 버튼 */}
         {isEditMode && (
@@ -56,36 +68,40 @@ export const CirtificationCard = ({
             className="absolute right-2 cursor-pointer"
             height="h-[30px]"
             width="w-[60px]"
-            onClick={onDelete} // ✅ 삭제 호출
+            onClick={onDelete}
           >
             삭제
           </Button>
         )}
       </div>
 
-      {isModalOpen && imageUrl && (
-        <div
-          className="bg-opacity-30 fixed inset-1 z-50 flex items-start justify-center pt-[10vh] backdrop-blur-sm"
-          onClick={() => setIsModalOpen(false)}
-        >
+      {/* ✅ Portal을 이용한 모달 */}
+      {isModalOpen &&
+        imageUrl &&
+        createPortal(
           <div
-            className="flex max-h-[90%] max-w-[90%] flex-col rounded-lg bg-gray-200 p-4"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            onClick={() => setIsModalOpen(false)}
           >
-            <img
-              src={imageUrl}
-              alt="증명 이미지"
-              className="max-h-[80vh] max-w-full object-contain"
-            />
-            <button
-              className="mt-4 cursor-pointer self-end rounded rounded-[10px] bg-[#003efb] px-4 py-2 text-white hover:bg-[#0f2b91] active:bg-[#0f2b91]"
-              onClick={() => setIsModalOpen(false)}
+            <div
+              className="flex max-h-[90%] max-w-[90%] flex-col rounded-lg bg-gray-200 p-4"
+              onClick={(e) => e.stopPropagation()}
             >
-              닫기
-            </button>
-          </div>
-        </div>
-      )}
+              <img
+                src={imageUrl}
+                alt="증명 이미지"
+                className="max-h-[80vh] w-full object-contain"
+              />
+              <button
+                className="mt-4 self-end rounded-[10px] bg-[#003efb] px-4 py-2 text-white hover:bg-[#0f2b91] active:bg-[#0f2b91]"
+                onClick={() => setIsModalOpen(false)}
+              >
+                닫기
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
     </>
   );
 };
@@ -131,7 +147,7 @@ export const CirtificationEditCard = ({ onAdd }: CirtificationEditCardProps) => 
         description,
         imageUrl: fileUrl, // 미리보기 url
       },
-      file
+      file,
     );
 
     // 입력 초기화
@@ -210,4 +226,3 @@ export const CirtificationEditCard = ({ onAdd }: CirtificationEditCardProps) => 
     </div>
   );
 };
-

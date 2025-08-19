@@ -13,6 +13,7 @@ import ROUTES from '@/constants/routes';
 import { useGetProProfileWithUserId } from '@/hooks/useGetProProfile';
 import type { PtPrice } from '@/types/ProPrifleType';
 import { postCreateChatRoom } from '@/apis/postCreateChatRoom';
+import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 
 export const ExpertDetailInfo = () => {
   const [photos, setPhotos] = useState<SlideImage[]>([]);
@@ -23,11 +24,9 @@ export const ExpertDetailInfo = () => {
 
   const { id } = useParams();
   const proId = Number(id);
+  const {data:userInfo} = useGetUserInfo();
+  const userId = userInfo?.userId;
 
-  const nav = useNavigate();
-  const handleChatButton = () => {
-    nav(ROUTES.CHAT.ROOT);
-  };
   // const { data: credentialList } = useGetCredentialList();
   // console.log(credentialList);
 
@@ -50,8 +49,11 @@ export const ExpertDetailInfo = () => {
     }
   }, [profileData]);
   const 채팅상담 = () => {
-      if (profileData === undefined) return;
-      postCreateChatRoom({ userId: profileData.proId, proId: profileData.proId });
+      if (userId == undefined || profileData?.proId === undefined) {
+        console.log("안됨");
+        return;
+      }
+      postCreateChatRoom({ userId: userId, proId: profileData.proId });
       navigate(ROUTES.CHAT.ROOT);
     };
 
@@ -71,7 +73,7 @@ export const ExpertDetailInfo = () => {
             width="w-[17.5rem]"
             height="h-[2.625rem]"
             text="text-white text-[15px] font-semibold"
-            onClick={handleChatButton}
+            onClick={채팅상담}
           >
             채팅 상담
           </Button>
