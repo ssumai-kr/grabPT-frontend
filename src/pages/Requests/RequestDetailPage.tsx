@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import z from 'zod';
 
-import Profile from '@/assets/images/HeaderProfile.png';
 import Button from '@/components/Button';
 import CheckedButton from '@/components/CheckedButton';
 import Tabs, { type TabItem } from '@/components/Tabs';
@@ -16,8 +15,8 @@ import { useGetDetailRequest } from '@/features/Request/hooks/useGetDetailReques
 import { usePatchRequest } from '@/features/Request/hooks/usePatchRequest';
 import { patchRequestSchema } from '@/features/Request/schemas/requestSchema';
 import type { RequestRequestDto } from '@/features/Request/types/Request';
+import { useRoleStore } from '@/store/useRoleStore';
 import { useSuggestStore } from '@/store/useSuggestStore';
-import { useUserRoleStore } from '@/store/useUserRoleStore';
 import {
   AGES,
   type AgeGroup,
@@ -30,6 +29,7 @@ import {
   TIMES,
   type TimeSlot,
 } from '@/types/ReqeustsType';
+import { onErrorImage } from '@/utils/onErrorImage';
 
 //에러 보여주기 추가할것
 const RequestDetailPage = () => {
@@ -37,7 +37,7 @@ const RequestDetailPage = () => {
   const { id } = useParams();
   const requestionId = Number(id);
   const { setSuggestInfo } = useSuggestStore();
-  const { isExpert } = useUserRoleStore();
+  const { role } = useRoleStore();
   //제안서 작성하기 버튼 누를 시 suggestStore의 requestionId를 업데이트하고 proposalFormPage에서 받아쓰기
 
   // api연결 시 isWriter 함수로 변경 (요청서의 작성자 id === 현재 유저 id)
@@ -108,7 +108,7 @@ const RequestDetailPage = () => {
   };
   const { mutate: editRequest } = usePatchRequest();
   const handleButton = () => {
-    if (isExpert) {
+    if (role === 'EXPERT') {
       navigateToProposalForm();
     } else {
       handleSubmit((formData) => {
@@ -125,7 +125,6 @@ const RequestDetailPage = () => {
       })();
     }
   };
-
   /* 목적(다중) */
   const selectedPurposes = watch('purpose');
   //기타 포함 시 입력창 보임
@@ -180,9 +179,14 @@ const RequestDetailPage = () => {
       {/* 헤더 */}
       <div className="mt-16 flex h-[50px] w-full items-center justify-center gap-3">
         {/* 프로필 url 이미지로 바꾸는 로직 필요 */}
-        <img src={Profile} alt="요청서 프로필" className="h-full" />
+        <img
+          src={data?.profileImageUrl}
+          alt="요청서 프로필"
+          className="h-[3.125rem] w-[3.125rem] rounded-full"
+          onError={onErrorImage}
+        />
         <span className="text-4xl font-extrabold">
-          {data?.location} {data?.nickname}
+          {data?.location?.substring(2)} {data?.nickname}
           {/* {category} */}
         </span>
         <span className="text-2xl leading-none font-bold"> 님의 요청서입니다.</span>
@@ -408,9 +412,9 @@ const RequestDetailPage = () => {
         </section>
       </section>
 
-      {(isExpert || isWriter) && (
+      {(role === 'EXPERT' || isWriter) && (
         <Button width="w-[425px]" className="mt-28" onClick={handleButton}>
-          {isExpert ? '제안서 작성' : '수정하기'}
+          {role === 'EXPERT' ? '제안서 작성' : '수정하기'}
         </Button>
       )}
     </section>

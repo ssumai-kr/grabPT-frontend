@@ -10,8 +10,10 @@ export const END_POINT = {
       send: '/api/sms/send',
       verify: '/api/sms/verify-sms',
     },
+    REISSUE: '/api/auth/reissue',
     NICKNAME_CHECK: '/api/auth/check-nickname',
     LOGOUT: '/api/auth/logout',
+    REGEX: /\/api\/auth\/(reissue|logout)/,
   },
 
   HOME: {},
@@ -27,6 +29,9 @@ export const END_POINT = {
   MYPROPAGE: {
     CREDENTIALS: {
       credentials: '/mypage/pro/certification',
+    },
+    REVIEWS: {
+      reviews: `/mypage/pro/reviews`,
     },
     PROFILE: {
       profile: '/mypage/pro/',

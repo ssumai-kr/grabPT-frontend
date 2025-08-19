@@ -1,39 +1,92 @@
-const UserInformationForm = () => {
+import { useEffect, useState } from 'react';
+
+import type { userInfoType } from '@/features/Contract/types/postContractType';
+
+interface UserInformationFormProps {
+  isCanEdit: boolean;
+  defaultValues?: userInfoType;
+}
+
+const UserInformationForm = ({ isCanEdit, defaultValues }: UserInformationFormProps) => {
+  const baseInputClass = 'h-10 w-full rounded-md border px-3 outline-none transition';
+  const editableClass = 'border-gray-300 bg-white focus:border-blue-500';
+  const readOnlyClass = 'border-gray-200 bg-gray-100 text-gray-500 cursor-not-allowed';
+
+  // date 인풋에 들어갈 값 정규화(YYYY-MM-DD)
+  const birthValue =
+    typeof defaultValues?.birth === 'string' && defaultValues.birth.length > 0
+      ? defaultValues.birth.slice(0, 10)
+      : '';
+
+  const [gender, setGender] = useState<'MALE' | 'FEMALE' | null>(defaultValues?.gender ?? null);
+  useEffect(() => {
+    setGender(defaultValues?.gender ?? null);
+  }, [defaultValues?.gender]);
+
   return (
     <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-4 text-sm">
       <label className="self-center">성명</label>
       <input
         type="text"
         placeholder="이름"
-        className="focus:border-button h-10 w-full rounded-md border border-gray-300 bg-white px-3 outline-none"
+        name="name"
+        readOnly={!isCanEdit}
+        defaultValue={defaultValues?.name ?? ''}
+        className={`${baseInputClass} ${isCanEdit ? editableClass : readOnlyClass}`}
       />
 
       <label className="self-center">생년월일</label>
       <input
         aria-label="날짜"
+        name="birth"
         type="date"
-        className="focus:border-button h-10 w-full rounded-md border border-gray-300 bg-white px-3 outline-none"
+        readOnly={!isCanEdit}
+        defaultValue={birthValue}
+        className={`${baseInputClass} ${isCanEdit ? editableClass : readOnlyClass}`}
       />
 
       <label className="self-center">연락처</label>
       <input
         type="tel"
         placeholder="010-0000-0000"
-        className="focus:border-button h-10 w-full rounded-md border border-gray-300 bg-white px-3 outline-none"
+        name="phoneNumber"
+        readOnly={!isCanEdit}
+        defaultValue={defaultValues?.phoneNumber ?? ''}
+        className={`${baseInputClass} ${isCanEdit ? editableClass : readOnlyClass}`}
       />
 
       <label className="self-center">성별</label>
       <div className="flex items-center gap-6">
         {/* 남자 */}
-        <label className="flex items-center gap-1">
-          <input type="radio" name="gender" value="male" className="peer sr-only" defaultChecked />
+        <label
+          className={`flex items-center gap-1 ${!isCanEdit ? 'cursor-not-allowed opacity-50' : ''}`}
+        >
+          <input
+            type="radio"
+            name="gender"
+            value="MALE"
+            className="peer sr-only"
+            readOnly={!isCanEdit}
+            checked={gender === 'MALE'}
+            onChange={() => setGender('MALE')}
+          />
           <span className="inline-block h-5 w-5 rounded-full border-2 border-gray-500 peer-checked:border-[6px] peer-checked:border-blue-600" />
           남
         </label>
 
         {/* 여자 */}
-        <label className="flex items-center gap-1">
-          <input type="radio" name="gender" value="female" className="peer sr-only" />
+        <label
+          className={`flex items-center gap-1 ${!isCanEdit ? 'cursor-not-allowed opacity-50' : ''}`}
+        >
+          <input
+            type="radio"
+            name="gender"
+            value="FEMALE"
+            className="peer sr-only"
+            readOnly={!isCanEdit}
+            checked={gender === 'FEMALE'}
+            onChange={() => setGender('FEMALE')}
+          />
           <span className="inline-block h-5 w-5 rounded-full border-2 border-gray-500 peer-checked:border-[6px] peer-checked:border-blue-600" />
           여
         </label>
@@ -43,7 +96,10 @@ const UserInformationForm = () => {
       <input
         type="text"
         placeholder="API 연동해야 함"
-        className="focus:border-button h-10 w-full rounded-md border border-gray-300 bg-white px-3 outline-none"
+        name="address"
+        readOnly={!isCanEdit}
+        defaultValue={defaultValues?.address ?? ''}
+        className={`${baseInputClass} ${isCanEdit ? editableClass : readOnlyClass}`}
       />
     </div>
   );

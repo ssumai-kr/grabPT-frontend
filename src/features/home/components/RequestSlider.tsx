@@ -4,14 +4,16 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
+import HeaderProfile from '@/assets/images/HeaderProfile.png';
+import type { RequestsListResultType } from '@/features/Requests/types/getRequestsListType';
 import { NextArrow, PrevArrow } from '@/features/home/components/CustomArrow';
 import RequestCardInMain from '@/features/home/components/RequestCard';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
-import type { getMyRequestsListResultType } from '@/types/getMyRequestListResponse';
+import { useRoleStore } from '@/store/useRoleStore';
 
 interface RequestSliderProps {
   title: string;
-  requests: getMyRequestsListResultType['content'];
+  requests: RequestsListResultType['content'];
 }
 
 function RequestSlider({ title, requests }: RequestSliderProps) {
@@ -34,10 +36,9 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
       { breakpoint: 1024, settings: { slidesToShow: 2, dots: false } },
     ],
   };
-  //임시방편용 사용자 이름
+
   const { data: userInfo } = useGetUserInfo();
-  const name = userInfo?.nickname;
-  const location = `${userInfo?.address[0].city} ${userInfo?.address[0].district} ${userInfo?.address[0].street}`;
+  const { role } = useRoleStore();
   return (
     <section
       ref={containerRef}
@@ -53,9 +54,21 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
             <div key={i} className="h-[230px] px-4">
               <RequestCardInMain
                 id={r.requestId}
-                name={name ?? '사용자'}
-                location={location}
-                profileImg={userInfo?.profileImageUrl}
+                name={role === 'USER' ? userInfo?.nickname : role === 'EXPERT' ? r.nickname : ''}
+                location={
+                  role === 'USER'
+                    ? `${userInfo?.address[0].city} ${userInfo?.address[0].district} ${userInfo?.address[0].street}`
+                    : role === 'EXPERT'
+                      ? (r?.location ?? '')
+                      : ''
+                }
+                profileImg={
+                  role === 'USER'
+                    ? userInfo?.profileImageUrl
+                    : role === 'EXPERT'
+                      ? r?.userProfileImageUrl
+                      : HeaderProfile
+                }
                 tags={{
                   availableTimes: r.availableTimes,
                   daysPerWeek: r.availableDays.length,

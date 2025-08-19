@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 
 import chatImage from '@/assets/images/ChatImage.svg';
 import fileImage from '@/assets/images/FileImage.svg';
+import PaymentImage from '@/assets/images/PaymentImage.svg';
+import SuccessImage from '@/assets/images/SuccessImage.svg';
 import textImage from '@/assets/images/TextImage.svg';
 import { useTimeAgo } from '@/hooks/useTimaAgo';
 import { usePatchReadAlarm } from '@/layout/hooks/useAlarm';
@@ -20,10 +22,19 @@ const AlramDropdownItem = ({ alarm }: AlarmDropdownItemProps) => {
     navigate(alarm.redirectUrl);
   };
 
-  const imagePath =
-    alarm.type === 'MESSAGE' ? chatImage : alarm.type === 'CONTRACT' ? fileImage : textImage;
+  const IMAGE_BY_TYPE: Record<string, string> = {
+    MESSAGE: chatImage,
+    CONTRACT: textImage,
+    SUGGESTION: fileImage,
+    REQUESTION: fileImage,
+    REQUEST: fileImage, // 혹시 백엔드가 REQUEST로 보내는 경우 대비
+    PAYMENT: PaymentImage,
+    SUCCESS: SuccessImage,
+  };
 
-  const timeAgo = useTimeAgo(alarm.createdAt); // 예: "3분 전", "어제", "5일 전"
+  const imagePath = IMAGE_BY_TYPE[alarm.type] ?? textImage;
+
+  const timeAgo = useTimeAgo(alarm.sentAt); // 예: "3분 전", "어제", "5일 전"
 
   return (
     <div

@@ -3,17 +3,21 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import Profile from '@/assets/images/HeaderProfile.png';
 import Button from '@/components/Button';
 import CommentBox from '@/components/CommentBox';
+import { urlFor } from '@/constants/routes';
 import ImageUploader from '@/features/ProposalForm/components/ImageUploader';
 import { useSuggest } from '@/features/ProposalForm/hooks/useSuggest';
 import { proposalFormSchema } from '@/features/ProposalForm/schemas/proposalFormSchema';
 import type { DetailProposalForm } from '@/features/ProposalForm/types/Suggest';
+import { useGetDetailRequest } from '@/features/Request/hooks/useGetDetailRequest';
 import { useSuggestStore } from '@/store/useSuggestStore';
 
 const ProposalFormPage = () => {
+  const navigate = useNavigate();
   /** 'accept' = 고객 요청 수락, 'custom' = 새로운 가격 제안 */
   const [mode, setMode] = useState<'accept' | 'custom'>('accept');
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -38,6 +42,10 @@ const ProposalFormPage = () => {
       location: '',
     },
   });
+  const { data: requestInfo } = useGetDetailRequest(
+    suggestInfo.requestionId !== null ? suggestInfo.requestionId : 0,
+  );
+
   console.log(errors);
   const onSubmit = async (data: DetailProposalForm) => {
     const newSuggestInfo = {
@@ -58,15 +66,23 @@ const ProposalFormPage = () => {
         console.error('Suggest failed:', err);
       }
     }
+    navigate(urlFor.requestDetail(suggestInfo.requestionId || undefined));
   };
+
   const amountErrorMsg = errors.price?.message ?? errors.sessionCount?.message;
   const hasAmountError = Boolean(errors.price || errors.sessionCount);
   return (
     <section className="flex w-full flex-col items-center gap-12 py-12 text-2xl font-extrabold">
       {/* 헤더 */}
       <div className="flex items-center gap-3">
-        <img src={Profile} alt="요청자 프로필" className="h-12" />
-        <span className="text-[2.5rem] font-bold">강서구 복서</span>
+        <img
+          src={requestInfo?.profileImageUrl || Profile}
+          alt="요청자 프로필"
+          className="h-12 w-12 rounded-full"
+        />
+        <span className="text-[2.5rem] font-bold">
+          {(requestInfo?.location ?? '').split(' ').slice(1).join(' ')} {requestInfo?.nickname}{' '}
+        </span>
         <span className="text-2xl font-semibold">고객에게 제안서 작성</span>
       </div>
 
