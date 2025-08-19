@@ -40,7 +40,11 @@ const ReviewCard = ({ rating, content, center, proId, proNickName, imageURL }: R
         <div className="flex gap-[11px]">
           {/* 아바타 */}
           <div>
-            <img src={imageURL ?? Profile} alt="profile" className="h-[47px] rounded-full w-[47px]" />
+            <img
+              src={imageURL ?? Profile}
+              alt="profile"
+              className="h-[47px] w-[47px] rounded-full"
+            />
           </div>
 
           <div className="flex flex-col">

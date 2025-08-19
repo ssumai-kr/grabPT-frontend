@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import type { certificationResponse } from '@/apis/getProCertifications';
+import { postCreateChatRoom } from '@/apis/postCreateChatRoom';
 import Profile from '@/assets/images/HeaderProfile.png';
 import Button from '@/components/Button';
 import { CirtificationCard } from '@/components/CirtificationCard';
@@ -11,9 +12,8 @@ import ProfilePrice from '@/components/ProfilePrice';
 import { TitleLine } from '@/components/TitleLine';
 import ROUTES from '@/constants/routes';
 import { useGetProProfileWithUserId } from '@/hooks/useGetProProfile';
-import type { PtPrice } from '@/types/ProPrifleType';
-import { postCreateChatRoom } from '@/apis/postCreateChatRoom';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
+import type { PtPrice } from '@/types/ProPrifleType';
 
 export const ExpertDetailInfo = () => {
   const [photos, setPhotos] = useState<SlideImage[]>([]);
@@ -24,7 +24,7 @@ export const ExpertDetailInfo = () => {
 
   const { id } = useParams();
   const proId = Number(id);
-  const {data:userInfo} = useGetUserInfo();
+  const { data: userInfo } = useGetUserInfo();
   const userId = userInfo?.userId;
 
   // const { data: credentialList } = useGetCredentialList();
@@ -49,19 +49,23 @@ export const ExpertDetailInfo = () => {
     }
   }, [profileData]);
   const 채팅상담 = () => {
-      if (userId == undefined || profileData?.proId === undefined) {
-        console.log("안됨");
-        return;
-      }
-      postCreateChatRoom({ userId: userId, proId: profileData.proId });
-      navigate(ROUTES.CHAT.ROOT);
-    };
+    if (userId == undefined || profileData?.proId === undefined) {
+      console.log('안됨');
+      return;
+    }
+    postCreateChatRoom({ userId: userId, proId: profileData.proId });
+    navigate(ROUTES.CHAT.ROOT);
+  };
 
   return (
     <div className="flex w-[800px] flex-col items-center justify-center">
       <div className="mt-10 flex w-full flex-col items-center justify-center gap-4">
         {/* <img src={ExpertDetailBgImg} alt="전문가 프로필 뱌경화면" className="w-full" /> */}
-        <img src={profileData?.profileImageUrl || Profile} alt="전문가 프로필 사진" className="h-[11.25rem] w-[11.25rem] rounded-full" />
+        <img
+          src={profileData?.profileImageUrl || Profile}
+          alt="전문가 프로필 사진"
+          className="h-[11.25rem] w-[11.25rem] rounded-full"
+        />
         <div className="flex flex-col items-center justify-center">
           <span className="font-roboto text-[2rem] font-semibold">{profileData?.name}</span>
           <span className="font-inter text-[0.875rem] font-semibold text-[#003EFB]">

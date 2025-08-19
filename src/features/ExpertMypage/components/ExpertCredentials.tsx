@@ -26,17 +26,17 @@ const ExpertCredentials = () => {
   const queryClient = useQueryClient();
   const { data } = useGetProCertifications();
   const certifications = useMemo(
-  () => data?.result.certifications || [],
-  [data?.result.certifications]
-);
+    () => data?.result.certifications || [],
+    [data?.result.certifications],
+  );
 
-useEffect(() => {
-  if (certifications.length > 0) {
-    setCertificationList(certifications);
-    setOriginalList(certifications);
-    setNewFiles([]); // 새로운 파일 배열 초기화
-  }
-}, [certifications]);
+  useEffect(() => {
+    if (certifications.length > 0) {
+      setCertificationList(certifications);
+      setOriginalList(certifications);
+      setNewFiles([]); // 새로운 파일 배열 초기화
+    }
+  }, [certifications]);
 
   console.log('certificationList:', certificationList);
 
@@ -137,7 +137,7 @@ useEffect(() => {
           </div>
         )}
       </div>
-      <hr className="mt-[10px] border-t-2 border-[#B8B8B8] w-[600px]" />
+      <hr className="mt-[10px] w-[600px] border-t-2 border-[#B8B8B8]" />
       <div className="mt-[20px] flex flex-col items-center justify-center">
         {certificationList.map((certification, index) => (
           <div key={index} className="mb-4">

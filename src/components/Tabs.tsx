@@ -13,7 +13,7 @@ interface TabsProps {
 
 const Tabs = ({ items, width = 'w-36' }: TabsProps) => {
   return (
-    <div className="flex w-full justify-center w-[800px]">
+    <div className="flex w-[800px] w-full justify-center">
       {items.map(({ label, to }) => (
         <NavLink
           key={to}

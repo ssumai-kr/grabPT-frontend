@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Button from './Button';
 import { createPortal } from 'react-dom';
+
+import Button from './Button';
 
 interface CirtificationCardProps {
   CirtificationCode?: string;
@@ -38,12 +39,12 @@ export const CirtificationCard = ({
   // ✅ 모달 열릴 때 body 스크롤 방지
   useEffect(() => {
     if (isModalOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, [isModalOpen]);
 
@@ -51,7 +52,7 @@ export const CirtificationCard = ({
     <>
       <div className="relative flex h-[50px] w-[600px] items-center justify-between rounded-[10px] bg-[#EFEFEF]">
         <div className="w-[140px] text-center">
-          {CirtificationCode ? codeMap[CirtificationCode] || CirtificationCode : "수상"}
+          {CirtificationCode ? codeMap[CirtificationCode] || CirtificationCode : '수상'}
         </div>
         <div className="h-[30px] w-[1px] border border-[#ACACAC]"></div>
         <div
@@ -60,7 +61,7 @@ export const CirtificationCard = ({
             if (imageUrl) setIsModalOpen(true);
           }}
         >
-          {CirtificationDescription ?? "내용"}
+          {CirtificationDescription ?? '내용'}
         </div>
         {/* 삭제 버튼 */}
         {isEditMode && (
@@ -100,7 +101,7 @@ export const CirtificationCard = ({
               </button>
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </>
   );

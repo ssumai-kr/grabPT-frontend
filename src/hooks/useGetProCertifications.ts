@@ -1,6 +1,9 @@
-import { getProCertifications, type getProCertificationResponseDto } from '@/apis/getProCertifications';
 import { useQuery } from '@tanstack/react-query';
 
+import {
+  type getProCertificationResponseDto,
+  getProCertifications,
+} from '@/apis/getProCertifications';
 
 export const useGetProCertifications = () => {
   return useQuery<getProCertificationResponseDto>({

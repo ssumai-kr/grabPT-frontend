@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+
 import { postProCertifications } from '@/apis/postProCertification';
 
 export const usePostCertifications = () => {

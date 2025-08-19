@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getProProfile, getProProfileWithUserId } from '@/apis/getProProfile';
 import type { getProProfileResponseDto } from '@/types/ProPrifleType';
 
-
 //전문가가 자기 프로필 조회
 export const useProProfileQuery = () => {
   return useQuery<getProProfileResponseDto>({

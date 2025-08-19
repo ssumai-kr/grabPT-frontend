@@ -64,19 +64,19 @@ const ProfilePriceInput = ({
   };
 
   const handleChange = (index: number, field: 'count' | 'price', value: string) => {
-  const numValue = Number(value);
-  const next = [...prices];
+    const numValue = Number(value);
+    const next = [...prices];
 
-  if (field === 'count') {
-    // 횟수는 최소 2
-    next[index][field] = numValue < 2 ? '2' : String(numValue);
-  } else if (field === 'price') {
-    // 가격은 최소 1
-    next[index][field] = numValue <= 0 ? '1' : String(numValue);
-  }
+    if (field === 'count') {
+      // 횟수는 최소 2
+      next[index][field] = numValue < 2 ? '2' : String(numValue);
+    } else if (field === 'price') {
+      // 가격은 최소 1
+      next[index][field] = numValue <= 0 ? '1' : String(numValue);
+    }
 
-  emitChange(next);
-};
+    emitChange(next);
+  };
 
   const handleRemovePrice = (index: number) => {
     const next = prices.filter((_, i) => i !== index);
@@ -101,7 +101,9 @@ const ProfilePriceInput = ({
           placeholder="가격"
         />
         <span className="text-[18px] font-semibold">원</span>
-        {pricePerOne == 0 ? <div className='absolute left-[650px] text-[#FF0000]'>1원 이상 입력 해주세요.</div> : null}
+        {pricePerOne == 0 ? (
+          <div className="absolute left-[650px] text-[#FF0000]">1원 이상 입력 해주세요.</div>
+        ) : null}
       </div>
 
       {/* 추가 가격 입력 */}
