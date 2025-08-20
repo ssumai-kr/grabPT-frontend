@@ -21,7 +21,7 @@ import {
 } from '@/hooks/useEditProProfile';
 //import MypageSection from '@/features/Mypage/components/MypageSection';
 import { useProProfileQuery } from '@/hooks/useGetProProfile';
-import type { PtPrice } from '@/types/ProPrifleType';
+import type { PtPrice } from '@/types/ProProfleType';
 
 //스타일 통일 될 경우 TileLine 컴포넌트로 통일
 
@@ -41,8 +41,7 @@ const ExpertProfile = () => {
   const [resetSeed, _setResetSeed] = useState(0);
   const [isPhotosCompressing, setIsPhotosCompressing] = useState(false);
 
-  const { data, isLoading, isError } = useProProfileQuery();
-  const profileData = data?.result;
+  const { data: profileData, isLoading, isError } = useProProfileQuery();
 
   useEffect(() => {
     setComment(profileData?.description || '');

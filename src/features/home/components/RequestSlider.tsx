@@ -13,9 +13,11 @@ import { useRoleStore } from '@/store/useRoleStore';
 interface RequestSliderProps {
   title: string;
   requests: RequestsListResultType['content'];
+  name?: string;
+  location?: string;
 }
 
-function RequestSlider({ title, requests }: RequestSliderProps) {
+function RequestSlider({ title, requests, location, name }: RequestSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { role } = useRoleStore();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,7 +38,6 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
       { breakpoint: 1440, settings: { slidesToShow: 3 } },
     ],
   };
-
   return (
     <section
       ref={containerRef}
@@ -52,14 +53,8 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
             <div key={i} className="h-[230px] px-4">
               <RequestCardInMain
                 id={r.requestId}
-                name={r.nickname}
-                location={
-                  role === 'USER'
-                    ? (r?.location ?? '')
-                    : role === 'EXPERT'
-                      ? `${r?.address?.[0]?.city ?? ''} ${r?.address?.[0]?.district ?? ''} ${r?.address?.[0]?.street ?? ''}`
-                      : ''
-                }
+                name={role === 'USER' ? name : role === 'EXPERT' ? r.nickname : ''}
+                location={location ?? ''}
                 profileImg={
                   role === 'USER'
                     ? r?.imageURL
@@ -70,7 +65,7 @@ function RequestSlider({ title, requests }: RequestSliderProps) {
                 tags={{
                   availableTimes: r.availableTimes,
                   daysPerWeek: r.availableDays.length,
-                  cagtegoryName: r.categoryName,
+                  categoryName: r.categoryName,
                 }}
                 text={r.content}
               />

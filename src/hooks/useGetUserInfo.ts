@@ -1,4 +1,3 @@
-// src/hooks/useGetUserInfo.ts
 import { useQuery } from '@tanstack/react-query';
 
 import { type UserInfo, getUserInfo } from '@/apis/getUserInfo';
