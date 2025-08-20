@@ -336,13 +336,15 @@ const ContractFormPage = () => {
               uploadProSign(
                 { contractId, file },
                 {
-                  onSuccess: ({ result }) => setExpertSignUrl(result.imageUrl),
+                  onSuccess: ({ result }) => {
+                    setExpertSignUrl(result.imageUrl);
+                    location.reload();
+                  },
                 },
               );
             },
           },
         );
-        location.reload();
       }
     }
   };
