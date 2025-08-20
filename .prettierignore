@@ -15,6 +15,7 @@ coverage
 *.mp4
 *.mp3
 *.wav
+*.json
 
 # 환경 파일
 .env
