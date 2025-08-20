@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
+
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
@@ -47,12 +48,12 @@ function RequestSlider({ title, requests, location, name }: RequestSliderProps) 
           settings: { slidesToShow: 2, slidesToScroll: 1, dots: false },
         },
         {
-          breakpoint: 720,  // <= 720 (모바일)
+          breakpoint: 720, // <= 720 (모바일)
           settings: { slidesToShow: 1, slidesToScroll: 1, dots: false },
         },
       ],
     }),
-    []
+    [],
   );
 
   // ✅ 초기/반응형 전환 시 0번으로 강제 이동해 트랙 재계산 유도
@@ -67,14 +68,14 @@ function RequestSlider({ title, requests, location, name }: RequestSliderProps) 
     typeof window === 'undefined'
       ? 'desktop'
       : window.innerWidth <= 720
-      ? 'bp-1'
-      : window.innerWidth <= 1024
-      ? 'bp-2'
-      : window.innerWidth <= 1280
-      ? 'bp-3'
-      : window.innerWidth <= 1536
-      ? 'bp-4'
-      : 'bp-5';
+        ? 'bp-1'
+        : window.innerWidth <= 1024
+          ? 'bp-2'
+          : window.innerWidth <= 1280
+            ? 'bp-3'
+            : window.innerWidth <= 1536
+              ? 'bp-4'
+              : 'bp-5';
 
   return (
     <section className="flex max-w-[1480px] flex-col gap-9 sm:w-[720px] lg:w-[720px] xl:w-[1080px] 2xl:w-[1480px]">
@@ -97,8 +98,8 @@ function RequestSlider({ title, requests, location, name }: RequestSliderProps) 
                     role === 'USER'
                       ? r?.imageURL
                       : role === 'EXPERT'
-                      ? r?.userProfileImageUrl
-                      : HeaderProfile
+                        ? r?.userProfileImageUrl
+                        : HeaderProfile
                   }
                   tags={{
                     availableTimes: r.availableTimes,
