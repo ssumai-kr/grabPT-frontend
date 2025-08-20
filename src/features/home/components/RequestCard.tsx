@@ -82,24 +82,15 @@ const RequestCardInMain = ({
       onClick={() => navigate(urlFor.requestDetail(id))}
       className="flex h-[220px] max-w-[340px] cursor-pointer flex-col gap-[12px] rounded-xl px-[10px] py-[15px] shadow-[4px_4px_10px_rgba(0,0,0,0.25)] transition-transform duration-200 hover:scale-[1.02] lg:w-[320px] xl:w-[320px] 2xl:w-[340px]"
     >
-      <div
-        className={clsx(
-          'ml-auto flex w-16 my-2 items-center justify-end rounded-2xl',
-          isMatched
-            ? 'bg-gradient-to-bl from-[#66BB6A] to-[#43A047] shadow-2xs'
-            : 'bg-gradient-to-bl from-[#FF9800] to-[#F57C00] shadow-2xs',
-        )}
-      >
+      <div className="flex items-center justify-end">
         <div
           className={clsx(
-            'ml-[7px] h-[13px] w-[13px] rounded-full',
-            isMatched
-              ? 'bg-gradient-to-b from-[#00FF00] to-[#006400]'
-              : 'bg-gradient-to-b from-[#FFB74D] to-[#E65100]',
+            'h-[13px] w-[13px] rounded-full',
+            isMatched ? 'bg-[#4CAF50]' : 'bg-[#FF8A00]',
           )}
         />
         {/* 상태 텍스트 */}
-        <p className="font-pretendard ml-[6px] text-[12px] leading-[16.8px] font-medium text-white">
+        <p className="font-pretendard ml-[6px] text-[12px] leading-[16.8px] font-medium text-[#000]">
           {isMatched ? '매칭 성공' : '대기중'}
         </p>
       </div>
@@ -109,14 +100,17 @@ const RequestCardInMain = ({
           <Hashtag key={idx} tag={tag} />
         ))}
       </div>
-      <div className="h-[100px] w-[300px] rounded-md border border-blue-600/10 bg-[#f0f7ff]">
-        <p className="p-1.5 text-[12px] text-[#525252]">{text}</p>
+      <div className="h-[100px] w-full rounded-md border border-blue-600/10 bg-[#f0f7ff]">
+        <p
+          className={clsx(
+            'p-1.5 text-[12px] text-[#525252]',
+            isMatched ? 'line-clamp-1' : 'line-clamp-3',
+          )}
+        >
+          {text}
+        </p>
       </div>
-      {isMatched && (
-        <Button width="" height="">
-          리뷰 작성하기
-        </Button>
-      )}
+      {isMatched && <Button width="280px">리뷰 작성하기</Button>}
     </div>
   );
 };
