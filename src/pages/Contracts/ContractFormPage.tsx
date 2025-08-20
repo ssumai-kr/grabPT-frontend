@@ -296,13 +296,15 @@ const ContractFormPage = () => {
               uploadUserSign(
                 { contractId, file },
                 {
-                  onSuccess: ({ result }) => setMemberSignUrl(result.imageUrl),
+                  onSuccess: ({ result }) => {
+                    setMemberSignUrl(result.imageUrl);
+                    location.reload();
+                  },
                 },
               );
             },
           },
         );
-        location.reload();
       } else {
         // userComplete && proComplete → 결제/제출
         // TODO: 결제/제출 트리거
