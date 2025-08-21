@@ -71,11 +71,16 @@ const RequestsListPage = () => {
             <RequestsStatusCard.Skeleton key={i} />
           ))}
         </div>
-      ) : (
+      ) : requestsList?.content && requestsList.content.length > 0 ? (
         <div className="flex flex-col gap-[30px]">
-          {requestsList?.content.map((request, idx) => (
+          {requestsList.content.map((request, idx) => (
             <RequestsStatusCard key={idx} request={request} />
           ))}
+        </div>
+      ) : (
+        <div className="flex h-[300px] w-full flex-col items-center justify-center gap-4 rounded-xl border border-gray-200 bg-gray-50">
+          <p className="text-lg font-semibold text-gray-600">아직 등록된 요청이 없어요 😢</p>
+          <p className="text-sm text-gray-500">새로운 전문가에게 도움을 요청해 보세요!</p>
         </div>
       )}
 
