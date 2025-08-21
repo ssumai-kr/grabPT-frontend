@@ -83,11 +83,16 @@ const RequestCardInMain = ({
           <Hashtag key={idx} tag={tag} />
         ))}
       </div>
-      <div className="h-[140px] w-full rounded-md border border-blue-600/10 bg-[#f0f7ff]">
+      <div
+        className={clsx(
+          'w-full rounded-md border border-blue-600/10 bg-[#f0f7ff]',
+          isMatched ? 'h-[140px]' : 'h-[200px]',
+        )}
+      >
         <p
           className={clsx(
             'p-1.5 text-[12px] text-[#525252]',
-            isMatched ? 'line-clamp-1' : 'line-clamp-3',
+            isMatched ? 'line-clamp-4' : 'line-clamp-6',
           )}
         >
           {text}
