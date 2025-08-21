@@ -8,11 +8,11 @@ import Button from '@/components/Button';
 import { ReviewFormModal } from '@/components/ReviewFormModal';
 import { urlFor } from '@/constants/routes';
 import UserRequestHeader from '@/features/Requests/components/UserRequestHeader';
+import { useRoleStore } from '@/store/useRoleStore';
 import { TIME_SLOT_LABELS } from '@/types/ReqeustsType';
 import type { Tags } from '@/types/Tags';
 
 import Hashtag from './Hashtag';
-import { useRoleStore } from '@/store/useRoleStore';
 
 interface RequestCardInMainProps {
   name?: string;
@@ -23,7 +23,7 @@ interface RequestCardInMainProps {
   profileImg?: string;
   isMatched: boolean;
   proProfileId?: number;
-  proNickname?:string;
+  proNickname?: string;
 }
 
 const RequestCardInMain = ({
@@ -39,8 +39,8 @@ const RequestCardInMain = ({
 }: RequestCardInMainProps) => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
-  const {role} = useRoleStore();
-const isExpert = (role==='EXPERT');
+  const { role } = useRoleStore();
+  const isExpert = role === 'EXPERT';
   useEffect(() => {
     const { body } = document;
     if (!body) return;
