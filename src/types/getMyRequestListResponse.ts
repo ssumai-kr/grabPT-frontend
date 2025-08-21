@@ -28,6 +28,7 @@ export type MyRequestListItemType = {
   sessionCount: number;
   content: string;
   matchStatus: MatchStatusType;
+  proProfileId: number;
 };
 
 export type getMyRequestsListResponseDto = CommonResponseDto<getMyRequestsListResultType>;
