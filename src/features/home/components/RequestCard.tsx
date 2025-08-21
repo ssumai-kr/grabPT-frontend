@@ -24,6 +24,7 @@ interface RequestCardInMainProps {
   isMatched: boolean;
   proProfileId?: number;
   proNickname?: string;
+  canWriteReview?: boolean;
 }
 
 const RequestCardInMain = ({
@@ -36,6 +37,7 @@ const RequestCardInMain = ({
   proProfileId,
   isMatched,
   proNickname,
+  canWriteReview,
 }: RequestCardInMainProps) => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
@@ -90,19 +92,19 @@ const RequestCardInMain = ({
       <div
         className={clsx(
           'w-full rounded-md border border-blue-600/10 bg-[#f0f7ff]',
-          isMatched && !isExpert ? 'h-[140px]' : 'h-[200px]',
+          canWriteReview && !isExpert ? 'h-[140px]' : 'h-[200px]',
         )}
       >
         <p
           className={clsx(
             'p-1.5 text-[12px] text-[#525252]',
-            isMatched && !isExpert ? 'line-clamp-4' : 'line-clamp-6',
+            canWriteReview && !isExpert ? 'line-clamp-4' : 'line-clamp-6',
           )}
         >
           {text}
         </p>
       </div>
-      {isMatched && !isExpert && (
+      {canWriteReview && !isExpert && (
         <Button
           className="z-10"
           type="button"

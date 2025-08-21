@@ -1,10 +1,16 @@
+import { useState } from 'react';
+
+import clsx from 'clsx';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 
 import Profile from '@/assets/images/HeaderProfile.png';
 import XIcon from '@/assets/images/x.png';
 import Box from '@/components/Box';
+import Button from '@/components/Button';
 import { Skeleton } from '@/components/Skeleton';
 import { urlFor } from '@/constants/routes';
+import { useDeleteRequest } from '@/features/UserMypage/hooks/useDeleteRequest';
 import Hashtag from '@/features/home/components/Hashtag';
 import { TIME_SLOT_LABELS } from '@/types/ReqeustsType';
 import type { Tags } from '@/types/Tags';
@@ -16,6 +22,7 @@ interface RequestCardProps {
   location: string;
   profileImg?: string;
   requestionId: number;
+  isWriter?: boolean;
 }
 
 const RequestCard = ({
@@ -25,9 +32,10 @@ const RequestCard = ({
   location,
   profileImg,
   requestionId,
+  isWriter,
 }: RequestCardProps) => {
   const navigate = useNavigate();
-
+  const [modalOpen, setModalOpen] = useState(false);
   const daysPerWeek = `주 ${tags.daysPerWeek}회`;
 
   const tagsResult = [
@@ -35,16 +43,30 @@ const RequestCard = ({
     ...tags.availableTimes.map((time) => TIME_SLOT_LABELS[time]),
     daysPerWeek,
   ];
-
+  const { mutate } = useDeleteRequest();
+  const handleDeleteRequest = () => {
+    mutate(requestionId);
+  };
   return (
     <Box width="w-[600px]">
       <div
         className="relative flex h-full w-full cursor-pointer flex-col p-[10px] pt-[15px]"
         onClick={() => navigate(urlFor.requestDetail(requestionId))}
       >
-        {/* 닫기 (기능 없음) */}
-        <img src={XIcon} alt="close" className="absolute top-2 right-2 h-4 w-4" />
-
+        {/* 삭제버튼 */}
+        {isWriter && (
+          <button
+            type="button"
+            className={clsx('absolute top-1 right-1 z-50 flex items-center justify-center')}
+            aria-label="삭제"
+            onClick={(e) => {
+              e.stopPropagation();
+              setModalOpen(true);
+            }}
+          >
+            <img src={XIcon} alt="close" className="pointer-events-none h-4 w-4" />
+          </button>
+        )}
         {/* 상단 정보 */}
         <div className="flex items-start gap-[11px]">
           {/* 아바타 */}
@@ -76,6 +98,36 @@ const RequestCard = ({
           </div>
         </div>
       </div>
+      {modalOpen &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9999] flex h-screen min-h-screen w-screen items-center justify-center bg-black/40"
+            onClick={(e) => {
+              e.stopPropagation();
+              setModalOpen(false);
+            }}
+          >
+            <div
+              className="mx-auto my-auto flex w-[min(92vw,520px)] flex-col justify-center rounded-xl bg-white p-6 shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex flex-col items-center justify-center gap-10">
+                <h1 className="text-2xl font-semibold">요청서를 삭제하시겠습니까?</h1>
+                <div className="flex items-center justify-center gap-20">
+                  <Button
+                    onClick={() => {
+                      setModalOpen(false);
+                    }}
+                  >
+                    취소
+                  </Button>
+                  <Button onClick={handleDeleteRequest}>삭제</Button>
+                </div>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </Box>
   );
 };
