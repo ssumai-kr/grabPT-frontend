@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import imageCompression from 'browser-image-compression';
+import { createPortal } from 'react-dom';
 import { useForm } from 'react-hook-form';
 
 import type { UserInfo } from '@/apis/getUserInfo';
@@ -449,7 +450,24 @@ const Dashboard = ({ userInfo }: DashboardProps) => {
             </>
           )}
         </div>
-        {isModalOpen && <DeleteUserModal setIsModalOpen={setIsModalOpen} />}
+        {isModalOpen &&
+          createPortal(
+            <div
+              className="fixed inset-0 z-[9999] flex h-screen min-h-screen w-screen items-center justify-center bg-black/40"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsModalOpen(false);
+              }}
+            >
+              <div
+                className="mx-auto my-auto flex w-[min(92vw,520px)] flex-col justify-center rounded-xl bg-white p-6 shadow-xl"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <DeleteUserModal setIsModalOpen={setIsModalOpen} />
+              </div>
+            </div>,
+            document.body,
+          )}
       </div>
 
       {/* 카카오 주소 검색 모달 */}
