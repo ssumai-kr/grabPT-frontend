@@ -172,6 +172,7 @@ function RequestSlider({ title, requests, location, name }: RequestSliderProps) 
                   text={r.content}
                   isMatched={r.status === 'MATCHED'}
                   proProfileId={r.proProfileId}
+                  proNickname={r.proNickname || ''}
                 />
               </div>
             ))}
