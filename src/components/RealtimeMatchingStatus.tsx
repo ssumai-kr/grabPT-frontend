@@ -37,8 +37,8 @@ const RealtimeMatchingStatus = ({ categoryType }: RealtimeMatchingStatusProps) =
   useEffect(() => {
     const update = () => {
       const w = window.innerWidth;
-      if (w >= 1536) setCardCount(8);
-      else if (w >= 1280) setCardCount(6);
+      if (w >= 1820) setCardCount(8);
+      else if (w >= 1440) setCardCount(6);
       else setCardCount(4);
     };
     update();
@@ -51,12 +51,12 @@ const RealtimeMatchingStatus = ({ categoryType }: RealtimeMatchingStatusProps) =
   if (error) return <ErrorComponent />;
 
   return (
-    <section className="flex max-w-[1480px] flex-col gap-9 px-4 sm:w-[720px] lg:w-[720px] xl:w-[1080px] 2xl:w-[1480px]">
+    <section className="3xl:w-[1480px] flex flex-col gap-9 px-4 sm:w-[720px] md:w-[820px] lg:w-[920px] xl:w-[1080px] 2xl:w-[1280px]">
       <h2 className="font-[Pretendard Variable] leading-[40px] font-extrabold text-black not-italic sm:text-[24px] xl:text-[30px]">
         <span className="text-button">{categoryLabel}</span> 실시간 매칭 현황
       </h2>
 
-      <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="3xl:grid-cols-4 mt-6 grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
         {matchingList
           ?.slice(0, cardCount)
           .map((match, idx) => <MatchingStatusCard key={idx} match={match} />)}
