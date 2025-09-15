@@ -1,6 +1,7 @@
 import { END_POINT } from '@/constants/endPoints';
 import type {
   BaseSignupRequestDto,
+  EmailCheckResponseDto,
   LogoutDto,
   SignupProInfoStepDto,
   SmsSendRequestDto,
@@ -92,5 +93,14 @@ export const postReissue = async (): Promise<CommonResponseDto<void>> => {
     { withCredentials: true, skipAuth: true },
   );
   console.log('reissue 성공인가??', data);
+  return data;
+};
+
+export const getEmailCheck = async (
+  email: string,
+): Promise<CommonResponseDto<EmailCheckResponseDto>> => {
+  const { data } = await publicInstance.get(END_POINT.AUTH.EMAIL_CHECK, {
+    params: { email },
+  });
   return data;
 };
