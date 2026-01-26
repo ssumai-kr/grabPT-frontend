@@ -8,6 +8,7 @@ export type Address = {
   district: string;
   street: string;
   zipcode: string;
+  specAddress: string;
 };
 
 export type PtPrice = {
@@ -15,27 +16,45 @@ export type PtPrice = {
   price: number;
 };
 
+export type Review = {
+  reviewer: string;
+  rating: number;
+  content: string;
+};
+
 export type ProProfileType = {
-  proId: number;
+  userId: number;
   profileImageUrl: string;
-  proName: string;
   userName: string;
-  center: string | null;
-  centerDescription: string | null;
+  userNickname: string;
+  centerName: string;
   categoryName: string;
   averageRating: number;
-  description: string | null;
-  centerName: string | null;
-  photos: SlideImage[]; // 이미지 URL 배열
-  reviews: any[] | null; // 상세 타입 정의가 필요한 경우 인터페이스 추가
+  profileDescription: string;
+  centerDescription: string;
+  photos: SlideImage[];
+  reviews: Review[];
+  pricePerSession: number;
+  ptPrices: PtPrice[];
+  userLocations: Address[];
+};
+
+export type ProProfileWithUserIdType = {
+  userId: number;
+  userNickname: string;
+  profileImageUrl: string;
+  proCenterDescription: string | null;
+  categoryName: string;
   programDescription: string | null;
   pricePerSession: number;
-  totalSessions: number;
   ptPrices?: PtPrice[];
+  photos: SlideImage[];
+  reviews: Review[] | null;
   address: Address[];
-  introduction?: string | null;
-  name?: string | null;
-  certifications?: certificationResponse[] | null;
+  centerName: string;
+  introduction: string;
+  certifications: certificationResponse[];
 };
 
 export type getProProfileResponseDto = CommonResponseDto<ProProfileType>;
+export type getProProfileWithUserIdResponseDto = CommonResponseDto<ProProfileWithUserIdType>;

@@ -5,18 +5,21 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import HeaderProfile from '@/assets/images/HeaderProfile.png';
-import type { RequestsListResultType } from '@/features/Requests/types/getRequestsListType';
 import { NextArrow, PrevArrow } from '@/features/home/components/CustomArrow';
 import RequestCardInMain from '@/features/home/components/RequestCard';
+import type { RequestSliderItemType } from '@/features/home/types/request';
 import { useRoleStore } from '@/store/useRoleStore';
 
 interface RequestSliderProps {
   title: string;
-  requests: RequestsListResultType['content'];
+  requests: RequestSliderItemType[];
   name?: string;
   location?: string;
 }
 
+/**
+ * 사용자 요청서 슬라이더
+ */
 const UserRequestSlider = ({ title, requests, location, name }: RequestSliderProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSliderReady, setIsSliderReady] = useState(false);
@@ -142,7 +145,7 @@ const UserRequestSlider = ({ title, requests, location, name }: RequestSliderPro
         {title}
       </h2>
 
-      {requests.length === 0 ? (
+      {requests?.length === 0 ? (
         // ✅ 요청서 없을 때
         <div className="flex h-[230px] items-center justify-center rounded-xl border border-gray-200 bg-gray-50">
           <p className="text-lg font-medium text-gray-500">아직 작성하신 요청서가 없어요 📝</p>
@@ -151,16 +154,16 @@ const UserRequestSlider = ({ title, requests, location, name }: RequestSliderPro
         // ✅ 요청서 있을 때
         <div className="slider-container 3xl:w-[1480px] relative mx-auto mb-[4px] sm:w-[720px] md:w-[920px] lg:w-[720px] xl:w-[1080px] 2xl:w-[1280px]">
           <Slider ref={sliderRef} {...settings}>
-            {requests.slice(0, 12).map((r, i) => (
+            {requests?.slice(0, 12).map((r, i) => (
               <div key={`${r.requestId}-${i}`} className="h-[400px] px-4">
                 <RequestCardInMain
                   id={r.requestId}
-                  name={role === 'USER' ? name : role === 'EXPERT' ? r.nickname : ''}
+                  name={role === 'USER' ? name : role === 'PRO' ? r.nickname : ''}
                   location={location ?? ''}
                   profileImg={
                     role === 'USER'
                       ? r?.imageURL
-                      : role === 'EXPERT'
+                      : role === 'PRO'
                         ? r?.userProfileImageUrl
                         : HeaderProfile
                   }
@@ -169,7 +172,7 @@ const UserRequestSlider = ({ title, requests, location, name }: RequestSliderPro
                     daysPerWeek: r.availableDays.length,
                     categoryName: r.categoryName,
                   }}
-                  text={r.content}
+                  text={r.content ?? ''}
                   isMatched={r.status === 'MATCHED'}
                   proProfileId={r.proProfileId}
                   proNickname={r.proNickname || ''}

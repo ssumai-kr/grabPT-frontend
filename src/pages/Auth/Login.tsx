@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
 import AppLogo from '@/assets/images/AppLogo.png';
-import GoogleLogo from '@/features/Login/assets//GoogleLogo.svg';
-import KakaoLogo from '@/features/Login/assets//KakaoLogo.svg';
-import NaverLogo from '@/features/Login/assets//NaverLogo.svg';
 import LoginBgLogo from '@/features/Login/assets/LoginBgLogo.svg';
 import LoginButton from '@/features/Login/components/LoginButton';
 import BackBtn from '@/features/Signup/assets/BackBtn.svg';
 import SignupLogo from '@/features/Signup/assets/SignupLogo.png';
 
+/**
+ * 로그인 페이지
+ */
 const Login = () => {
   const navigate = useNavigate();
   const navigateToBack = () => navigate(-1);
@@ -45,56 +45,27 @@ const Login = () => {
                 원하는 가격에, 원하는 방식으로 시작하는 나만의 운동 플렛폼
               </span>
             </div>
-
-            {/* 각 소셜 로그인 버튼 이건 나중에 로직 추가 에정 */}
             <div className="mt-[8.81rem] flex flex-col items-center justify-center rounded-[1.25rem]">
               <div className="flex w-full flex-col gap-4 whitespace-pre">
                 <div className="flex items-center justify-center">
                   <LoginButton
-                    color="kakao"
+                    provider="kakao"
                     onClick={() => (window.location.href = import.meta.env.VITE_OAUTH_KAKAO_URL)}
-                  >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={KakaoLogo}
-                        className="h-[1.875rem] w-[1.8765rem]"
-                        alt="Kakao Logo"
-                      />
-                      카카오로 시작
-                    </div>
-                  </LoginButton>
+                  />
                 </div>
                 <div className="flex items-center justify-center">
                   <LoginButton
-                    color="naver"
+                    provider="naver"
                     onClick={() => (window.location.href = import.meta.env.VITE_OAUTH_NAVER_URL)}
-                  >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={NaverLogo}
-                        className="h-[1.875rem] w-[1.8765rem]"
-                        alt="Naver Logo"
-                      />
-                      네이버로 시작
-                    </div>
-                  </LoginButton>
+                  />
                 </div>
                 <div className="flex items-center justify-center">
                   <LoginButton
-                    color="google"
+                    provider="google"
                     onClick={() => {
                       window.location.href = import.meta.env.VITE_OAUTH_GOOGLE_URL;
                     }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={GoogleLogo}
-                        className="h-[1.875rem] w-[1.8765rem]"
-                        alt="Google Logo"
-                      />
-                      구글로 시작
-                    </div>
-                  </LoginButton>
+                  />
                 </div>
               </div>
             </div>

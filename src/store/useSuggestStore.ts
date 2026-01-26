@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import type { SuggestRequestDto } from '@/features/ProposalForm/types/Suggest';
+import type { SuggestRequestDto } from '@/features/SuggestForm/types/Suggest';
 
 interface SuggestState {
   suggestInfo: SuggestRequestDto;
@@ -19,7 +19,7 @@ export const useSuggestStore = create<SuggestState>()(
         message: '',
         location: '',
         sentAt: '',
-        isAgreed: false,
+        isMatched: false,
       },
 
       setSuggestInfo: (info) =>
@@ -36,7 +36,7 @@ export const useSuggestStore = create<SuggestState>()(
           message: suggestInfo.message,
           location: suggestInfo.location,
           sentAt: suggestInfo.sentAt,
-          isAgreed: suggestInfo.isAgreed,
+          isMatched: suggestInfo.isMatched,
         };
       },
     }),

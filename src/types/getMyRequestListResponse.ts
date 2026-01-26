@@ -1,4 +1,5 @@
 import type { PageableType } from '@/features/Requests/types/getRequestsListType';
+import type { Address } from '@/types/ProProfleType';
 import type { MatchStatusType } from '@/types/RealtimeMatchingType';
 import type { TimeSlot } from '@/types/ReqeustsType';
 import type { SortType } from '@/types/SortType';
@@ -18,19 +19,19 @@ export type getMyRequestsListResultType = {
   empty: boolean;
 };
 export type MyRequestListItemType = {
-  requestId: number;
-  imageURL: string;
+  requestionId: number;
+  profileImageURL: string;
   userId: number;
-  location: string;
-  availableTimes: TimeSlot[];
   availableDays: string[];
+  availableTimes: TimeSlot[];
   categoryName: string;
-  sessionCount: number;
   content: string;
-  matchStatus: MatchStatusType;
-  proProfileId: number;
-  proNickname: string;
-  canWriteReview: boolean;
+  address: Address & { specAddress: string };
+  matchingStatus: MatchStatusType;
+  proNickname: string | null;
+  proId: number | null;
+  sessionCount: number;
+  isWriteReview: boolean;
 };
 
 export type getMyRequestsListResponseDto = CommonResponseDto<getMyRequestsListResultType>;

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
-import Profile from '@/assets/images/HeaderProfile.png';
 import Box from '@/components/Box';
+import ProfileImage from '@/components/ProfileImage';
 import { Skeleton } from '@/components/Skeleton';
 import StarRating from '@/components/StarRating';
 import { ROLES } from '@/constants/roles';
@@ -13,29 +13,29 @@ interface ReviewCardProps {
   location?: string;
   rating: number; // 0‒5
   content: string;
-  center?: string;
+  centerName?: string;
   proId?: number;
   proNickName?: string;
   imageURL?: string;
-  isExpertDetail?: boolean;
+  isProDetail?: boolean;
 }
 
 const ReviewCard = ({
   name,
   rating,
   content,
-  center,
+  centerName,
   proId,
   proNickName,
   imageURL,
-  isExpertDetail,
+  isProDetail,
 }: ReviewCardProps) => {
   const { role } = useRoleStore();
   const navigate = useNavigate();
 
   const boxClick = () => {
-    if (role === ROLES.EXPERT) return;
-    else navigate(urlFor.expertDetail(proId));
+    if (role === ROLES.PRO) return;
+    else navigate(urlFor.proDetail(proId));
   };
 
   return (
@@ -44,20 +44,16 @@ const ReviewCard = ({
         {/* 상단 정보 */}
         <div className="flex gap-[11px]">
           {/* 아바타 */}
-          <div>
-            <img
-              src={imageURL ?? Profile}
-              alt="profile"
-              className="h-[47px] w-[47px] rounded-full"
-            />
+          <div className="h-12 w-12 overflow-hidden rounded-full">
+            <ProfileImage src={imageURL} alt={'프로필'} />
           </div>
 
           <div className="flex flex-col">
             <span className="text-[16px] leading-[140%] font-semibold">
-              {role === 'EXPERT' || isExpertDetail ? <>From. {name}</> : <>To. {proNickName}</>}
+              {role === 'PRO' || isProDetail ? <>From. {name}</> : <>To. {proNickName}</>}
             </span>
             <span className="text-[12px] leading-[140%] font-semibold text-[#7A7A7A]">
-              {center}
+              {centerName}
             </span>
             <StarRating rating={rating} size={10} fontSize={6} />
           </div>

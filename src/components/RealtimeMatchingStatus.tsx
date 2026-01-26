@@ -17,22 +17,29 @@ interface RealtimeMatchingStatusProps {
   categoryType: SportsSlugType;
 }
 
-// 실시간 매칭 현황 컴포넌트입니다
-// category를 넘겨받으면 컴포넌트에서 요청을 날립니다
+/**
+ * 실시간 매칭 현황
+ * categoryType을 넘겨받아 실시간 매칭 현황을 조회합니다
+ */
 const RealtimeMatchingStatus = ({ categoryType }: RealtimeMatchingStatusProps) => {
-  const { data: matchingList, error, isPending } = useGetRealtimeMatching(categoryType);
   const navigate = useNavigate();
   const { isLoggedIn, role } = useRoleStore();
+
   const [cardCount, setCardCount] = useState(8);
+
+  const { data: matchingList, error, isPending } = useGetRealtimeMatching(categoryType);
+
   const handleRequestWriteClick = () => {
     if (!isLoggedIn) {
       alert('로그인이 필요합니다.');
       navigate(ROUTES.AUTH.LOGIN);
-    } else if (role === 'EXPERT') {
+    } else if (role === 'PRO') {
       alert('전문가 계정은 요청서를 작성할 수 없습니다.');
     } else navigate(ROUTES.MATCHING_STATUS.REQUESTS.NEW);
   };
+
   const categoryLabel = getLabelFromSlug(categoryType);
+
   // 화면 폭에 따라 카드 개수 조정
   useEffect(() => {
     const update = () => {
@@ -46,7 +53,7 @@ const RealtimeMatchingStatus = ({ categoryType }: RealtimeMatchingStatusProps) =
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  //ui 처리
+  // todo: ui 처리 => 컴포넌트는 스켈레톤으로 처리
   if (isPending) return <LoadingMuscle />;
   if (error) return <ErrorComponent />;
 
@@ -56,14 +63,23 @@ const RealtimeMatchingStatus = ({ categoryType }: RealtimeMatchingStatusProps) =
         <span className="text-button">{categoryLabel}</span> 실시간 매칭 현황
       </h2>
 
-      <div className="3xl:grid-cols-4 mt-6 grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
-        {matchingList
-          ?.slice(0, cardCount)
-          .map((match, idx) => <MatchingStatusCard key={idx} match={match} />)}
-      </div>
+      {!matchingList || matchingList.length === 0 ? (
+        <div className="flex h-[230px] items-center justify-center rounded-xl border border-gray-200 bg-gray-50">
+          <p className="text-lg font-medium text-gray-500">
+            아직 {categoryLabel} 매칭 현황이 없어요 🏋️
+          </p>
+        </div>
+      ) : (
+        <div className="3xl:grid-cols-4 mt-6 grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
+          {matchingList.slice(0, cardCount).map((match, idx) => (
+            <MatchingStatusCard key={idx} match={match} />
+          ))}
+        </div>
+      )}
 
       {/* 오른쪽 아래 정렬 */}
-      {!(role === 'EXPERT') && (
+      {/* todo: 전문가면 요청서 작성 버튼 안 보여야 함 */}
+      {!(role === 'PRO') && (
         <div className="flex justify-end">
           <Button
             label="요청서 작성"

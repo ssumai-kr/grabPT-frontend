@@ -1,3 +1,4 @@
+import { END_POINT } from '@/constants/endPoints';
 import type {
   postContractInfoResponseDto,
   postContractProInfoRequestDto,
@@ -9,7 +10,10 @@ export const postContractUserInfo = async (
   params: postContractUserInfoRequestDto,
 ): Promise<postContractInfoResponseDto> => {
   try {
-    const { data } = await privateInstance.post(`/contract/${params.contractId}/user`, params.body);
+    const { data } = await privateInstance.post(
+      END_POINT.CONTRACTS.userWrite(params.contractId),
+      params.body,
+    );
     return data;
   } catch (e) {
     console.log(e);
@@ -17,11 +21,14 @@ export const postContractUserInfo = async (
   }
 };
 
-export const postContractExpertInfo = async (
+export const postContractProInfo = async (
   params: postContractProInfoRequestDto,
 ): Promise<postContractInfoResponseDto> => {
   try {
-    const { data } = await privateInstance.post(`/contract/${params.contractId}/pro`, params.body);
+    const { data } = await privateInstance.post(
+      END_POINT.CONTRACTS.proWrite(params.contractId),
+      params.body,
+    );
     return data;
   } catch (e) {
     console.log(e);

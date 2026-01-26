@@ -6,7 +6,7 @@ import Box from '@/components/Box';
 import ROUTES from '@/constants/routes';
 import { useLogout } from '@/features/Signup/hooks/useLogout';
 import { useRoleStore } from '@/store/useRoleStore';
-import { decodeCookie } from '@/utils/decodeCookie';
+import { decodeBase64Utf8 } from '@/utils/decodeBaseUtf8';
 
 type Item = {
   label: string;
@@ -28,31 +28,39 @@ const DropdownItem = memo(function DropdownItem({ label, onClick }: Item) {
 function ProfileDropdown() {
   const navigate = useNavigate();
   const { role } = useRoleStore();
-  const isExpert = role === 'EXPERT';
+  const isPro = role === 'PRO';
   const { mutate: logout } = useLogout();
-  const refreshToken = decodeCookie('refreshToken');
+  const stage = import.meta.env.VITE_STAGE;
+  let refreshToken: string;
+  if (stage == 'development' || stage == 'staging') {
+    refreshToken = decodeBase64Utf8(localStorage.getItem('refreshToken'));
+  } else {
+    const match = document.cookie.split('; ').find((row) => row.startsWith('REFRESH_TOKEN' + '='));
+    refreshToken = match ? match.split('=')[1] : '';
+  }
   const navigateToMyInfo = useCallback(() => {
-    if (isExpert) navigate(ROUTES.MYPAGE.EXPERT);
+    if (isPro) navigate(ROUTES.MYPAGE.PRO);
     else navigate(ROUTES.MYPAGE.USER);
-  }, [isExpert, navigate]);
+  }, [isPro, navigate]);
 
   const navigateToSettlement = useCallback(() => {
-    if (isExpert) navigate(ROUTES.EXPERT_SETTLEMENT);
+    if (isPro) navigate(ROUTES.PRO_SETTLEMENT);
     else navigate(ROUTES.USER_SETTLEMENT);
-  }, [navigate, isExpert]);
+  }, [navigate, isPro]);
 
-  /* isExpert 변동 시에만 재계산 */
+  /* isPro 변동 시에만 재계산 */
   const handleLogout = useCallback(() => {
+    alert(`로그아웃:${refreshToken}`);
     logout({ refreshToken });
   }, [logout, refreshToken]);
 
   const items = useMemo<Item[]>(
     () => [
       { label: '내정보', onClick: navigateToMyInfo },
-      { label: isExpert ? '정산 현황' : '결제 내역', onClick: navigateToSettlement },
+      { label: isPro ? '정산 현황' : '결제 내역', onClick: navigateToSettlement },
       { label: '로그아웃', onClick: handleLogout },
     ],
-    [navigateToMyInfo, isExpert, navigateToSettlement, handleLogout],
+    [navigateToMyInfo, isPro, navigateToSettlement, handleLogout],
   );
 
   return (

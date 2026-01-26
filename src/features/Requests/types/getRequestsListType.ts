@@ -11,21 +11,21 @@ export type getRequestsListRequestDto = {
 };
 
 export type RequestsListItemType = {
-  requestUserName: string;
-  requestUserStreet: string;
-  requestSessionCount: number;
-  requestPrice: number;
-  requestStatus: MatchStatusType;
-  photos: string;
-  requestRequestId: number;
-  requestAvailableTimes: TimeSlot[];
-  requestAvailableDays: string[];
-  requestCategoryName: string;
-  requestContent: string;
-  requestUserNickname: string;
-  requestLocation: Address[];
-  requestEtcPurposeContent: string;
-  matchStatus: MatchStatusType;
+  userName: string;
+  location: string;
+  sessionCount: number;
+  requestedPrice: number;
+  matchingStatus: MatchStatusType;
+  profileImageUrl: string;
+  requestionId: number;
+  content: string;
+  etcPurposeContent: string;
+  availableDays: string[];
+  availableTimes: TimeSlot[];
+  categoryName: string;
+  userNickname: string;
+  // requestLocation: Address[];
+  // matchStatus: MatchStatusType; 중복 주석 처리
 };
 
 export type getRequestsListResultType = {
@@ -56,7 +56,7 @@ export type RequestsListResultType = {
   totalPages: number;
   totalElements: number;
   size: number;
-  content: RequestsListItemProps[];
+  content?: RequestsListItemProps[];
   number: number;
   sort: SortType;
   numberOfElements: number;
@@ -81,7 +81,7 @@ export type RequestsListItemProps = {
   availableDays: string[];
   categoryName: string;
   sessionCount?: number;
-  content: string;
+  content?: string;
   profileImageUrl?: string;
   proProfileId?: number;
   proNickname?: string;

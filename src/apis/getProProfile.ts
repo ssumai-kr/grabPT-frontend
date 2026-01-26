@@ -1,5 +1,9 @@
+import { END_POINT } from '@/constants/endPoints';
 import { privateInstance, publicInstance } from '@/libs/axios';
-import type { getProProfileResponseDto } from '@/types/ProProfleType';
+import type {
+  getProProfileResponseDto,
+  getProProfileWithUserIdResponseDto,
+} from '@/types/ProProfleType';
 
 export const getProProfile = async () => {
   try {
@@ -12,8 +16,8 @@ export const getProProfile = async () => {
 };
 
 export const getProProfileWithUserId = async (userId: number) => {
-  const { data } = await publicInstance.get<getProProfileResponseDto>(
-    `/api/category-proprofile/${userId}`,
+  const { data } = await publicInstance.get<getProProfileWithUserIdResponseDto>(
+    END_POINT.PRODETAIL.profile(userId),
     { headers: { accept: 'application/json' } },
   );
   return data;

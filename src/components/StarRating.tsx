@@ -7,6 +7,9 @@ interface StarRatingProps {
   fontSize?: number;
 }
 
+/**
+ * 별점컴포넌트 - 별이랑 숫자까지 들어있는 거
+ */
 const StarRating = ({ rating, size, fontSize }: StarRatingProps) => {
   const fontSizeClass = `text-[${fontSize}px]`;
   return (

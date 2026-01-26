@@ -5,39 +5,56 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import RealtimeMatchingStatus from '@/components/RealtimeMatchingStatus';
 import { SPORTS } from '@/constants/sports';
-import ExpertCardScroll from '@/features/Category/components/ExpertCardScroll';
+import ProCardScroll from '@/features/Category/components/ProCardScroll';
 import useGeolocation from '@/hooks/useGeolocation';
-import { useGetCategoryExperts } from '@/hooks/useGetCategoryExperts';
+import { useGetCategoryPros } from '@/hooks/useGetCategoryPros';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
-import type { ExpertCardItem } from '@/types/ExpertCardItemType';
+import { useRoleStore } from '@/store/useRoleStore';
+import type { ProCardItem } from '@/types/ProCardItemType';
 
+/**
+ * 카테고리 상세 페이지
+ * todo: 스켈레톤 작업 필요
+ */
 const CategoryDetailPage = () => {
-  const [location, setLocation] = useState<string>();
+  const [location, setLocation] = useState<string>('');
+  const role = useRoleStore((s) => s.role);
+  // 파라미터에서 스포츠를 가져오고 SPORTS상수랑 매칭
   const { slug } = useParams<{ slug: string }>();
   const sport = SPORTS.find((s) => s.slug === slug);
-  const { address, loading, error } = useGeolocation();
+
+  // 위치 정보가져오기(유저 정보 없을때만)
+  const { address, loading, error } = useGeolocation(role === 'GUEST');
+
+  // 유저정보
   const { data: userData } = useGetUserInfo();
-  const { data: expertsList } = useGetCategoryExperts(slug, location);
-  const expertCards = useMemo<ExpertCardItem[]>(
+
+  // userData에서 주소가 있으면 가져오고 없으면 geolocation으로 가져온 주소를 setLocation
+  // 없으면 걍 안하는 듯 그러면 useGetCategoryPros 훅에서 enabled처리
+  const loc = userData?.address[0].street;
+  useEffect(() => {
+    if (address) setLocation(address);
+    else if (loc) setLocation(loc);
+  }, [loc, address]);
+
+  // 프로카드 리스트 - useEffect로 설정한 location을 담아서
+  const { data: prosList } = useGetCategoryPros(slug, location);
+
+  // 프로카드 리스트 => 메모했넹
+  const proCards = useMemo<ProCardItem[]>(
     () =>
-      (expertsList ?? []).map((e) => ({
+      (prosList ?? []).map((e) => ({
         id: e.userId,
         imageUrl: e.profileImageUrl,
         name: e.userName,
-        center: e.proCenterName,
+        center: e.centerName,
         rating: e.rating,
-        pricePerSession: e.suggestSessionCount,
+        pricePerSession: e.sessionCount,
       })),
-    [expertsList],
+    [prosList],
   );
 
-  const loc = userData?.address[0].street;
-
-  useEffect(() => {
-    if (loc) setLocation(loc);
-    else if (address) setLocation(address);
-  }, [loc, address]);
-
+  // 후...
   if (!sport) return <Navigate to="/category" replace />;
 
   return (
@@ -51,10 +68,12 @@ const CategoryDetailPage = () => {
         </div>
       </div>
 
+      {/* 프로카드 슬라이더 */}
       <section className="sm:mt-[4px] xl:mt-[17px]">
-        <ExpertCardScroll experts={expertCards} />
+        <ProCardScroll pros={proCards} />
       </section>
 
+      {/* 실시간 매칭현황 */}
       <div className="mt-[156px] mb-[200px]">
         <RealtimeMatchingStatus categoryType={sport.slug} />
       </div>

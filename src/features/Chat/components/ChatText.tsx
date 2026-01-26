@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 
+import ProfileImage from '@/components/ProfileImage';
 import type { messageType } from '@/features/Chat/types/getMessagesType';
 import { useRoleStore } from '@/store/useRoleStore';
 import { onErrorImage } from '@/utils/onErrorImage';
@@ -7,14 +8,15 @@ import { onErrorImage } from '@/utils/onErrorImage';
 interface ChatTextProps {
   chat: messageType;
   imageUrl: string;
+  onLoad?: () => void;
 }
 
-export const ChatText = ({ chat, imageUrl }: ChatTextProps) => {
+export const ChatText = ({ chat, imageUrl, onLoad }: ChatTextProps) => {
   const { userId } = useRoleStore();
   const isMe = chat.senderId === userId;
   const isImage = chat.messageType === 'IMAGE';
   const isFile = chat.messageType === 'FILE';
-  const timeAgo = new Date(chat.sendAt).toLocaleTimeString('ko-KR', {
+  const timeAgo = new Date(chat.sentAt).toLocaleTimeString('ko-KR', {
     hour: '2-digit',
     minute: '2-digit',
   });
@@ -47,6 +49,7 @@ export const ChatText = ({ chat, imageUrl }: ChatTextProps) => {
             decoding="async"
             referrerPolicy="no-referrer"
             onError={onErrorImage}
+            onLoad={onLoad}
             className="h-auto max-h-[60vh] w-full rounded-md object-contain"
           />
         </a>
@@ -96,12 +99,9 @@ export const ChatText = ({ chat, imageUrl }: ChatTextProps) => {
       )}
     >
       {!isMe && (
-        <img
-          src={imageUrl}
-          onError={onErrorImage}
-          alt="프로필 이미지"
-          className="h-12 w-12 self-end rounded-full"
-        />
+        <div className="h-12 w-12 self-end overflow-hidden rounded-full">
+          <ProfileImage src={imageUrl} alt={'프로필 이미지'} />
+        </div>
       )}
 
       <div className="flex w-fit max-w-[70%] items-end gap-1">
@@ -117,7 +117,6 @@ export const ChatText = ({ chat, imageUrl }: ChatTextProps) => {
         <div
           className={clsx(
             'flex flex-col shadow-md',
-            // 이미지일 때는 padding 0, bg-white
             isImage ? 'bg-white p-0' : 'p-4',
             isMe
               ? 'rounded-t-xl rounded-br-none rounded-bl-xl bg-[#1F56FF] text-white'

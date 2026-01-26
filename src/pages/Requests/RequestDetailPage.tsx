@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import z from 'zod';
 
 import Button from '@/components/Button';
 import CheckedButton from '@/components/CheckedButton';
 import CommentBox from '@/components/CommentBox';
+import ProfileImage from '@/components/ProfileImage';
 import Tabs, { type TabItem } from '@/components/Tabs';
 import ROUTES, { urlFor } from '@/constants/routes';
 import { SPORTS } from '@/constants/sports';
@@ -31,7 +31,6 @@ import {
   TIMES,
   type TimeSlot,
 } from '@/types/ReqeustsType';
-import { onErrorImage } from '@/utils/onErrorImage';
 
 //에러 보여주기 추가할것
 const RequestDetailPage = () => {
@@ -41,23 +40,25 @@ const RequestDetailPage = () => {
   const requestionId = Number(id);
   const { setSuggestInfo } = useSuggestStore();
   const { role } = useRoleStore();
-  //제안서 작성하기 버튼 누를 시 suggestStore의 requestionId를 업데이트하고 proposalFormPage에서 받아쓰기
+  const [isEditing, setIsEditing] = useState(false);
+  //제안서 작성하기 버튼 누를 시 suggestStore의 requestionId를 업데이트하고 suggestFormPage에서 받아쓰기
 
   // api연결 시 isWriter 함수로 변경 (요청서의 작성자 id === 현재 유저 id)
   const { data: isWriter } = useGetCanEditRequest(requestionId);
-  const canEdit = isWriter?.canEdit;
+  const isEdit = isWriter?.isEdit;
 
   const TabItems: TabItem[] = [
     { label: '정보', to: urlFor.requestDetail(requestionId) },
-    { label: '제안 목록', to: urlFor.requestProposals(requestionId) },
+    { label: '제안 목록', to: urlFor.requestSuggests(requestionId) },
   ];
-  const { data } = useGetDetailRequest(requestionId);
+  const { data, refetch } = useGetDetailRequest(requestionId);
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
     reset,
   } = useForm<Omit<RequestRequestDto, 'location'>>({
     mode: 'onChange',
@@ -67,8 +68,8 @@ const RequestDetailPage = () => {
       purpose: [],
       ageGroup: null,
       userGender: '',
-      trainerGender: '',
-      startPreference: '',
+      proGender: '',
+      startDate: '',
       availableDays: [],
       availableTimes: [],
       content: '',
@@ -77,57 +78,86 @@ const RequestDetailPage = () => {
       sessionCount: 0,
     },
   });
-
+  const originalValuesRef = useRef<Omit<RequestRequestDto, 'location'> | null>(null);
   useEffect(() => {
     if (data) {
       reset({
-        categoryId: data.requestCategoryId,
-        purpose: data.requestPurpose ?? [],
-        ageGroup: data.requestAgeGroup ?? null,
-        userGender: data.requestUserGender,
-        trainerGender: data.requestTrainerGender,
-        startPreference: Array.isArray(data.requestStartPreference)
-          ? `${data.requestStartPreference[0]}-${String(data.requestStartPreference[1]).padStart(2, '0')}-${String(data.requestStartPreference[2]).padStart(2, '0')}`
-          : (data.requestStartPreference ?? ''),
-        availableDays: data.requestAvailableDays ?? [],
-        availableTimes: data.requestAvailableTimes ?? [],
-        content: data.requestContent ?? '',
-        etcPurposeContent: data.requestEtcPurposeContent ?? '',
-        price: data.requestPrice ?? 0,
-        sessionCount: data.requestSessionCount ?? 0,
+        categoryId: data.categoryId,
+        purpose: data.purposes ?? [],
+        ageGroup: data.ageGroup ?? null,
+        userGender: data.userGender,
+        proGender: data.proGender,
+        startDate: Array.isArray(data.startDate)
+          ? `${data.startDate[0]}-${String(data.startDate[1]).padStart(2, '0')}-${String(data.startDate[2]).padStart(2, '0')}`
+          : (data.startDate ?? ''),
+        availableDays: data.availableDays ?? [],
+        availableTimes: data.availableTimes ?? [],
+        content: data.content ?? '',
+        etcPurposeContent: data.etcPurposeContent ?? '',
+        price: data.requestedPrice ?? 0,
+        sessionCount: data.sessionCount ?? 0,
       });
     }
   }, [data, reset]);
-  const category = SPORTS.find((s) => s.id === data?.requestCategoryId)?.label;
+  const category = SPORTS.find((s) => s.id === data?.categoryId)?.label;
   // const profileImage = data?.profileImage;
-  const navigateToProposalForm = () => {
-    //request 페이지에서 url에 있는 id로 requestionId 업데이트 + 가격+위치 정보 업데이트 -> proposalFormPage에서 store의 저장된 값을 받아서 사용
+  const navigateToSuggestForm = () => {
+    //request 페이지에서 url에 있는 id로 requestionId 업데이트 + 가격+위치 정보 업데이트 -> suggestFormPage에서 store의 저장된 값을 받아서 사용
     setSuggestInfo({
       ...setSuggestInfo,
       requestionId: requestionId,
-      price: data?.requestPrice,
-      sessionCount: data?.requestSessionCount,
+      price: data?.requestedPrice,
+      sessionCount: data?.sessionCount,
     });
-    navigate(ROUTES.MATCHING_STATUS.PROPOSALS.NEW);
+    navigate(ROUTES.MATCHING_STATUS.SUGGESTS.NEW);
   };
 
   const { mutate: editRequest } = usePatchRequest();
   const handleButton = () => {
-    if (role === 'EXPERT') {
-      navigateToProposalForm();
-    } else {
-      handleSubmit((formData) => {
-        if (isWriter?.canEdit) {
-          editRequest({
-            requestionId,
-            body: {
-              ...formData,
-              location: data?.requestLocation ?? '',
-              categoryId: data?.requestCategoryId ?? 0,
-            },
-          });
-        }
-      });
+    if (role === 'PRO') {
+      navigateToSuggestForm();
+      return;
+    } else if (!isEditing) {
+      originalValuesRef.current = getValues(); // 현재 값을 저장
+      setIsEditing(true);
+      containerRef?.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    } else if (isEditing) {
+      handleSubmit(
+        (formData) => {
+          if (isWriter?.isEdit) {
+            editRequest(
+              {
+                requestionId,
+                body: {
+                  ...formData,
+                  location: data?.location ?? '',
+                  categoryId: data?.categoryId ?? 0,
+                },
+              },
+              {
+                onSuccess: async () => {
+                  await refetch();
+                  setIsEditing(false);
+                },
+                onError: async () => {
+                  //실패시 롤백
+                  if (originalValuesRef.current) {
+                    reset(originalValuesRef.current);
+                  }
+                  await refetch();
+                },
+              },
+            );
+          }
+        },
+        (errors) => {
+          const firstError = Object.values(errors)[0];
+          if (firstError?.message) {
+            alert(firstError.message);
+          }
+        },
+      )();
       containerRef?.current?.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -145,8 +175,8 @@ const RequestDetailPage = () => {
   const setStudentGender = (g: Gender) => setValue('userGender', g);
 
   /* 트레이너 선호 성별(단일) */
-  const trainer = watch('trainerGender');
-  const setTrainerGender = (g: Gender) => setValue('trainerGender', g);
+  const trainer = watch('proGender');
+  const setTrainerGender = (g: Gender) => setValue('proGender', g);
 
   /* 가능 요일(다중) */
   const days = watch('availableDays');
@@ -161,8 +191,8 @@ const RequestDetailPage = () => {
     setValue('availableTimes', next);
   };
   /* PT 시작 희망일 */
-  const startDate = watch('startPreference');
-  const setStartDate = (v: string) => setValue('startPreference', v);
+  const startDate = watch('startDate');
+  const setStartDate = (v: string) => setValue('startDate', v);
 
   const togglePurpose = (p: Purpose) => {
     const current = watch('purpose');
@@ -170,29 +200,18 @@ const RequestDetailPage = () => {
     setValue('purpose', next);
   };
 
-  try {
-    // 검증 통과 → 제출 가능
-  } catch (err) {
-    if (err instanceof z.ZodError) {
-      console.log(err); // 각 필드별 에러 메시지 접근 가능
-      alert(err.message); // 첫 번째 에러 메시지 alert
-    }
-  }
   return (
     <section className="flex flex-col items-center py-6">
-      {isWriter?.canEdit ? <Tabs items={TabItems} width="w-[400px]" /> : <div></div>}
+      {isWriter?.isEdit ? <Tabs items={TabItems} width="w-[400px]" /> : <div></div>}
 
       {/* 헤더 */}
       <div className="mt-16 flex h-[50px] w-full items-center justify-center gap-3">
         {/* 프로필 url 이미지로 바꾸는 로직 필요 */}
-        <img
-          src={data?.photos}
-          alt="요청서 프로필"
-          className="h-[3.125rem] w-[3.125rem] rounded-full"
-          onError={onErrorImage}
-        />
+        <div className="h-[3.125rem] w-[3.125rem] overflow-hidden rounded-full">
+          <ProfileImage src={data?.profileImageUrl} alt="요청서 프로필" />
+        </div>
         <span className="text-4xl font-extrabold">
-          {data?.requestLocation?.substring(2)} {data?.requestUserNickName}
+          {data?.location?.substring(2)} {data?.userNickname}
           {/* {category} */}
         </span>
         <span className="text-2xl leading-none font-bold"> 님의 요청서입니다.</span>
@@ -201,26 +220,32 @@ const RequestDetailPage = () => {
       <section className="mt-20 flex w-[800px] flex-col gap-20 text-4xl font-bold">
         <section>
           <span className="mr-3">{category}</span>
-          <span className="text-lg font-semibold">{data?.requestLocation}</span>
-
-          <div className="mt-5 flex items-center">
+          <span className="text-lg font-semibold">{data?.location}</span>
+          {/* 가격 및 횟수 */}
+          <div className="mt-5 flex items-end">
             <input
               type="number"
-              {...register('sessionCount', { valueAsNumber: true })}
+              {...register('sessionCount', {
+                valueAsNumber: true,
+                setValueAs: (v) => Number(v) || 0,
+              })}
               aria-label="희망 PT 횟수"
               className="mr-1.5 h-12 w-[85px] rounded-xl border-2 border-[#BABABA] pl-3.5 text-center text-2xl text-[#9F9F9F]"
-              readOnly={!canEdit}
+              readOnly={!isEdit || !isEditing}
             />
 
             <span className="mr-5">회</span>
             <input
               type="number"
-              {...register('price', { valueAsNumber: true })}
+              {...register('price', { valueAsNumber: true, setValueAs: (v) => Number(v) || 0 })}
               aria-label="희망 PT 가격"
               className="mr-1.5 h-12 w-[260px] rounded-xl border-2 border-[#BABABA] px-8 text-end text-2xl text-[#9F9F9F]"
-              readOnly={!canEdit}
+              readOnly={!isEdit || !isEditing}
             />
             <span className="mr-5">원</span>
+            {(errors.price || errors.sessionCount) && (
+              <p className="text-[1rem] font-semibold text-red-500">{errors.price?.message}</p>
+            )}
           </div>
         </section>
 
@@ -242,7 +267,7 @@ const RequestDetailPage = () => {
                   isChecked={selectedPurposes.includes(p)}
                   onClick={() => togglePurpose(p)}
                   key={p}
-                  disabled={!canEdit}
+                  disabled={!isEdit || !isEditing}
                 >
                   {p}
                 </CheckedButton>
@@ -256,6 +281,7 @@ const RequestDetailPage = () => {
                 }
                 className="mt-4 h-[180px] w-full resize-none rounded-[10px] border border-[#CCCCCC] bg-[#F5F5F5] p-4 text-[15px] placeholder:text-[#CCCCCC] focus:border-gray-400 focus:outline-none"
                 placeholder="세부 내용을 입력해주세요"
+                disabled={!isEdit || !isEditing}
               />
             )}
           </div>
@@ -277,7 +303,7 @@ const RequestDetailPage = () => {
               <CheckedButton
                 key={a}
                 isChecked={age === a}
-                disabled={!canEdit}
+                disabled={!isEdit || !isEditing}
                 onClick={() => setAge(a)}
               >
                 {a}
@@ -302,7 +328,7 @@ const RequestDetailPage = () => {
               <CheckedButton
                 isChecked={studentGender === g}
                 onClick={() => setStudentGender(g)}
-                disabled={!canEdit}
+                disabled={!isEdit || !isEditing}
                 key={g}
               >
                 {g}
@@ -316,14 +342,10 @@ const RequestDetailPage = () => {
           <div className="flex items-end gap-3">
             <h1>
               트레이너{' '}
-              <span className={errors.trainerGender ? 'text-red-500' : 'text-button'}>
-                선호 성별
-              </span>
+              <span className={errors.proGender ? 'text-red-500' : 'text-button'}>선호 성별</span>
             </h1>
-            {errors.trainerGender && (
-              <p className="text-[1rem] font-semibold text-red-500">
-                {errors.trainerGender.message}
-              </p>
+            {errors.proGender && (
+              <p className="text-[1rem] font-semibold text-red-500">{errors.proGender.message}</p>
             )}
           </div>
           <div className="mt-6 flex gap-2">
@@ -332,7 +354,7 @@ const RequestDetailPage = () => {
                 isChecked={trainer === g}
                 onClick={() => setTrainerGender(g)}
                 key={g}
-                disabled={!canEdit}
+                disabled={!isEdit || !isEditing}
               >
                 {g}
               </CheckedButton>
@@ -345,14 +367,10 @@ const RequestDetailPage = () => {
           <div className="flex items-end gap-3">
             <h1>
               PT{' '}
-              <span className={errors.startPreference ? 'text-red-500' : 'text-button'}>
-                시작 희망일
-              </span>
+              <span className={errors.startDate ? 'text-red-500' : 'text-button'}>시작 희망일</span>
             </h1>
-            {errors.startPreference && (
-              <p className="text-[1rem] font-semibold text-red-500">
-                {errors.startPreference.message}
-              </p>
+            {errors.startDate && (
+              <p className="text-[1rem] font-semibold text-red-500">{errors.startDate.message}</p>
             )}
           </div>
           <input
@@ -360,7 +378,7 @@ const RequestDetailPage = () => {
             aria-label="PT 시작 희망일"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            readOnly={!canEdit}
+            readOnly={!isEdit || !isEditing}
             className="mt-6 rounded-[10px] border border-[#CCCCCC] p-3 text-xl focus:border-gray-400 focus:outline-none"
           />
         </section>
@@ -385,7 +403,7 @@ const RequestDetailPage = () => {
                 onClick={() => toggleDay(d)}
                 key={d}
                 width="w-[56px]"
-                disabled={!canEdit}
+                disabled={!isEdit || !isEditing}
               >
                 {d}
               </CheckedButton>
@@ -412,7 +430,7 @@ const RequestDetailPage = () => {
                 isChecked={times.includes(t)}
                 onClick={() => toggleTime(t)}
                 key={t}
-                disabled={!canEdit}
+                disabled={!isEdit || !isEditing}
               >
                 {t}
               </CheckedButton>
@@ -428,15 +446,15 @@ const RequestDetailPage = () => {
           <CommentBox
             value={watch('content')}
             onChange={(e) => setValue('content', e.target.value, { shouldDirty: true })}
-            readOnly={!canEdit}
+            readOnly={!isEdit || !isEditing}
             placeholder="추가 요청사항을 입력해주세요"
           />
         </section>
       </section>
 
-      {(role === 'EXPERT' || isWriter) && (
+      {(role === 'PRO' || isWriter?.isEdit) && (
         <Button width="w-[425px]" className="my-16" onClick={handleButton}>
-          {role === 'EXPERT' ? '제안서 작성' : '수정하기'}
+          {role === 'PRO' ? '제안서 작성' : !isEditing ? '수정하기' : '수정 완료'}
         </Button>
       )}
     </section>

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import Box from '@/components/Box';
+import { urlFor } from '@/constants/routes';
 import { SPORTS } from '@/constants/sports';
 
 const CategoryDropdown = () => {
@@ -11,8 +12,8 @@ const CategoryDropdown = () => {
         <div className="mt-[18px] flex flex-col gap-[6px]">
           {SPORTS.map((sport, idx) => (
             <Link
-              to={`category/${sport.slug}`}
-              className="text-base leading-[normal] font-normal"
+              to={urlFor.categoryDetail(sport.slug)}
+              className="transform text-base leading-[normal] font-normal transition-all duration-200 hover:scale-105 hover:font-bold"
               key={idx}
             >
               {sport.label}

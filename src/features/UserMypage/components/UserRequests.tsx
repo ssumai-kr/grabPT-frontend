@@ -42,9 +42,9 @@ const UserRequests = () => {
             myRequestsList.content.map((rq, idx) => (
               <RequestCard
                 key={`${page}-${idx}`}
-                requestionId={rq.requestId}
+                requestionId={rq.requestionId}
                 location={location}
-                name={data?.nickname ?? '사용자'}
+                name={data?.userNickname ?? '사용자'}
                 profileImg={data?.profileImageUrl}
                 tags={{
                   availableTimes: rq.availableTimes,

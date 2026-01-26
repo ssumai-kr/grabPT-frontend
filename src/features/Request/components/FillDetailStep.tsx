@@ -35,13 +35,14 @@ const FillDetailStep: ForwardRefRenderFunction<{ submit: () => Promise<boolean> 
     setValue,
   } = useForm<RequestDetailStepDto>({
     mode: 'onChange',
+    reValidateMode: 'onChange',
     resolver: zodResolver(detailInfoSchema),
     defaultValues: {
       purpose: detailInfo.purpose ?? [],
       ageGroup: detailInfo.ageGroup ?? null,
       userGender: detailInfo.userGender ?? '',
-      trainerGender: detailInfo.trainerGender ?? '',
-      startPreference: detailInfo.startPreference ?? '',
+      proGender: detailInfo.proGender ?? '',
+      startDate: detailInfo.startDate ?? '',
       availableDays: detailInfo.availableDays ?? [],
       availableTimes: detailInfo.availableTimes ?? [],
       content: detailInfo.content ?? '',
@@ -62,8 +63,12 @@ const FillDetailStep: ForwardRefRenderFunction<{ submit: () => Promise<boolean> 
             console.log('updated:', updated);
             resolve(true);
           },
-          () => {
+          (errors) => {
             resolve(false); // 유효성 검증 실패 시 false 반환
+            const firstError = Object.values(errors)[0];
+            if (firstError?.message) {
+              alert(firstError.message);
+            }
           },
         )();
       }),
@@ -83,8 +88,8 @@ const FillDetailStep: ForwardRefRenderFunction<{ submit: () => Promise<boolean> 
   const setStudentGender = (g: Gender) => setValue('userGender', g);
 
   /* 트레이너 선호 성별(단일) */
-  const trainer = watch('trainerGender');
-  const setTrainerGender = (g: Gender) => setValue('trainerGender', g);
+  const trainer = watch('proGender');
+  const setTrainerGender = (g: Gender) => setValue('proGender', g);
 
   /* 가능 요일(다중) */
   const days = watch('availableDays');
@@ -99,8 +104,8 @@ const FillDetailStep: ForwardRefRenderFunction<{ submit: () => Promise<boolean> 
     setValue('availableTimes', next);
   };
   /* PT 시작 희망일 */
-  const startDate = watch('startPreference');
-  const setStartDate = (v: string) => setValue('startPreference', v);
+  const startDate = watch('startDate');
+  const setStartDate = (v: string) => setValue('startDate', v);
 
   const togglePurpose = (p: Purpose) => {
     const current = watch('purpose');
@@ -194,10 +199,10 @@ const FillDetailStep: ForwardRefRenderFunction<{ submit: () => Promise<boolean> 
         <div className="flex items-end gap-3">
           <h1>
             트레이너{' '}
-            <span className={errors.trainerGender ? 'text-red-500' : 'text-button'}>선호 성별</span>
+            <span className={errors.proGender ? 'text-red-500' : 'text-button'}>선호 성별</span>
           </h1>
-          {errors.trainerGender && (
-            <p className="text-[1rem] font-semibold text-red-500">{errors.trainerGender.message}</p>
+          {errors.proGender && (
+            <p className="text-[1rem] font-semibold text-red-500">{errors.proGender.message}</p>
           )}
         </div>
         <div className="mt-6 flex gap-2">
@@ -214,14 +219,10 @@ const FillDetailStep: ForwardRefRenderFunction<{ submit: () => Promise<boolean> 
         <div className="flex items-end gap-3">
           <h1>
             PT{' '}
-            <span className={errors.startPreference ? 'text-red-500' : 'text-button'}>
-              시작 희망일
-            </span>
+            <span className={errors.startDate ? 'text-red-500' : 'text-button'}>시작 희망일</span>
           </h1>
-          {errors.startPreference && (
-            <p className="text-[1rem] font-semibold text-red-500">
-              {errors.startPreference.message}
-            </p>
+          {errors.startDate && (
+            <p className="text-[1rem] font-semibold text-red-500">{errors.startDate.message}</p>
           )}
         </div>
         <input
